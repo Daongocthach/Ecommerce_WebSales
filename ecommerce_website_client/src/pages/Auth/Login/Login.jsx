@@ -1,0 +1,94 @@
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Container, TextField, Stack, Button, Box, Checkbox } from '@mui/material'
+import { Link, useNavigate } from 'react-router-dom'
+import { getCookie, setCookie } from '../../../utils/cookie'
+import { mockData } from '../../../apis/mockdata'
+import loginImage from '../../../assets/img/loginImage.jpg'
+import { login } from '../../../redux/actions/auth'
+
+function Login() {
+  const currentUser = useSelector((state) => state.auth)
+  console.log(currentUser)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const users = mockData.users
+  const onFinish = () => {
+    for (let i = 0; i < users.length; i++) {
+      if (users[i]?.email === email && users[i]?.password === password) {
+        dispatch(login(users[i]))
+        localStorage.setItem('avatar', users[i]?.avatar)
+        localStorage.setItem('fullname', users[i]?.fullname)
+        navigate('/')
+        return
+      }
+    }
+    alert('Wrong Email Or Password!')
+  }
+  return (
+    <Container disableGutters maxWidth={false} sx={{ height: '100vh', width: '100vw' }}>
+      <Box sx={{
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden',
+        position: 'relative',
+        bgcolor: 'black'
+      }}>
+        <img src={loginImage} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} />
+        <Box sx={{
+          position: 'absolute',
+          width: { xs: '90%', sm: '70%', md: '30%' },
+          height: 'auto',
+          borderRadius: '5px',
+          top: '30%',
+          left: '50%',
+          bgcolor: 'black',
+          opacity: 0.8,
+          transform: 'translate(-50%, -30%)'
+        }}>
+          <h2 style={{ textAlign: 'center', color: 'white' }}> Sign In</h2>
+          <Stack
+            component="form"
+            sx={{ m: 3 }}
+            spacing={4}
+          >
+            <TextField
+              id="filled-hidden-label-small"
+              placeholder='Input email'
+              variant="filled"
+              size="small"
+              sx={{ bgcolor: 'white', borderRadius: 3 }}
+              onChange={e => setEmail(e.target.value)}
+            />
+            <TextField
+              id="filled-hidden-label-normal"
+              placeholder='Input password'
+              variant="filled"
+              size="small"
+              sx={{ bgcolor: 'white', borderRadius: 3 }}
+              type="password"
+              onChange={e => setPassword(e.target.value)}
+            />
+            <Button
+              sx={{ bgcolor: 'red', color: 'white', fontWeight: 'bold' }}
+              onClick={() => onFinish()}
+            >Sign In</Button>
+            <Box sx={{ display: 'flex', alignItems: 'center', m: 0, color: 'white' }}>
+              <Checkbox sx={{ color: 'white' }}/>
+              Remember me?
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+
+              <Link to={'/reset-password'} style={{ color: 'white' }}>Forgot Password?</Link>
+              <Link to={'/'} style={{ color: 'white' }}>Need help?</Link>
+            </Box>
+          </Stack>
+        </Box>
+      </Box>
+    </Container>
+  )
+}
+
+export default Login
