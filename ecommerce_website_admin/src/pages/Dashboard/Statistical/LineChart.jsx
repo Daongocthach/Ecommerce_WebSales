@@ -2,7 +2,7 @@ import { LineChart } from '@mui/x-charts/LineChart'
 import { Box, Typography } from '@mui/material'
 export default function BasicLineChart() {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: 400 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: 430 }}>
       <LineChart
         xAxis={[{ data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }]}
         series={[

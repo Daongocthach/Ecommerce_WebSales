@@ -23,7 +23,7 @@ function AddProvider() {
     }
     return (
         <div>
-            <Button startIcon={<AddCircle />} variant="outlined" onClick={handleClickOpen}>
+            <Button sx={{ fontWeight: 'bold' }} startIcon={<AddCircle />} variant="outlined" onClick={handleClickOpen}>
                 New Provider
             </Button>
             <Dialog open={open} onClose={handleClose} >

@@ -1,6 +1,6 @@
 # Ecommerce_G2Store
 # Công nghệ sử dụng
-•	Front-End: ReactJS
+•	Front-End: ReactJS, Material UI
 •	Back-End: Java Spring Boot
 •	Database: Mysql
 •	Other: Jwt, Redux 
@@ -19,7 +19,7 @@
 •	Thanh toán MoMo
 •	Giao hàng nhanh
 # Cài đặt 
-1.	Git clone: https://github.com/ngonhan71/bookstore-v2.git
+1.	Git clone: https://github.com/Daongocthach/Ecommerce_G2Store.git
 # Liên hệ
 •	Email: thach752002@gmail.com
 

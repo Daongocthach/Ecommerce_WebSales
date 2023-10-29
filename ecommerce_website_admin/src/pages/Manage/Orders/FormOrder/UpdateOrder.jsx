@@ -1,11 +1,16 @@
 import { useState } from 'react'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stepper, Step, StepLabel, Box } from '@mui/material'
 import { Create } from '@mui/icons-material'
 
+const steps = [
+  'Đã xác nhận',
+  'Đã đóng gói',
+  'Đang giao hàng',
+  'Đã nhận hàng'
+]
 
-function UpdateCategory({ category }) {
-  const [name, setName] = useState(category?.name)
-  const [description, setDescription] = useState(category?.description)
+function UpdateOrder({ order }) {
+  const [activeStep, setActiveStep] = useState(0)
   const [open, setOpen] = useState(false)
 
   const handleClickOpen = () => {
@@ -18,16 +23,36 @@ function UpdateCategory({ category }) {
 
     handleClose()
   }
+  const handleNext = () => {
+    if (activeStep == 3) {
+      return
+    }
+    setActiveStep(activeStep + 1)
+  }
+
+  const handleBack = () => {
+    if (activeStep == 0)
+      return
+    setActiveStep(activeStep - 1)
+  }
   return (
     <div>
-      <Button startIcon={<Create />} variant="outlined" onClick={handleClickOpen}>
-        Update Category
-      </Button>
+      <Button sx={{ bgcolor: 'orange', color: 'black' }} variant="outlined" onClick={handleClickOpen}><Create /></Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Update Category</DialogTitle>
+        <DialogTitle>Update Order</DialogTitle>
         <DialogContent>
-          <TextField fullWidth size='small' label="Name" sx={{ mt: 2 }} value={name} onChange={(e) => setName(e.target.value)} />
-          <TextField fullWidth size='small' label="Description" sx={{ mt: 2 }} value={description} onChange={(e) => setDescription(e.target.value)} />
+          <Stepper activeStep={activeStep} alternativeLabel>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Button onClick={handleBack}>Back</Button>
+            <Button onClick={handleNext}>Next</Button>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
@@ -37,4 +62,4 @@ function UpdateCategory({ category }) {
     </div>
   )
 }
-export default UpdateCategory
+export default UpdateOrder

@@ -3,7 +3,7 @@ import { Box, Button, Tooltip, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
 import ModeSelect from './ModeSelect/ModeSelect'
 import Account from './Account/Account'
-import Search from './Search/Search'
+import Search from '../Search/Search'
 import G2Logo from '../../assets/img/G2Logo.png'
 
 const useStyles = {

@@ -3,7 +3,7 @@ import { PieChart } from '@mui/x-charts/PieChart'
 
 export default function BasicPie() {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: 400 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: 430 }}>
       <PieChart
         series={[
           {

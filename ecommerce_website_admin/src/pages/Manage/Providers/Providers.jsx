@@ -1,10 +1,11 @@
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Paper, TableFooter, TablePagination, TableContainer } from '@mui/material'
+import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { AddHomeWork } from '@mui/icons-material'
 import AddProvider from './FormProvider/AddProvider'
 import UpdateProvider from './FormProvider/UpdateProvider'
 import DeleteProvider from './FormProvider/DeleteProvider'
+import Search from '../../../components/Search/Search'
+
 
 function createData(id, name, phone, address) {
   return { id, name, phone, address }
@@ -18,7 +19,6 @@ const providers = [
 ]
 
 function Providers() {
-  const categories = ''
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(6)
 
@@ -29,12 +29,24 @@ function Providers() {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
-  return (
-    <Box sx={{ m: 5 }}>
-      <Box sx={{ height: '50px', display: 'flex', justifyContent: 'space-between' }}>
-        <AddHomeWork />
-        <Typography variant='h6' fontWeight={'bold'}>Promotion List</Typography>
-        <AddProvider />
+  const [select, setSelect] = useState(1)
+  const handleChange = () => {
+
+  }
+  return ( <Box sx={{ m: 5 }}>
+      <Typography variant='h7' >Trang chủ / Quản lý nhà cung cấp</Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+        <AddProvider/>
+        <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
+          <Search />
+          <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
+          <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
+            <Select value={select} onChange={handleChange} defaultValue={1} >
+              <MenuItem value={1}>Mới nhất</MenuItem>
+              <MenuItem value={2}>Cũ nhất</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
       </Box>
       <Box sx={{ height: 'fit-content', bgcolor: 'white', boxShadow: '0px 0px 10px' }}>
         <TableContainer >

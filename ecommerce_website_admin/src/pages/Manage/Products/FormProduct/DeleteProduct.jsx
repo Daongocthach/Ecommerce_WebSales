@@ -3,7 +3,7 @@ import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 
 
-function DeleteProduct({ Product }) {
+function DeleteProduct({ productId }) {
     const [open, setOpen] = useState(false)
     const handleClickOpen = () => {
         setOpen(true)
@@ -17,9 +17,7 @@ function DeleteProduct({ Product }) {
     }
     return (
         <div>
-            <Button startIcon={<DeleteIcon />} variant="outlined" onClick={handleClickOpen}>
-                Delete Product
-            </Button>
+            <Button sx={{ bgcolor: '#EE0000', color: 'white' }} variant="outlined" onClick={handleClickOpen}><DeleteIcon /></Button>
             <Dialog open={open} onClose={handleClose} >
                 <DialogTitle >Are you sure you want to delete this item?</DialogTitle>
                 <DialogActions>

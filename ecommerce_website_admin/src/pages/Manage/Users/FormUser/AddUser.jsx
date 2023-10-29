@@ -26,16 +26,16 @@ function AddUser() {
     const handleAvatarChange = (e) => {
         const file = e.target.files[0]
         if (file) {
-          const reader = new FileReader()
-          reader.onload = () => {
-            setAvatar(reader.result)
-          };
-          reader.readAsDataURL(file)
+            const reader = new FileReader()
+            reader.onload = () => {
+                setAvatar(reader.result)
+            }
+            reader.readAsDataURL(file)
         }
-      }
+    }
     return (
         <div>
-            <Button startIcon={<AddCircle />} variant="outlined" onClick={handleClickOpen}>
+            <Button sx={{ fontWeight: 'bold' }} startIcon={<AddCircle />} variant="outlined" onClick={handleClickOpen}>
                 New User
             </Button>
             <Dialog open={open} onClose={handleClose} >
@@ -70,7 +70,7 @@ function AddUser() {
                             <Typography minWidth={'100px'}>Avatar: </Typography>
                             <TextField fullWidth size='small' type={'file'} onChange={handleAvatarChange} />
                         </Box>
-                        { avatar && <img src={avatar} style={{ height: '50px', width: '50px' }}/>}
+                        {avatar && <img src={avatar} style={{ height: '50px', width: '50px' }} />}
                     </Box>
                 </DialogContent>
                 <DialogActions>

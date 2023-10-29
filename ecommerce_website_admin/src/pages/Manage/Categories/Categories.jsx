@@ -1,10 +1,11 @@
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Paper, TableFooter, TablePagination, TableContainer } from '@mui/material'
+import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Category } from '@mui/icons-material'
 import AddCategory from './FormCategory/AddCategory'
 import UpdateCategory from './FormCategory/UpdateCategory'
 import DeleteCategory from './FormCategory/DeleteCategory'
+import Search from '../../../components/Search/Search'
 
 function createData(id, name) {
   return { id, name }
@@ -28,12 +29,25 @@ function Categories() {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
+  const [select, setSelect] = useState(1)
+  const handleChange = () => {
+
+  }
   return (
     <Box sx={{ m: 5 }}>
-      <Box sx={{ height: '50px', display: 'flex', justifyContent: 'space-between' }}>
-        <Category />
-        <Typography variant='h6' fontWeight={'bold'}>Category List</Typography>
-        <AddCategory />
+      <Typography variant='h7' >Trang chủ / Quản lý loại sản phẩm</Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+        <AddCategory/>
+        <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
+          <Search />
+          <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
+          <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
+            <Select value={select} onChange={handleChange} defaultValue={1} >
+              <MenuItem value={1}>Mới nhất</MenuItem>
+              <MenuItem value={2}>Cũ nhất</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
       </Box>
       <Box sx={{ height: 'fit-content', bgcolor: 'white', boxShadow: '0px 0px 10px' }}>
         <TableContainer >

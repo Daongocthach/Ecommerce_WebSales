@@ -27,9 +27,10 @@ function Invoices() {
   }
   return (
     <Box sx={{ m: 5 }}>
-      <Box sx={{ height: '50px', display: 'flex', justifyContent: 'space-between' }}>
+      <Typography variant='h7' >Trang chủ / Xem hóa đơn</Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
         <ReceiptLong />
-        <Typography variant='h6' fontWeight={'bold'}>Promotion List</Typography>
+        <Typography variant='h6' fontWeight={'bold'}>Invoice List</Typography>
         <DownloadForOffline/>
       </Box>
       <Box sx={{ height: 'fit-content', bgcolor: 'white', boxShadow: '0px 0px 10px' }}>

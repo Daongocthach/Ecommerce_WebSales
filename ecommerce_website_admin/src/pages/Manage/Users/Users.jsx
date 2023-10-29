@@ -1,8 +1,9 @@
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableContainer, TableFooter, TablePagination } from '@mui/material'
+import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableContainer, TableFooter, TablePagination, FormControl, Select, MenuItem } from '@mui/material'
 import { People } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 import AddUser from './FormUser/AddUser'
 import ChangeStatusUser from './FormUser/ChangeStatusUser'
+import Search from '../../../components/Search/Search'
 
 function createData(id, fullName, username, email, phone, address, avatar, status) {
   return { id, fullName, username, email, phone, address, avatar, status }
@@ -25,13 +26,25 @@ function Users() {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
+  const [select, setSelect] = useState(1)
+  const handleChange = () => {
 
+  }
   return (
     <Box sx={{ m: 5 }}>
-      <Box sx={{ height: '50px', display: 'flex', justifyContent: 'space-between' }}>
-        <People />
-        <Typography variant='h6' fontWeight={'bold'}>User List</Typography>
-        <AddUser />
+      <Typography variant='h7' >Trang chủ / Quản lý tài khoản khách hàng</Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+        <AddUser/>
+        <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
+          <Search />
+          <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
+          <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
+            <Select value={select} onChange={handleChange} defaultValue={1} >
+              <MenuItem value={1}>Mới nhất</MenuItem>
+              <MenuItem value={2}>Cũ nhất</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
       </Box>
       <Box sx={{ height: 'fit-content', bgcolor: 'white', boxShadow: '0px 0px 10px' }}>
         <TableContainer >
