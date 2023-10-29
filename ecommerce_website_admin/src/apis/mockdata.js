@@ -173,6 +173,7 @@ export const mockData = {
             phone: '012345678',
             address: 'TPHCM',
             avatar: 'https://cdn1.iconfinder.com/data/icons/mix-color-3/502/Untitled-7-512.png',
+            status: 0,
             role: 0
         },
         {
@@ -184,6 +185,7 @@ export const mockData = {
             phone: '012345678',
             address: 'TPHCM',
             avatar: 'https://cdn1.iconfinder.com/data/icons/mix-color-3/502/Untitled-7-512.png',
+            status: 0,
             role: 0
         },
         {
@@ -195,6 +197,7 @@ export const mockData = {
             phone: '012345678',
             address: 'TPHCM',
             avatar: 'https://cdn1.iconfinder.com/data/icons/mix-color-3/502/Untitled-7-512.png',
+            status: 0,
             role: 0
         },
         {
@@ -206,6 +209,7 @@ export const mockData = {
             phone: '012345678',
             address: 'TPHCM',
             avatar: 'https://cdn1.iconfinder.com/data/icons/mix-color-3/502/Untitled-7-512.png',
+            status: 0,
             role: 0
         }
 
