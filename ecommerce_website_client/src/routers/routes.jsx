@@ -8,15 +8,15 @@ import Promotion from '../pages/Promotion/Promotion'
 import GenreDetail from '../pages/GenreDetail/GenreDetail'
 import NotFound from '../pages/NotFound/NotFound'
 import ProductDetail from '../pages/ProductDetail/ProductDetail'
-import Profile from '../pages/Account/Profile/Profile'
 import AuthLayout from '../layouts/AuthLayout'
 import Thanks from '../pages/Thanks/Thanks'
+import Account from '../pages/Account/Account'
 const publicRoutes = [
     { path:'/login', component: Login, layout: AuthLayout },
     { path:'/register', component: Register, layout: AuthLayout },
     { path:'/reset-password', component: ResetPassword, layout: AuthLayout },
     { path:'/', component: DashBoard },
-    { path:'/profile', component: Profile },
+    { path:'/account', component: Account },
     { path:'/cart', component: Cart },
     { path:'/checkout', component: Checkout },
     { path:'/promotion', component: Promotion },

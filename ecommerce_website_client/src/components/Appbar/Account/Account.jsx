@@ -53,9 +53,9 @@ function Account() {
                 }}
             >
                 {avatar && <MenuItem onClick={handleClose}>
-                    <Link to={'/profile'} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Link to={'/account'} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Avatar sx={{ mr: 3 }} />
-                        Profile
+                        Cá nhân
                     </Link>
 
                 </MenuItem>}

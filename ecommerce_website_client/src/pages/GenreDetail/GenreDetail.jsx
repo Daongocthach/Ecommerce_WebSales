@@ -1,4 +1,4 @@
-import { Container, Grid, Typography, Box, FormControl, Select, MenuItem, Checkbox } from '@mui/material'
+import { Container, Grid, Typography, Box, FormControl, Select, MenuItem } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import Product from '../Dashboard/BoardContent/ListRow/Row/ListProduct/Product/Product'
@@ -58,7 +58,6 @@ function GenreDetail() {
             </Grid>
           ))}
         </Grid>
-
       </Grid>
     </Container >
   )
