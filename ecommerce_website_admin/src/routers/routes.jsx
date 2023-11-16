@@ -5,6 +5,7 @@ import Profile from '../pages/Profile/Profile'
 import AuthLayout from '../layouts/AuthLayout'
 import Users from '../pages/Manage/Users/Users'
 import Categories from '../pages/Manage/Categories/Categories'
+import SubCategories from '../pages/Manage/SubCategories/SubCategories'
 import Providers from '../pages/Manage/Providers/Providers'
 import Promotions from '../pages/Manage/Promotions/Promotions'
 import Inventory from '../pages/Manage/Inventory/Inventory'
@@ -18,6 +19,7 @@ const publicRoutes = [
     { path:'/profile', component: Profile },
     { path:'/manage/users', component: Users },
     { path:'/manage/categories', component: Categories },
+    { path:'/manage/subCategories', component: SubCategories },
     { path:'/manage/providers', component: Providers },
     { path:'/manage/products', component: Products },
     { path:'/manage/promotions', component: Promotions },

@@ -14,20 +14,10 @@ function Login() {
   const [password, setPassword] = useState('')
   const users = mockData.users
   const onFinish = () => {
-    for (let i = 0; i < users.length; i++) {
-      if (users[i]?.email === email && users[i]?.password === password) {
-        dispatch(login(users[i]))
-        setCookie('token', '1', 1)
-        localStorage.setItem('avatar', users[i]?.avatar)
-        localStorage.setItem('fullname', users[i]?.fullname)
-        navigate('/dashboard')
-        return
-      }
-    }
-    alert('Wrong Email Or Password!')
+    navigate('/dashboard')
   }
   return (
-    <Container disableGutters maxWidth={false} sx={{ height: '100vh', width: '100vw' }}>
+    <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
       <Box sx={{
         width: '100%',
         height: '100%',

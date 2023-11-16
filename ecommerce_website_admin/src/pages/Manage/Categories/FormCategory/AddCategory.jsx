@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography } from '@mui/material'
 import AddCircle from '@mui/icons-material/AddCircle'
+import categoryApi from '../../../../apis/categoryApi'
 
-
-function AddCategory() {
+function AddCategory({ setUpdate }) {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [name, setName] = useState('')
@@ -16,7 +16,15 @@ function AddCategory() {
         setOpen(false)
     }
     const handleClickAdd = () => {
-
+        categoryApi.addCategory(name)
+        .then(() => {
+            alert('Add Success')
+            setUpdate(1)
+        })
+        .catch(error => {
+            console.log(error)
+            alert('Add Fail')
+        })
         handleClose()
     }
     return (

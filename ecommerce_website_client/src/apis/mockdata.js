@@ -4,8 +4,8 @@ export const mockData = {
             _id: 'product-id-01',
             name: 'Bánh gạo',
             description: 'Pro MERN stack Course',
-            price: 100000,
-            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
+            price: 27000,
+            image: 'https://cf.shopee.vn/file/7af07542440785944f35316f30ba53d7',
             category: [
                 {
                     name: 'Thực phẩm'
@@ -43,8 +43,8 @@ export const mockData = {
             _id: 'product-id-02',
             name: 'Chai nước',
             description: 'Pro MERN stack Course',
-            price: 100000,
-            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
+            price: 5000,
+            image: 'https://nuocsuoi.com.vn/wp-content/uploads/2021/04/nuoc-suoi-13.jpg',
             category: 'Nước uống',
             provider: 'MasanGroup'
         },
@@ -52,8 +52,8 @@ export const mockData = {
             _id: 'product-id-03',
             name: 'Mì omachi',
             description: 'Pro MERN stack Course',
-            price: 100000,
-            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
+            price: 8000,
+            image: 'https://trongoivanphongpham.com/wp-content/uploads/2021/09/mi-omachi-1757.jpg',
             category: 'Thực phẩm',
             provider: 'MasanGroup'
         },
@@ -61,8 +61,8 @@ export const mockData = {
             _id: 'product-id-04',
             name: 'Bóng đèn 10W',
             description: 'Pro MERN stack Course',
-            price: 100000,
-            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
+            price: 45000,
+            image: 'https://th.bing.com/th/id/OIP.i0-PyGivP2vkxU28CioLiAHaHa?pid=ImgDet&rs=1',
             category: 'Đồ điện tử',
             provider: 'MasanGroup'
         },
@@ -71,52 +71,52 @@ export const mockData = {
             name: 'Dao thái',
             description: 'Pro MERN stack Course',
             price: 100000,
-            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
+            image: 'https://topcomshop.com/uploads/images/a-adao/2/12070802423-1778177338.jpg',
             category: 'Đồ gia dụng',
             provider: 'MasanGroup'
         },
         {
             _id: 'product-id-06',
-            name: 'Dao thái1',
+            name: 'Snack Lays',
             description: 'Pro MERN stack Course',
-            price: 100000,
-            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
+            price: 10000,
+            image: 'https://th.bing.com/th/id/OIP.R_Uyabt-iEE7oki8DCJp2AHaHa?pid=ImgDet&rs=1',
             category: 'Đồ gia dụng',
             provider: 'MasanGroup'
         },
         {
             _id: 'product-id-07',
-            name: 'Dao thái2',
+            name: 'Keo mut Chupa Chups',
             description: 'Pro MERN stack Course',
-            price: 100000,
-            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
+            price: 1000,
+            image: 'https://th.bing.com/th/id/OIP.LPJAyms0EE1ZUJjrGAOMmAHaHa?pid=ImgDet&rs=1',
             category: 'Đồ gia dụng',
             provider: 'MasanGroup'
         },
         {
             _id: 'product-id-08',
-            name: 'Dao thái',
+            name: 'Sữa tươi Vinamilk hộp',
             description: 'Pro MERN stack Course',
-            price: 100000,
-            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
+            price: 7000,
+            image: 'https://th.bing.com/th/id/OIP.uAsn1C6xKHXsub6DpMKvFgHaHa?pid=ImgDet&rs=1',
             category: 'Đồ gia dụng',
             provider: 'MasanGroup'
         },
         {
             _id: 'product-id-09',
-            name: 'Dao thái1',
+            name: 'Sữa Milo Hộp',
             description: 'Pro MERN stack Course',
-            price: 100000,
-            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
+            price: 9000,
+            image: 'https://th.bing.com/th/id/OIP.dOpwJcAms5LhC5px-IjYHgHaFj?pid=ImgDet&rs=1',
             category: 'Đồ gia dụng',
             provider: 'MasanGroup'
         },
         {
             _id: 'product-id-010',
-            name: 'Dao thái2',
+            name: 'Sữa ovaltine Hộp',
             description: 'Pro MERN stack Course',
             price: 100000,
-            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
+            image: 'https://th.bing.com/th/id/R.c2b295844c82ab01ad9675685b928a9f?rik=N4Y3IM2U2m%2b%2bfw&pid=ImgRaw&r=0',
             category: 'Đồ gia dụng',
             provider: 'MasanGroup'
         },

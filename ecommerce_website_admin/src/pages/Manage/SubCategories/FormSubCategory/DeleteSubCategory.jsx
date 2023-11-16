@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
-import categoryApi from '../../../../apis/categoryApi'
+import subCategoryApi from '../../../../apis/subCategoryApi'
 
-function DeleteCategory({ setUpdate, categoryId }) {
+function DeleteCategory({ setUpdate, subCategoryId }) {
     const [open, setOpen] = useState(false)
     const handleClickOpen = () => {
         setOpen(true)
@@ -12,7 +12,7 @@ function DeleteCategory({ setUpdate, categoryId }) {
         setOpen(false)
     }
     const handleClickDelete = () => {
-        categoryApi.deleteCategory(categoryId)
+        subCategoryApi.deleteSubCategory(subCategoryId)
         .then(() => {
             alert('Delete Success')
             setUpdate(2)

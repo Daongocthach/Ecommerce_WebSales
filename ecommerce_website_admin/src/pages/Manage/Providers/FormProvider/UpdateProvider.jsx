@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography } from '@mui/material'
 import { Create } from '@mui/icons-material'
+import providerApi from '../../../../apis/providerApi'
 
-function UpdateProvider({ provider }) {
+function UpdateProvider({ provider, setUpdate }) {
   const [name, setName] = useState(provider?.name)
-  const [phone, setPhone] = useState(provider?.phone)
+  const [phone, setPhone] = useState(provider?.phoneNo)
   const [address, setAddress] = useState(provider?.address)
   const [open, setOpen] = useState(false)
 
@@ -15,7 +16,12 @@ function UpdateProvider({ provider }) {
     setOpen(false)
   }
   const handleUpdate = () => {
-
+    providerApi.updateProvider(provider?.id, name, phone, address)
+      .then(() => {
+        alert('Update Success')
+        setUpdate(3)
+      })
+      .catch(() => alert('Update Fail'))
     handleClose()
   }
   return (

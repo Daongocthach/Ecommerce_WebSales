@@ -1,16 +1,20 @@
-import { useState } from 'react'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography } from '@mui/material'
+import { useState, useEffect } from 'react'
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, FormControl, Select, MenuItem } from '@mui/material'
 import { Create } from '@mui/icons-material'
+import subCategoryApi from '../../../../apis/subCategoryApi'
+import providerApi from '../../../../apis/providerApi'
+import productApi from '../../../../apis/productApi'
 
-
-function UpdateProduct({ product }) {
+function UpdateProduct({ setUpdate, product }) {
+  const [subCategories, setSubCategories] = useState([])
+  const [providers, setProviders] = useState([])
   const [name, setName] = useState(product?.name)
-  const [description, setDescription] = useState(product?.description)
   const [price, setPrice] = useState(product?.price)
-  const [categoryId, setCategoryId] = useState(product?.category_id)
-  const [providerId, setProviderId] = useState(product?.provider_id)
+  const [description, setDescription] = useState(product?.description)
+  const [discount, setDiscount] = useState(product?.discount)
+  const [subCategory, setSubCategory] = useState(product?.subCategory?.id || 1)
+  const [provider, setProvider] = useState(product?.provider?.id || 1)
   const [image, setImage] = useState(product?.image)
-  
   const [open, setOpen] = useState(false)
 
   const handleClickOpen = () => {
@@ -19,9 +23,11 @@ function UpdateProduct({ product }) {
   const handleClose = () => {
     setOpen(false)
   }
-  const handleUpdate = () => {
-
-    handleClose()
+  const handleChangeSubCategory = (event) => {
+    setSubCategory(event.target.value)
+  }
+  const handleChangeProvider = (event) => {
+    setProvider(event.target.value)
   }
   const handleImageChange = (e) => {
     const file = e.target.files[0]
@@ -32,6 +38,34 @@ function UpdateProduct({ product }) {
       }
       reader.readAsDataURL(file)
     }
+  }
+  useEffect(() => {
+    subCategoryApi.getAllSubCategories()
+      .then(response => {
+        setSubCategories(response.data)
+      })
+      .catch(error => {
+        console.error(error)
+      })
+    providerApi.getAllProviders()
+      .then(response => {
+        setProviders(response.data)
+      })
+      .catch(error => {
+        console.error(error)
+      })
+  }, [])
+  const handleUpdate = () => {
+    productApi.updateProduct(product?.id, name, price, description, discount, subCategory, provider, image)
+      .then(() => {
+        alert('Update Success')
+        setUpdate(3)
+      })
+      .catch(error => {
+        console.log(error)
+        alert('Update Fail')
+      })
+    handleClose()
   }
   return (
     <div>
@@ -53,12 +87,32 @@ function UpdateProduct({ product }) {
               <TextField fullWidth size='small' value={price} onChange={(e) => setPrice(e.target.value)} />
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography minWidth={'100px'}>Category: </Typography>
-              <TextField fullWidth size='small' value={categoryId} onChange={(e) => setCategoryId(e.target.value)} />
+              <Typography minWidth={'100px'}>Discount: </Typography>
+              <TextField fullWidth size='small' value={discount} onChange={(e) => setDiscount(e.target.value)} />
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography minWidth={'100px'}>SubCategory: </Typography>
+              <FormControl size={'small'} fullWidth>
+                <Select value={subCategory} onChange={handleChangeSubCategory} >
+                  {Array.isArray(subCategories) && subCategories?.map((subCategory, index) => {
+                    return (
+                      <MenuItem key={index} value={subCategory?.id}>{subCategory?.name}</MenuItem>
+                    )
+                  })}
+                </Select>
+              </FormControl>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Typography minWidth={'100px'}>Provider: </Typography>
-              <TextField fullWidth size='small' value={providerId} onChange={(e) => setProviderId(e.target.value)} />
+              <FormControl size={'small'} fullWidth>
+                <Select value={provider} onChange={handleChangeProvider} >
+                  {Array.isArray(providers) && providers?.map((provider, index) => {
+                    return (
+                      <MenuItem key={index} value={provider?.id}>{provider?.name}</MenuItem>
+                    )
+                  })}
+                </Select>
+              </FormControl>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Typography minWidth={'100px'}>Image: </Typography>
@@ -69,7 +123,7 @@ function UpdateProduct({ product }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={() => handleUpdate()}>Update</Button>
+          <Button onClick={handleUpdate}>Update</Button>
         </DialogActions>
       </Dialog>
     </div>

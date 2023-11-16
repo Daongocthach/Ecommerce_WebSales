@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
+import providerApi from '../../../../apis/providerApi'
 
-
-function DeleteProvider({ providerId }) {
+function DeleteProvider({ setUpdate, providerId }) {
     const [open, setOpen] = useState(false)
     const handleClickOpen = () => {
         setOpen(true)
@@ -12,7 +12,14 @@ function DeleteProvider({ providerId }) {
         setOpen(false)
     }
     const handleClickDelete = () => {
-
+        providerApi.deleteProvider(providerId)
+        .then(() => {
+            alert('Delete Success')
+            setUpdate(2)
+        })
+        .catch(() => {
+            alert('Delete Fail')
+        })
         handleClose()
     }
     return (

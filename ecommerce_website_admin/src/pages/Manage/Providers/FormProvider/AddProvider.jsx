@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography } from '@mui/material'
 import AddCircle from '@mui/icons-material/AddCircle'
+import providerApi from '../../../../apis/providerApi'
 
-
-function AddProvider() {
+function AddProvider({ setUpdate }) {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [name, setName] = useState('')
@@ -18,7 +18,15 @@ function AddProvider() {
         setOpen(false)
     }
     const handleClickAdd = () => {
-
+        providerApi.addProvider(name, phone, address)
+        .then(() => {
+            alert('Add Success')
+            setUpdate(1)
+        })
+        .catch(error => {
+            console.log(error)
+            alert('Add Fail')
+        })
         handleClose()
     }
     return (
@@ -35,7 +43,7 @@ function AddProvider() {
                             <TextField fullWidth size='small' onChange={(e) => setName(e.target.value)} />
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <Typography minWidth={'100px'}>Phone: </Typography>
+                            <Typography minWidth={'100px'}>PhoneNo: </Typography>
                             <TextField fullWidth size='small' onChange={(e) => setPhone(e.target.value)} />
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

@@ -6,8 +6,9 @@ function BoardContent() {
     <Box sx={{
       display: 'flex',
       flexDirection: 'column',
-      bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#363636' : '#F0FFFF'),
-      overflowX: 'hidden'
+      bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#363636' : '#E6E6FA'),
+      overflowX: 'hidden',
+      pb: 2
     }}>
       <ListRow />
     </Box>

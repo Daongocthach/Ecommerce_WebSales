@@ -1,24 +1,14 @@
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Paper, TableFooter, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
+import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { Filter9Plus } from '@mui/icons-material'
 import AddProduct from './FormProduct/AddProduct'
 import UpdateProduct from './FormProduct/UpdateProduct'
 import DeleteProduct from './FormProduct/DeleteProduct'
 import Search from '../../../components/Search/Search'
-
-function createData(id, name, description, price, image, category_id, provider_id) {
-  return { id, name, description, price, image, category_id, provider_id }
-}
-const products = [
-  createData(1, 'Frozen yoghurt', 3, 4, 'https://th.bing.com/th/id/OIP.2HgWxlt6o5NKSicmnfV6rwHaHa?pid=ImgDet&rs=1', 6, 7),
-  createData(2, 'Ice cream sandwich', 3, 4, 'https://th.bing.com/th/id/OIP.2HgWxlt6o5NKSicmnfV6rwHaHa?pid=ImgDet&rs=1', 6, 7),
-  createData(3, 'Eclair', 3, 4, 'https://th.bing.com/th/id/OIP.2HgWxlt6o5NKSicmnfV6rwHaHa?pid=ImgDet&rs=1', 6, 7),
-  createData(4, 'Cupcake', 3, 4, 'https://th.bing.com/th/id/OIP.2HgWxlt6o5NKSicmnfV6rwHaHa?pid=ImgDet&rs=1', 6, 7),
-  createData(5, 'Gingerbread', 3, 4, 'https://th.bing.com/th/id/OIP.2HgWxlt6o5NKSicmnfV6rwHaHa?pid=ImgDet&rs=1', 6, 7)
-]
+import productApi from '../../../apis/productApi'
 
 function Products() {
+  const [products, setProducts] = useState([])
+  const [update, setUpdate] = useState(0)
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(6)
 
@@ -31,18 +21,28 @@ function Products() {
   }
   const [select, setSelect] = useState(1)
   const handleChange = () => {
-
+    setSelect(event.target.value)
   }
+  useEffect(() => {
+    productApi.getAllProducts()
+      .then(response => {
+        setProducts(response.data)
+        setUpdate(0)
+      })
+      .catch(error => {
+        console.error(error)
+      })
+  }, [update])
   return (
     <Box sx={{ m: 5 }}>
       <Typography variant='h7' >Trang chủ / Quản lý sản phẩm</Typography>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-        <AddProduct />
+        <AddProduct setUpdate={setUpdate}/>
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
           <Search />
           <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
           <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
-            <Select value={select} onChange={handleChange} defaultValue={1} >
+            <Select value={select} onChange={handleChange} >
               <MenuItem value={1}>Mới nhất</MenuItem>
               <MenuItem value={2}>Cũ nhất</MenuItem>
             </Select>
@@ -56,9 +56,10 @@ function Products() {
               <TableRow >
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Id</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Name</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">Description</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Price</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">Category</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Description</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Discount</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">SubCategory</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Provider</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Image</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Update</TableCell>
@@ -71,13 +72,14 @@ function Products() {
                   <TableRow key={index}>
                     <TableCell align="center">{product?.id}</TableCell>
                     <TableCell align="center">{product?.name}</TableCell>
-                    <TableCell align="center">{product?.description}</TableCell>
                     <TableCell align="center">{product?.price}</TableCell>
-                    <TableCell align="center">{product?.category_id}</TableCell>
-                    <TableCell align="center">{product?.provider_id}</TableCell>
+                    <TableCell align="center">{product?.description}</TableCell>
+                    <TableCell align="center">{product?.discount}</TableCell>
+                    <TableCell align="center">{product?.subCategory?.name}</TableCell>
+                    <TableCell align="center">{product?.provider?.name}</TableCell>
                     <TableCell align="center">{<img src={product?.image} alt='avatar' width={'50px'} height={'50px'} />}</TableCell>
-                    <TableCell align="center"><UpdateProduct product={product} /></TableCell>
-                    <TableCell align="center"><DeleteProduct productId={product?.id} /></TableCell>
+                    <TableCell align="center"><UpdateProduct setUpdate={setUpdate} product={product} /></TableCell>
+                    <TableCell align="center"><DeleteProduct setUpdate={setUpdate} productId={product?.id} /></TableCell>
                   </TableRow>
                 )
               })}

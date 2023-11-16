@@ -1,13 +1,12 @@
 const initialState = {
-    _id: '',
-    fullname: '',
+    id: '',
     username: '',
     email: '',
-    password: '',
-    phone: '',
+    fullName: '',
+    phoneNo: '',
+    point: '',
     address: '',
-    avatar: '',
-    role: -1
+    avatar: ''
 }
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -47,15 +46,14 @@ const authReducer = (state = initialState, action) => {
 
         case 'LOGOUT': {
             return {
-                _id: '',
-                fullname: '',
+                id: '',
                 username: '',
                 email: '',
-                password: '',
-                phone: '',
+                fullName: '',
+                phoneNo: '',
+                point: '',
                 address: '',
-                avatar: '',
-                role: -1
+                avatar: ''
             }
         }
 

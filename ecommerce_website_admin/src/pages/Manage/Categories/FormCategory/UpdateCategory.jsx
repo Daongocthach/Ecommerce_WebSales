@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography } from '@mui/material'
 import { Create } from '@mui/icons-material'
+import categoryApi from '../../../../apis/categoryApi'
 
-
-function UpdateCategory({ category }) {
+function UpdateCategory({ setUpdate, category }) {
   const [name, setName] = useState(category?.name)
   const [open, setOpen] = useState(false)
 
@@ -14,7 +14,15 @@ function UpdateCategory({ category }) {
     setOpen(false)
   }
   const handleUpdate = () => {
-
+    categoryApi.updateCategory(category?.id, name)
+    .then(() => {
+        alert('Update Success')
+        setUpdate(3)
+    })
+    .catch(error => {
+        console.log(error)
+        alert('Update Fail')
+    })
     handleClose()
   }
   return (
@@ -32,7 +40,7 @@ function UpdateCategory({ category }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={() => handleUpdate()}>Update</Button>
+          <Button onClick={handleUpdate}>Update</Button>
         </DialogActions>
       </Dialog>
     </div>

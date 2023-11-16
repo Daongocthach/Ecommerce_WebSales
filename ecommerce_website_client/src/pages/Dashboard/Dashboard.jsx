@@ -4,7 +4,7 @@ import { Box } from '@mui/material'
 
 function Dashboard() {
   return (
-    <Box>
+    <Box >
       <Advertisement />
       <BoardContent />
     </Box>

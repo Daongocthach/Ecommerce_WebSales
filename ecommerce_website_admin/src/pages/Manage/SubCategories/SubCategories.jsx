@@ -1,14 +1,13 @@
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import AddProvider from './FormProvider/AddProvider'
-import UpdateProvider from './FormProvider/UpdateProvider'
-import DeleteProvider from './FormProvider/DeleteProvider'
+import AddSubCategory from './FormSubCategory/AddSubCategory'
+import UpdateSubCategory from './FormSubCategory/UpdateSubCategory'
+import DeleteSubCategory from './FormSubCategory/DeleteSubCategory'
 import Search from '../../../components/Search/Search'
-import providerApi from '../../../apis/providerApi'
+import subCategoryApi from '../../../apis/subCategoryApi'
 
-function Providers() {
-  const [providers, setProviders] = useState([])
+function SubCategories() {
+  const [subCategories, setSubCategories] = useState([])
   const [update, setUpdate] = useState(0)
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(6)
@@ -21,31 +20,31 @@ function Providers() {
     setPage(0)
   }
   const [select, setSelect] = useState(1)
-  const handleChange = (event) => {
+  const handleChange = () => {
     setSelect(event.target.value)
   }
   useEffect(() => {
-    providerApi.getAllProviders()
+    subCategoryApi.getAllSubCategories()
       .then(response => {
-        setProviders(response.data)
+        setSubCategories(response.data)
         setUpdate(0)
       })
       .catch(error => {
         console.error(error)
       })
   }, [update])
-
-  return ( <Box sx={{ m: 5 }}>
-      <Typography variant='h7' >Trang chủ / Quản lý nhà cung cấp</Typography>
+  return (
+    <Box sx={{ m: 5 }}>
+      <Typography variant='h7' >Trang chủ / Quản lý loại sản phẩm</Typography>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-        <AddProvider setUpdate={setUpdate}/>
+        <AddSubCategory setUpdate={setUpdate} />
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
           <Search />
           <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
           <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
             <Select value={select} onChange={handleChange} >
-              <MenuItem value={1}>Mới nhất</MenuItem>
-              <MenuItem value={2}>Cũ nhất</MenuItem>
+              <MenuItem value={1}>Cũ nhất</MenuItem>
+              <MenuItem value={2}>Mới nhất</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -55,24 +54,22 @@ function Providers() {
           <Table>
             <TableHead>
               <TableRow >
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">Id</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">Name</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">PhoneNo</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">Address</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">Update</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">Delete</TableCell>
+                <TableCell align="center">Id</TableCell>
+                <TableCell align="center">Name</TableCell>
+                <TableCell align="center">Category</TableCell>
+                <TableCell align="center">Update</TableCell>
+                <TableCell align="center">Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {Array.isArray(providers) && providers?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((provider, index) => {
+              {Array.isArray(subCategories) && subCategories?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((subCategory, index) => {
                 return (
                   <TableRow key={index}>
-                    <TableCell align="center">{provider?.id}</TableCell>
-                    <TableCell align="center">{provider?.name}</TableCell>
-                    <TableCell align="center">{provider?.phoneNo}</TableCell>
-                    <TableCell align="center">{provider?.address}</TableCell>
-                    <TableCell align="center"><UpdateProvider setUpdate={setUpdate} provider={provider} /></TableCell>
-                    <TableCell align="center"><DeleteProvider setUpdate={setUpdate} providerId={provider?.id} /></TableCell>
+                    <TableCell align="center">{subCategory?.id}</TableCell>
+                    <TableCell align="center">{subCategory?.name}</TableCell>
+                    <TableCell align="center">{subCategory?.category?.name}</TableCell>
+                    <TableCell align="center"><UpdateSubCategory setUpdate={setUpdate} subCategory={subCategory} /></TableCell>
+                    <TableCell align="center"><DeleteSubCategory setUpdate={setUpdate} subCategoryId={subCategory?.id} /></TableCell>
                   </TableRow>
                 )
               })}
@@ -82,7 +79,7 @@ function Providers() {
                 <TablePagination
                   colSpan={12}
                   rowsPerPageOptions={[6, 10]}
-                  count={Array.isArray(providers) ? providers.length : 0}
+                  count={Array.isArray(subCategories) ? subCategories?.length : 0}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onPageChange={handleChangePage}
@@ -97,4 +94,4 @@ function Providers() {
   )
 }
 
-export default Providers
+export default SubCategories
