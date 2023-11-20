@@ -1,42 +1,28 @@
-import { Chip, Box } from '@mui/material'
-import { Home, Bolt, AddHomeWork, Fastfood, WaterDrop } from '@mui/icons-material'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Box } from '@mui/material'
+import categoryApi from '../../apis/categoryApi'
+import MenuCategory from './MenuCategory/MenuCategory'
 
-const useStyles = {
-    container: {
-        width: '100%',
-        height: (theme) => theme.webCustom.boardBarHeight,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        gap: 2,
-        paddingX: 2,
-        overflow: 'auto',
-        borderTop: '1px solid #D3D3D3',
-        bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#363636' : 'white')
-    },
-    chip: {
-        color: (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black'),
-        bgcolor: 'transparent',
-        border: '1 ',
-        paddingX: '5px',
-        borderRadius: '4px',
-        '& .MuiSvgIcon-root': {
-            color: (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black')
-        },
-        '&:hover': {
-            bgcolor: 'primary.50'
-        }
-    }
-}
 function BoardBar() {
+    const [categories, setCategories] = useState([])
+    useEffect(() => {
+        categoryApi.getAllCategories()
+            .then(response => {
+                setCategories(response.data)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }, [])
     return (
-        <Box sx={useStyles.container}>
-            <Link to={'/'}><Chip icon={<Home />} label={'Trang chủ'} clickable sx={useStyles.chip} ></Chip></Link>
-            <Link to={'/'}><Chip icon={<AddHomeWork />} label={'Đồ gia dụng'} clickable sx={useStyles.chip} ></Chip></Link>
-            <Link to={'/'}><Chip icon={<Bolt />} label={'Đồ điện tử'} clickable sx={useStyles.chip} ></Chip></Link>
-            <Link to={'/'}><Chip icon={<Fastfood />} label={'Thực phẩm'} clickable sx={useStyles.chip} ></Chip></Link>
-            <Link to={'/'}><Chip icon={<WaterDrop />} label={'Nước uống'} clickable sx={useStyles.chip} ></Chip></Link>
+        <Box sx={{
+            width: '100%', height: (theme) => theme.webCustom.boardBarHeight, display: 'flex', alignItems: 'center',
+            justifyContent: 'flex-start', gap: 2, paddingX: 2, overflow: 'auto', borderTop: '1px solid #D3D3D3',
+            overflowY: 'hidden', bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#363636' : 'white')
+        }}>
+            {categories?.map((category) => (
+                <MenuCategory key={category.id} category={category}/>
+            ))}
         </Box>
     )
 }

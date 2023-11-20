@@ -1,9 +1,19 @@
+import { useState, useEffect } from 'react'
 import { Box, Typography } from '@mui/material'
 import ListProduct from './ListProduct/ListProduct'
-import { mockData } from '../../../../../apis/mockdata'
+import productApi from '../../../../../apis/productApi'
 
 function Row({ category }) {
-    const products = mockData?.products
+    const [products, setProducts] = useState([])
+    useEffect(() => {
+        productApi.getAllProducts()
+            .then(response => {
+                setProducts(response.data)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }, [])
     return (
         <Box >
             <Typography variant={'h6'} sx={{ mt: 2, ml: 10, mb: 2, fontWeight: 'bold' }}>

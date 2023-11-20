@@ -1,26 +1,35 @@
-import { Box,  Typography, TextField, Checkbox } from '@mui/material'
+import { Box, Typography, TextField, Checkbox, Button } from '@mui/material'
 import { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import DeleteItem from '../DeleteItem/DeleteItem'
 import { formatCurrency } from '../../../utils/price'
+import cartItemApi from '../../../apis/cartItemApi'
 
-function Product() {
-    const [quantity, setQuantity] = useState(1)
+function Product({ product, quantity, customerId }) {
+    const [update, setUpdate] = useState(0)
+    const [updateQuantity, setUpdateQuantity] = useState(quantity)
+    const handleUpdateQuantity = (e) => {
+        setUpdateQuantity(e.target.value)
+        cartItemApi.updateCartItem(product?.id, customerId, updateQuantity)
+            .catch(error => {
+                console.error(error)
+            })
+    }
     return (
         <Box sx={{ display: 'flex', justifyContent: 'flex-start', mt: 4 }}>
-            <img src='https://i.pinimg.com/736x/22/98/cb/2298cb267f745cebcbec821857e00800.jpg' alt='omachi'
+            <img src={product?.image} alt='omachi'
                 style={{ objectFit: 'cover', borderRadius: '5px', height: '150px', with: '150px' }} />
-            <Box ml={2}>
-                <Typography variant='h6' fontWeight={'bold'}>Mì omachi Sốt Spaghetty Nước sốt thịt bằm cà chua</Typography>
-                <Typography variant='h6' color={'red'} fontWeight={'bold'}>{formatCurrency(129000)}</Typography>
+            <Box ml={2} minWidth={'300px'}>
+                <Typography variant='h6' fontWeight={'bold'} maxWidth={'280px'}>{product?.name}</Typography>
+                <Typography variant='h6' color={'red'} fontWeight={'bold'}>{formatCurrency(product?.price)}</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1 }}>
                     <Typography variant='body1' fontWeight={'bold'} color={'gray'} >Số lượng</Typography>
                     <TextField type='number' size='small' InputProps={{ inputProps: { min: 1, max: 50 } }}
-                        value={quantity} onChange={e => setQuantity(e.target.value)} />
+                        value={updateQuantity} onChange={(e) => handleUpdateQuantity(e)} />
                 </Box>
             </Box>
-            <Box sx={{ display: 'flex', flexDirection:'column', justifyContent:'center', alignItems: 'center', ml: 2, gap: 2 }}>
-                <DeleteItem/>
-                <Checkbox/>
+            <Box >
+                <DeleteItem customerId={customerId} productId={product?.id}/>
             </Box>
         </Box>
     )

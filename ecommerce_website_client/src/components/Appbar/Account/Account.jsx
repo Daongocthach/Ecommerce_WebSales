@@ -8,9 +8,7 @@ import { logout } from '../../../redux/actions/auth'
 
 function Account() {
     const dispatch = useDispatch()
-    const currentUser = useSelector((state) => state.auth)
-    const avatar = localStorage.getItem('avatar')
-    const fullname = localStorage.getItem('fullname')
+    const avatar = useSelector(state => state.auth.avatar)
     const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
@@ -22,7 +20,6 @@ function Account() {
         setAnchorEl(null)
     }
     const handleLogout = () => {
-        localStorage.removeItem('avatar', 'fullname')
         dispatch(logout())
         alert('Logout sucessfull')
         navigate('/')

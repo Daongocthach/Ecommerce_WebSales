@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { Container, TextField, Stack, Button, Box, Checkbox } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { getCookie, setCookie } from '../../../utils/cookie'
 import authenApi from '../../../apis/authenApi'
 import loginImage from '../../../assets/img/loginImage.jpg'
 import { login } from '../../../redux/actions/auth'
+import { setCart } from '../../../redux/actions/cart'
+import cartItemApi from '../../../apis/cartItemApi'
 
 function Login() {
   const dispatch = useDispatch()
@@ -16,8 +18,9 @@ function Login() {
   const onFinish = () => {
     authenApi.signin(username, password)
       .then(response => {
-        dispatch(login(response))
-        localStorage.setItem('avatar', response?.avatar)
+        dispatch(login(response.data))
+        cartItemApi.getCartItemsByCustomerId(response?.data.id)
+          .then(response => {dispatch(setCart(response.data))})
         alert('Login Successful')
         navigate('/')
       })

@@ -6,22 +6,6 @@ import { mockData } from '../../../apis/mockdata'
 const color = (theme) => (theme.palette.mode === 'dark' ? '#898989' : '#E6E6FA')
 
 const useStyles = {
-  container: {
-    width: '100%', height: (theme) => theme.webCustom.promotionBannerHeight, position: 'relative'
-  },
-  imageBox: {
-    width: '100%', height: '100%', bgcolor: color, borderRadius: 5
-  },
-  image: {
-    width: '100%', height: '100%', objectFit: 'contain', filter: 'brightness(60%)'
-  },
-  name: {
-    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: 'white', fontWeight: 'bold',
-    fontFamily: 'Rubik Vinyl, cursive', width: '400px', textAlign: 'center'
-  },
-  buttonBox: {
-    display: 'flex', gap: 1, position: 'absolute', top: '80%', left: '50%', transform: 'translate(-50%, -50%)', color: 'white', height: '40px', opacity: 0.8
-  },
   btnNextPrev: {
     position: 'absolute', bgcolor: 'white', color: 'black', fontWeight: 'bold', transform: 'translate(-50%, -50%)', top: '50%', opacity: 0.5,
     ':hover': { bgcolor: '#D3D3D3' }
@@ -32,12 +16,15 @@ function Advertisement() {
   const [index, setIndex] = useState(0)
   const promotions = mockData.promotions
   return (
-    <Box sx={useStyles.container} >
-      <Box sx={useStyles.imageBox}>
-        <img src={promotions[index]?.image} alt='product' style={useStyles.image} />
-        <Typography variant={'h2'} sx={useStyles.name}>{promotions[index]?.name}</Typography>
+    <Box sx={{ width: '100%', height: (theme) => theme.webCustom.promotionBannerHeight, position: 'relative' }} >
+      <Box sx={{ width: '100%', height: '100%', bgcolor: color, borderRadius: 5 }}>
+        <img src={promotions[index]?.image} alt='product' style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'brightness(60%)' }} />
+        <Typography variant={'h2'} sx={{
+          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: 'white', fontWeight: 'bold',
+          fontFamily: 'Rubik Vinyl, cursive', width: '400px', textAlign: 'center'
+        }}>{promotions[index]?.name}</Typography>
       </Box>
-      <Box sx={useStyles.buttonBox}>
+      <Box sx={{ display: 'flex', gap: 1, position: 'absolute', top: '80%', left: '50%', transform: 'translate(-50%, -50%)', color: 'white', height: '40px', opacity: 0.8 }}>
         <Button variant="contained" startIcon={<Visibility sx={{ color: 'black' }} />}
           sx={{ bgcolor: 'white', color: 'black', fontWeight: 'bold' }}>View
         </Button>

@@ -3,7 +3,7 @@ import { cyan, teal, deepOrange, orange } from '@mui/material/colors'
 
 const APP_BAR_HEIGHT = '70px'
 const BOARD_CONTENT_HEIGHT = '600px'
-const BOARD_BAR_HEIGHT = '48px'
+const BOARD_BAR_HEIGHT = '51px'
 const PROMOTION_BANNER_HEIGHT = '650px'
 
 const theme = extendTheme({

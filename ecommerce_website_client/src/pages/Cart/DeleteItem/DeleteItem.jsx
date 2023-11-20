@@ -1,9 +1,12 @@
 import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import cartItemApi from '../../../apis/cartItemApi'
+import { removeFromCart } from '../../../redux/actions/cart'
 
-const color = (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black')
-function DeleteItem() {
+function DeleteItem({ customerId, productId }) {
+    const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const handleClickOpen = () => {
         setOpen(true)
@@ -12,11 +15,18 @@ function DeleteItem() {
         setOpen(false)
     }
     const handleClickDelete = () => {
-
+        cartItemApi.deleteCartItem(customerId, productId)
+            .then(response => {
+                console.log(response.data)
+                // dispatch(removeFromCart(response.data))
+                alert('Delete successfull')
+            })
+        handleClose()
     }
     return (
         <div>
-            <Button onClick={handleClickOpen}><DeleteIcon sx={{ color: color }}/></Button>
+            <Button onClick={handleClickOpen}><DeleteIcon sx={{ color: (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black') }} />
+            </Button>
             <Dialog open={open} onClose={handleClose} >
                 <DialogTitle >Are you sure you want to delete this item?</DialogTitle>
                 <DialogActions>

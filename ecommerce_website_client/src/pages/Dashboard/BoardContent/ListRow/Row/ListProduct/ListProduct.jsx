@@ -17,7 +17,7 @@ function ListProduct({ products }) {
         <Box sx={{ gap: 1, display: 'flex' }}>
             <Button startIcon={<ArrowBackIos />} sx={{ visibility: showMore > 0 ? 'visible' : 'hidden' }}
                 onClick={() => { setShowMore(showMore - maxItemsToShow) }}></Button>
-            {products?.slice(showMore, showMore + maxItemsToShow).map(product => <Product key={product._id} product={product} />)}
+            {products?.slice(showMore, showMore + maxItemsToShow).map(product => <Product key={product.id} product={product} />)}
             <Button startIcon={<ArrowForwardIos />} sx={{ visibility: products?.length > showMore + maxItemsToShow ? 'visible' : 'hidden' }}
                 onClick={() => { setShowMore(showMore + maxItemsToShow) }}></Button>
         </Box>

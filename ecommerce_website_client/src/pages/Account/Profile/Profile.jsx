@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react'
 import {Typography, Box, Input, Button } from '@mui/material'
 import { PersonOutline } from '@mui/icons-material'
+import { useSelector } from 'react-redux'
 
 const useStyles = {
-  alignBox: {
-    display: 'flex', alignItems: 'flex-start', flexDirection: 'column'
-  },
   flexBox: {
     display: 'flex', alignItems: 'center', gap: 3, mt: 1, mb: 1
   },
@@ -23,16 +21,17 @@ const useStyles = {
   }
 }
 function Profile() {
-  const [username, setUsername] = useState('')
-  const [phone, setPhone] = useState('')
-  const [image, setImage] = useState('')
-  const [address, setAdress] = useState('')
+  const user = useSelector(state => state.auth)
+  const [username, setUsername] = useState(user?.name || '')
+  const [phone, setPhone] = useState(user?.phoneNo || '')
+  const [image, setImage] = useState(user?.name || '')
+  const [address, setAdress] = useState(user?.name || '')
 
   const onUpdate = () => {
   }
 
   return (
-    <Box sx={useStyles.alignBox}>
+    <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
       <Box sx={{ ...useStyles.flexBox }}>
         <Typography variant='h6' sx={useStyles.textContent}>Tài khoản ID: {123456}</Typography>
         <PersonOutline sx={{ color: 'red' }} />
