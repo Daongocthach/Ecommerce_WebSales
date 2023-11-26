@@ -39,7 +39,7 @@ function ProductDetail() {
       cartItemApi.addCartItem(cartItem)
         .then(response => {
           alert('Thêm vào giỏ hàng thành công')
-          dispatch(addToCart(response))
+          dispatch(addToCart(response.data))
         })
         .catch(error => {
           console.error('Lỗi khi thêm vào giỏ hàng:', error)
@@ -59,7 +59,7 @@ function ProductDetail() {
       .catch(error => {
         console.error(error)
       })
-  }, [])
+  }, [productId])
   return (
     <div>
       <Box sx={{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center' }}>

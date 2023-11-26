@@ -8,7 +8,6 @@ import Account from './Account/Account'
 import Search from './Search/Search'
 import G2Logo from '../../assets/img/G2Logo.png'
 import { setSubCategory } from '../../redux/actions/subCategory'
-import cartItemApi from '../../apis/cartItemApi'
 
 const useStyles = {
   button: {
@@ -31,7 +30,7 @@ function AppBar() {
     navigate('/genre-detail')
   }
   useEffect(() => {
-    setQuantity(cart?.quantity)
+    setQuantity(cart?.cartItems.length)
   }, [cart])
   return (
     <Box sx={{

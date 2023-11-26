@@ -11,7 +11,11 @@ export const removeFromCart = (data) => {
         payload: data
     }
 }
-
+export const deleteAllCart = () => {
+    return {
+        type: 'DELETE_ALL_CART'
+    }
+}
 export const updateQuantity = (data) => {
     return {
         type: 'UPDATE_QUANTITY',

@@ -5,6 +5,7 @@ import { Settings, PersonAdd } from '@mui/icons-material'
 import { Link, useNavigate } from 'react-router-dom'
 import { deleteCookie, getCookie } from '../../../utils/cookie'
 import { logout } from '../../../redux/actions/auth'
+import { persistor } from '../../../redux/store'
 
 function Account() {
     const dispatch = useDispatch()
@@ -21,6 +22,7 @@ function Account() {
     }
     const handleLogout = () => {
         dispatch(logout())
+        persistor.purge()
         alert('Logout sucessfull')
         navigate('/')
     }

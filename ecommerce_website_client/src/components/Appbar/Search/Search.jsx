@@ -1,46 +1,79 @@
 import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
-import { InputAdornment, TextField } from '@mui/material'
-import { useState } from 'react'
+import { InputAdornment, TextField, Autocomplete, Stack, Box } from '@mui/material'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import productApi from '../../../apis/productApi'
+import ListItem from '@mui/material/List';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import Avatar from '@mui/material/Avatar';
 
 function Search() {
+    const navigate = useNavigate()
     const colorChangeByTheme = (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black')
     const [searchValue, setSearchValue] = useState('')
+    const [products, setProducts] = useState([])
+    const handleProductSelect = (event, value) => {
+        if (value) {
+          // Chuyển hướng đến trang chi tiết sản phẩm với id của sản phẩm được chọn
+          navigate(`/product-detail?${value.id}`)
+        }
+      }
+    useEffect(() => {
+        productApi.getAllProducts()
+            .then(response => {
+                setProducts(response.data)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }, [])
     return (
-        <TextField
-            id="outlined-search"
-            label="Search..."
-            type="text"
-            size='small'
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            InputProps={{
-                startAdornment: (
-                    <InputAdornment position="start">
-                        <SearchIcon sx={{ color: (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black') }} />
-                    </InputAdornment>
-                ),
-                endAdornment: (
-                    <CloseIcon
-                        fontSize='small'
-                        sx={{ color: searchValue ? (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black') : 'transparent', cursor: 'pointer' }}
-                        onClick={() => setSearchValue('')}
-                    />
-                )
-            }}
-            sx={{
-                minWidth: '120px',
-                maxWidth: '300px',
-                '& label': { color: colorChangeByTheme },
-                '& input': { color: colorChangeByTheme },
-                '& label.Mui-focused': { fontWeight:'bold' },
-                '& .MuiOutlinedInput-root': {
-                    '& fieldset': { borderColor: colorChangeByTheme },
-                    '&:hover fieldset': { borderColor: colorChangeByTheme },
-                    '&.Mui-focused fieldset': { borderColor: colorChangeByTheme }
-                }
-            }} />
+        <Stack spacing={2} sx={{ width: 300 }}>
+            <Autocomplete
+                freeSolo
+                id="free-solo-2-demo"
+                options={products}
+                getOptionLabel={(product) => (product && product.name) || ''}
+                onChange={handleProductSelect}
+                renderOption={(props, product) => (
+                    <ListItem {...props}>
+                        <ListItemAvatar>
+                            <Avatar alt={product.name} src={product.image} />
+                        </ListItemAvatar>
+                        <ListItemText primary={product.name} />
+                    </ListItem>
+                )}
+
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        id="outlined-search"
+                        label="Search..."
+                        type="text"
+                        size='small'
+                        InputProps={{
+                            ...params.InputProps,
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon sx={{ color: (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black') }} />
+                                </InputAdornment>
+                            )
+                        }}
+                        sx={{
+                            minWidth: '120px',
+                            maxWidth: '300px',
+                            '& label': { color: colorChangeByTheme },
+                            '& input': { color: colorChangeByTheme },
+                            '& label.Mui-focused': { fontWeight: 'bold' },
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': { borderColor: colorChangeByTheme },
+                                '&:hover fieldset': { borderColor: colorChangeByTheme },
+                                '&.Mui-focused fieldset': { borderColor: colorChangeByTheme }
+                            }
+                        }} />)} />
+        </Stack>
     )
 }
 

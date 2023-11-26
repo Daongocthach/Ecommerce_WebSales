@@ -17,9 +17,12 @@ function DeleteItem({ customerId, productId }) {
     const handleClickDelete = () => {
         cartItemApi.deleteCartItem(customerId, productId)
             .then(response => {
-                console.log(response.data)
-                // dispatch(removeFromCart(response.data))
+                dispatch(removeFromCart(productId))
                 alert('Delete successfull')
+            })
+            .catch(err => {
+                console.log(err)
+                alert('Delete fail')
             })
         handleClose()
     }

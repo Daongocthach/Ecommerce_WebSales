@@ -21,6 +21,10 @@ const cartItemApi = {
     const url = `http://localhost:8080/api/v1/delete-cartitem?customerId=${customerId}&productId=${productId}`
     return axios.delete(url)
   },
+  deleteAllCartItemByCustomerId(customerId) {
+    const url = `http://localhost:8080/api/v1/delete-cartitems-customer?customerId=${customerId}`
+    return axios.delete(url)
+  },
   getCartItemsByCustomerId(customerId) {
     const url = `http://localhost:8080/api/v1/cartitems-customer?customerId=${customerId}`
     return axios.get(url)

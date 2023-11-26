@@ -19,8 +19,9 @@ function Login() {
     authenApi.signin(username, password)
       .then(response => {
         dispatch(login(response.data))
-        cartItemApi.getCartItemsByCustomerId(response?.data.id)
-          .then(response => {dispatch(setCart(response.data))})
+        setCookie('userId', response.data.id, 1)
+        cartItemApi.getCartItemsByCustomerId(response.data.id)
+          .then(response => { dispatch(setCart(response.data)) })
         alert('Login Successful')
         navigate('/')
       })

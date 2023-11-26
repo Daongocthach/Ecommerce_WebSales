@@ -14,6 +14,12 @@ const authenApi = {
             phoneNo
 
         })
+    },
+    updateProfile(id, fullName, phoneNo, address, avatar) {
+        const url = 'http://localhost:8080/api/v1/update-profile'
+        return axios.put(url, {
+           id, fullName, phoneNo, address, avatar
+        })
     }
 }
 

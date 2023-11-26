@@ -1,12 +1,17 @@
 import { Button, Typography, Tooltip, CardActions, CardMedia, CardContent, Card as MuiCard } from '@mui/material'
 import { Help, Visibility, ShoppingCart } from '@mui/icons-material'
 import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { formatCurrency } from '../../../../../../../utils/price'
+import cartItemApi from '../../../../../../../apis/cartItemApi'
+import { addToCart } from '../../../../../../../redux/actions/cart'
 
 const color = (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black')
 
 function Product({ product }) {
+    const dispatch = useDispatch()
+    const user = useSelector(state => state.auth)
     const navigate = useNavigate()
     const [isHovered, setIsHovered] = useState(false)
     const handleMouseEnter = () => {
@@ -15,6 +20,33 @@ function Product({ product }) {
     const handleMouseLeave = () => {
         setIsHovered(false)
     }
+    function handleClickAddToCart() {
+        if (user && product) {
+          const cartItem = {
+            'id': {
+              'customerId': user.id,
+              'productId': product.id
+            },
+            'customer': {
+              'id': user.id
+            },
+            'product': {
+              'id': product.id
+            },
+            'quantity': 1
+          }
+          cartItemApi.addCartItem(cartItem)
+            .then(response => {
+              alert('Thêm vào giỏ hàng thành công')
+              dispatch(addToCart(response.data))
+            })
+            .catch(error => {
+              console.error('Lỗi khi thêm vào giỏ hàng:', error)
+            })
+        } else {
+          console.error('User hoặc Product không tồn tại.')
+        }
+      }
     return (
         <MuiCard
             onMouseEnter={handleMouseEnter}
@@ -44,7 +76,7 @@ function Product({ product }) {
 
             <CardActions>
                 <Tooltip title="View"><Button size="small" startIcon={<Visibility />} sx={{ color: 'red' }} onClick={() => { navigate(`/product-detail?${product?.id}`) }}></Button></Tooltip>
-                <Tooltip title="Add To Cart"><Button size="small" startIcon={<ShoppingCart />} sx={{ color: color }}></Button></Tooltip>
+                <Tooltip title="Add To Cart"><Button size="small" startIcon={<ShoppingCart />} sx={{ color: color }} onClick={handleClickAddToCart}></Button></Tooltip>
                 <Tooltip title="Help"><Button size="small" startIcon={<Help />} sx={{ color: color }}></Button></Tooltip>
             </CardActions>
 

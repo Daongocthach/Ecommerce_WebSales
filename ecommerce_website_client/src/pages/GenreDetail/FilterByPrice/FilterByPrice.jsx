@@ -1,11 +1,12 @@
-import { Box, TextField, Typography, Menu, MenuItem, Slider } from '@mui/material'
-import { useState } from 'react'
+import { Box, TextField, Typography, Menu, MenuItem, Slider, Button } from '@mui/material'
+import { useState, useEffect } from 'react'
 import { formatCurrency } from '../../../utils/price'
+import { sortByMaxIdAndPriceRange } from '../../../utils/price'
 
-function FilterByPrice() {
+function FilterByPrice({ products, setProducts }) {
     const [minPrice, setMinPrice] = useState(1000)
-    const [maxPrice, setMaxPrice] = useState(10000000)
-    const [value, setValue] = useState([1, 10000])
+    const [maxPrice, setMaxPrice] = useState(1000000)
+    const [value, setValue] = useState([1, 1000])
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
     const handleClick = (event) => {
@@ -19,7 +20,9 @@ function FilterByPrice() {
         setMinPrice(newValue[0] * 1000)
         setMaxPrice(newValue[1] * 1000)
     }
-
+    // useEffect(() => {
+    //     setProducts(sortByMaxIdAndPriceRange(products, minPrice, maxPrice))
+    //   }, [minPrice, maxPrice])
     return (
         <>
             <Menu id="basic-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
@@ -30,13 +33,15 @@ function FilterByPrice() {
                             ---
                             <TextField value={formatCurrency(maxPrice)} InputProps={{ readOnly: true }} />
                         </Box>
-                        <Slider value={value} onChange={handleChange} min={1} max={10000}/>
+                        <Slider value={value} onChange={handleChange} min={1} max={1000}/>
                     </Box>
                 </MenuItem>
             </Menu>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
                 <Typography variant='body1' fontWeight={'bold'} minWidth={'70px'}>Chọn giá</Typography>
                 <TextField onClick={handleClick} sx={{ minWidth: '250px' }} size='small' value={'Từ ' + formatCurrency(minPrice) + ' - ' + formatCurrency(maxPrice)} />
+                <Button onClick={()=> {setProducts(sortByMaxIdAndPriceRange(products, minPrice, maxPrice))}}>abc</Button>
+                
             </Box>
         </>
     )

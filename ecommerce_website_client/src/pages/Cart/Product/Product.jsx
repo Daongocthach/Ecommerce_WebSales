@@ -4,17 +4,32 @@ import { useSelector, useDispatch } from 'react-redux'
 import DeleteItem from '../DeleteItem/DeleteItem'
 import { formatCurrency } from '../../../utils/price'
 import cartItemApi from '../../../apis/cartItemApi'
+import { updateQuantity } from '../../../redux/actions/cart'
 
 function Product({ product, quantity, customerId }) {
-    const [update, setUpdate] = useState(0)
-    const [updateQuantity, setUpdateQuantity] = useState(quantity)
-    const handleUpdateQuantity = (e) => {
-        setUpdateQuantity(e.target.value)
-        cartItemApi.updateCartItem(product?.id, customerId, updateQuantity)
-            .catch(error => {
-                console.error(error)
+    const dispatch = useDispatch()
+    const [changeQuantity, setChangeQuantity] = useState(quantity)
+    useEffect(() => {
+        const cartItem = {
+            'id': {
+                'customerId': customerId,
+                'productId': product.id
+            },
+            'customer': {
+                'id': customerId
+            },
+            'product': product,
+            'quantity': changeQuantity
+        }
+
+        cartItemApi.updateCartItem(cartItem)
+            .then(response => [
+                dispatch(updateQuantity(cartItem))
+            ])
+            .catch(err => {
+                console.log(err)
             })
-    }
+    }, [changeQuantity])
     return (
         <Box sx={{ display: 'flex', justifyContent: 'flex-start', mt: 4 }}>
             <img src={product?.image} alt='omachi'
@@ -25,11 +40,11 @@ function Product({ product, quantity, customerId }) {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1 }}>
                     <Typography variant='body1' fontWeight={'bold'} color={'gray'} >Số lượng</Typography>
                     <TextField type='number' size='small' InputProps={{ inputProps: { min: 1, max: 50 } }}
-                        value={updateQuantity} onChange={(e) => handleUpdateQuantity(e)} />
+                        value={changeQuantity} onChange={(e) => setChangeQuantity(parseInt(e.target.value), 10)} />
                 </Box>
             </Box>
             <Box >
-                <DeleteItem customerId={customerId} productId={product?.id}/>
+                <DeleteItem customerId={customerId} productId={product?.id} />
             </Box>
         </Box>
     )
