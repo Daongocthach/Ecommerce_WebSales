@@ -15,6 +15,7 @@ function UpdateProduct({ setUpdate, product }) {
   const [subCategory, setSubCategory] = useState(product?.subCategory?.id || 1)
   const [provider, setProvider] = useState(product?.provider?.id || 1)
   const [image, setImage] = useState(product?.image)
+  const [enabled, setEnabled] = useState(product?.enabled)
   const [open, setOpen] = useState(false)
 
   const handleClickOpen = () => {
@@ -56,7 +57,7 @@ function UpdateProduct({ setUpdate, product }) {
       })
   }, [])
   const handleUpdate = () => {
-    productApi.updateProduct(product?.id, name, price, description, discount, subCategory, provider, image)
+    productApi.updateProduct(product?.id, name, price, description, discount, subCategory, provider, image, enabled)
       .then(() => {
         alert('Update Success')
         setUpdate(3)
@@ -70,10 +71,10 @@ function UpdateProduct({ setUpdate, product }) {
   return (
     <div>
       <Button sx={{ bgcolor: 'orange', color: 'black' }} variant="outlined" onClick={handleClickOpen}><Create /></Button>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} fullWidth>
         <DialogTitle>Update Product</DialogTitle>
         <DialogContent>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, width: '350px' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Typography minWidth={'100px'}>Name: </Typography>
               <TextField fullWidth size='small' value={name} onChange={(e) => setName(e.target.value)} />
@@ -117,8 +118,17 @@ function UpdateProduct({ setUpdate, product }) {
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Typography minWidth={'100px'}>Image: </Typography>
               <TextField fullWidth size='small' type={'file'} onChange={handleImageChange} />
+              {image && <img src={image} style={{ height: '50px', width: '50px' }} />}
             </Box>
-            {image && <img src={image} style={{ height: '50px', width: '50px' }} />}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography minWidth={'100px'}>Status: </Typography>
+              <FormControl size={'small'} fullWidth>
+                <Select value={enabled} onChange={(e) => setEnabled(e.target.value)} >
+                  <MenuItem value={true}>Enable</MenuItem>
+                  <MenuItem value={false}>Disable</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
           </Box>
         </DialogContent>
         <DialogActions>

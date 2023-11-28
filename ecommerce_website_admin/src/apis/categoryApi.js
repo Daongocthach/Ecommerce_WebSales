@@ -12,9 +12,9 @@ const categoryApi = {
         const url = 'http://localhost:8080/api/v1/add-category'
         return axios.post(url, { name })
     },
-    updateCategory(id, name) {
+    updateCategory(id, name, enabled) {
         const url = 'http://localhost:8080/api/v1/update-category'
-        return axios.put(url, { id, name } )
+        return axios.put(url, { id, name, enabled } )
     },
     deleteCategory(id) {
         const url = `http://localhost:8080/api/v1/delete-category/${id}`

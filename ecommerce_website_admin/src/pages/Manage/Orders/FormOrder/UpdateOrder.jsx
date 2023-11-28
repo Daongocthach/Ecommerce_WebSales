@@ -1,16 +1,33 @@
 import { useState } from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stepper, Step, StepLabel, Box } from '@mui/material'
 import { Create } from '@mui/icons-material'
+import orderApi from '../../../../apis/orderApi'
 
 const steps = [
-  'Đã xác nhận',
-  'Đã đóng gói',
-  'Đang giao hàng',
-  'Đã nhận hàng'
+  'PENDING',
+  'CONFIRMED',
+  'ON_DELIVERY',
+  'CANCEL',
+  'SUCCESS'
 ]
-
-function UpdateOrder({ order }) {
-  const [activeStep, setActiveStep] = useState(0)
+function UpdateOrder({ setUpdate, order }) {
+  var status
+  if (order?.orderStatus == 'PENDING') {
+    status = 0
+  }
+  if (order?.orderStatus == 'CONFIRMED') {
+    status = 1
+  }
+  if (order?.orderStatus == 'ON_DELIVERY') {
+    status = 2
+  }
+  if (order?.orderStatus == 'CANCEL') {
+    status = 3
+  }
+  if (order?.orderStatus == 'SUCCESS') {
+    status = 4
+  }
+  const [activeStep, setActiveStep] = useState(status || 0)
   const [open, setOpen] = useState(false)
 
   const handleClickOpen = () => {
@@ -20,11 +37,20 @@ function UpdateOrder({ order }) {
     setOpen(false)
   }
   const handleUpdate = () => {
-
+    orderApi.updateOrderStatus(order?.id, activeStep)
+      .then(() => {
+        alert('Update Success')
+        setUpdate(3)
+      })
+      .catch(error => {
+        console.log(error)
+        alert('Update Fail')
+      })
+    console.log(activeStep)
     handleClose()
   }
   const handleNext = () => {
-    if (activeStep == 3) {
+    if (activeStep == 4) {
       return
     }
     setActiveStep(activeStep + 1)
@@ -56,7 +82,7 @@ function UpdateOrder({ order }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={() => handleUpdate()}>Update</Button>
+          <Button onClick={handleUpdate}>Update</Button>
         </DialogActions>
       </Dialog>
     </div>

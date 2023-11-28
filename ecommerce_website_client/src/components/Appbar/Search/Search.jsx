@@ -1,18 +1,12 @@
 import SearchIcon from '@mui/icons-material/Search'
-import CloseIcon from '@mui/icons-material/Close'
-import { InputAdornment, TextField, Autocomplete, Stack, Box } from '@mui/material'
+import { InputAdornment, TextField, Autocomplete, Stack, ListItem, ListItemAvatar, ListItemText, Avatar } from '@mui/material'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import productApi from '../../../apis/productApi'
-import ListItem from '@mui/material/List';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
 
 function Search() {
     const navigate = useNavigate()
     const colorChangeByTheme = (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black')
-    const [searchValue, setSearchValue] = useState('')
     const [products, setProducts] = useState([])
     const handleProductSelect = (event, value) => {
         if (value) {

@@ -29,7 +29,7 @@ function DeleteProvider({ setUpdate, providerId }) {
                 <DialogTitle >Are you sure you want to delete this item?</DialogTitle>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={() => { handleClickDelete() }}>Delete</Button>
+                    <Button onClick={handleClickDelete}>Delete</Button>
                 </DialogActions>
             </Dialog>
         </div>

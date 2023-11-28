@@ -1,32 +1,44 @@
 import SearchIcon from '@mui/icons-material/Search'
-import { InputAdornment, TextField, Autocomplete, Stack, ListItem, ListItemText } from '@mui/material'
-import { useState } from 'react'
+import { InputAdornment, TextField, Autocomplete, Stack } from '@mui/material'
+import { useState, useEffect } from 'react'
+import userApi from '../../../../apis/userApi'
 
-function SearchProvider({ datas }) {
+function SearchUser({ setUsers }) {
+    const [datas, setDatas] = useState([])
     const colorChangeByTheme = (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black')
-    const [searchValue, setSearchValue] = useState('')
-    const handleDatasSelect = (event, value) => {
-        // if (value) {
-        //   navigate(`/product-detail?${value.id}`)
-        // }
+
+    const handleUsersSelect = (event, value) => {
+        if (value !== null) {
+            userApi.getCustomerById(value.id)
+                .then(response => {
+                    setUsers([response.data])
+                })
+                .catch(err => { console.log(err) })
+        } else {
+            setUsers(datas)
+        }
     }
+
+    useEffect(() => {
+        userApi.getAllCustomers()
+            .then(response => {
+                setDatas(response.data)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }, [])
+
     return (
         <Stack spacing={2} sx={{ width: 300 }}>
             <Autocomplete
                 freeSolo
-                id="free-solo-2-demo"
                 options={datas}
-                getOptionLabel={(data) => (data && data.name) || ''}
-                onChange={handleDatasSelect}
-                renderOption={(props, data) => (
-                    <ListItem {...props}>
-                        <ListItemText primary={data.name} />
-                    </ListItem>
-                )}
+                getOptionLabel={(data) => (data && data.fullName) || ''}
+                onChange={handleUsersSelect}
                 renderInput={(params) => (
                     <TextField
                         {...params}
-                        id="outlined-search"
                         label="Search..."
                         type="text"
                         size='small'
@@ -54,4 +66,4 @@ function SearchProvider({ datas }) {
     )
 }
 
-export default SearchProvider
+export default SearchUser

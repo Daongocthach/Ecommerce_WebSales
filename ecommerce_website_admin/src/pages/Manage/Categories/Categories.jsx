@@ -3,14 +3,16 @@ import { useEffect, useState } from 'react'
 import AddCategory from './FormCategory/AddCategory'
 import UpdateCategory from './FormCategory/UpdateCategory'
 import DeleteCategory from './FormCategory/DeleteCategory'
-import Search from '../../../components/Search/Search'
+import SearchCategory from './SearchCategory/SearchCategory'
 import categoryApi from '../../../apis/categoryApi'
+import { sortByMaxId, sortByMinId } from '../../../utils/sort'
 
 function Categories() {
   const [categories, setCategories] = useState([])
   const [update, setUpdate] = useState(0)
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(6)
+  const [select, setSelect] = useState(1)
 
   const handleChangePage = (e, newPage) => {
     setPage(newPage)
@@ -19,32 +21,43 @@ function Categories() {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
-  const [select, setSelect] = useState(1)
-  const handleChange = () => {
+
+  const handleChange = (event) => {
     setSelect(event.target.value)
   }
   useEffect(() => {
     categoryApi.getAllCategories()
       .then(response => {
-        setCategories(response.data)
-        setUpdate(0)
+        setCategories(sortByMaxId(response.data))
       })
       .catch(error => {
         console.error(error)
       })
   }, [update])
+  useEffect(() => {
+    switch (select) {
+      case 1:
+        setCategories(sortByMaxId(categories))
+        break
+      case 2:
+        setCategories(sortByMinId(categories))
+        break
+      default:
+        break
+    }
+  }, [select])
   return (
     <Box sx={{ m: 5 }}>
       <Typography variant='h7' >Trang chủ / Quản lý loại sản phẩm</Typography>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <AddCategory setUpdate={setUpdate}/>
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
-          <Search />
+          <SearchCategory setCategories={setCategories}/>
           <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
           <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
             <Select value={select} onChange={handleChange} >
-              <MenuItem value={1}>Cũ nhất</MenuItem>
-              <MenuItem value={2}>Mới nhất</MenuItem>
+              <MenuItem value={1}>Mới nhất</MenuItem>
+              <MenuItem value={2}>Cũ nhất</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -54,10 +67,11 @@ function Categories() {
           <Table>
             <TableHead>
               <TableRow >
-                <TableCell align="center">Id</TableCell>
-                <TableCell align="center">Name</TableCell>
-                <TableCell align="center">Update</TableCell>
-                <TableCell align="center">Delete</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Id</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Name</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Status</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Update</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -66,8 +80,9 @@ function Categories() {
                   <TableRow key={index}>
                     <TableCell align="center">{category?.id}</TableCell>
                     <TableCell align="center">{category?.name}</TableCell>
+                    <TableCell align="center">{category?.enabled == 1 ? 'Enable': 'Disable'}</TableCell>
                     <TableCell align="center"><UpdateCategory setUpdate={setUpdate} category={category} /></TableCell>
-                    <TableCell align="center"><DeleteCategory setUpdate={setUpdate} categoryId={category?.id} /></TableCell>
+                    {category.enabled == 1 && <TableCell align="center"><DeleteCategory setUpdate={setUpdate} categoryId={category?.id} /></TableCell>}
                   </TableRow>
                 )
               })}

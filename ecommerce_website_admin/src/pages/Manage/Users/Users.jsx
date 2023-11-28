@@ -1,42 +1,66 @@
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableContainer, TableFooter, TablePagination, FormControl, Select, MenuItem } from '@mui/material'
-import { People } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
-import AddUser from './FormUser/AddUser'
-import ChangeStatusUser from './FormUser/ChangeStatusUser'
-import Search from '../../../components/Search/Search'
-
-function createData(id, fullName, username, email, phone, address, avatar, status) {
-  return { id, fullName, username, email, phone, address, avatar, status }
-}
-const users = [
-  createData(1, 'Frozen yoghurt', '12345', 1, 3, 4, 'https://th.bing.com/th/id/OIP.2HgWxlt6o5NKSicmnfV6rwHaHa?pid=ImgDet&rs=1'),
-  createData(2, 'Ice cream sandwich', 237, 3, 1, 2, 'https://th.bing.com/th/id/OIP.2HgWxlt6o5NKSicmnfV6rwHaHa?pid=ImgDet&rs=1'),
-  createData(3, 'Eclair', 262, 3, 3, 1, 'https://th.bing.com/th/id/OIP.2HgWxlt6o5NKSicmnfV6rwHaHa?pid=ImgDet&rs=1'),
-  createData(4, 'Cupcake', 305, 3, 3, 1, 'https://th.bing.com/th/id/OIP.2HgWxlt6o5NKSicmnfV6rwHaHa?pid=ImgDet&rs=1'),
-  createData(5, 'Gingerbread', 356, 3, 3, 1, 'https://th.bing.com/th/id/OIP.2HgWxlt6o5NKSicmnfV6rwHaHa?pid=ImgDet&rs=1')
-]
+import SearchUser from './SearchUser/SearchUser'
+import userApi from '../../../apis/userApi'
+import { sortByMaxId, sortByMinId } from '../../../utils/sort'
 
 function Users() {
+  const [users, setUsers] = useState([])
+  const [update, setUpdate] = useState(0)
+  const [enabled, setEnabled] = useState()
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(6)
+  const [select, setSelect] = useState(1)
+
   const handleChangePage = (e, newPage) => {
     setPage(newPage)
   }
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
-  const [select, setSelect] = useState(1)
-  const handleChange = () => {
 
+  const handleChange = (event) => {
+    setSelect(event.target.value)
   }
+  const handleUpdateStatus = (id, enabled) => {
+    userApi.updateStatus(id, enabled)
+      .then(() => {
+        alert('Update Success')
+      })
+      .catch(() => alert('Update Fail'))
+      setUpdate(3)
+  }
+  useEffect(() => {
+    userApi.getAllCustomers()
+      .then(response => {
+        setUsers(sortByMaxId(response.data))
+      })
+      .catch(error => {
+        console.error(error)
+      })
+  }, [update])
+
+  useEffect(() => {
+    switch (select) {
+      case 1:
+        setUsers(sortByMaxId(users))
+        break
+      case 2:
+        setUsers(sortByMinId(users))
+        break
+      default:
+        break
+    }
+  }, [select, users])
+
   return (
     <Box sx={{ m: 5 }}>
       <Typography variant='h7' >Trang chủ / Quản lý tài khoản khách hàng</Typography>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-        <AddUser/>
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
-          <Search />
+          <SearchUser setUsers={setUsers} />
           <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
           <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
             <Select value={select} onChange={handleChange} defaultValue={1} >
@@ -51,28 +75,35 @@ function Users() {
           <Table>
             <TableHead>
               <TableRow >
-                <TableCell align="center">Id</TableCell>
-                <TableCell align="center">Fullname</TableCell>
-                <TableCell align="center">Username</TableCell>
-                <TableCell align="center">Email</TableCell>
-                <TableCell align="center">Phone</TableCell>
-                <TableCell align="center">Address</TableCell>
-                <TableCell align="center">Avatar</TableCell>
-                <TableCell align="center">Status</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Id</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Fullname</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Username</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Email</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Phone</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Address</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Avatar</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Status</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-            {users?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user, index) => {
+              {Array.isArray(users) && users?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user, index) => {
                 return (
                   <TableRow key={index}>
                     <TableCell align="center">{user?.id}</TableCell>
                     <TableCell align="center">{user?.fullName}</TableCell>
                     <TableCell align="center">{user?.username}</TableCell>
                     <TableCell align="center">{user?.email}</TableCell>
-                    <TableCell align="center">{user?.phone}</TableCell>
+                    <TableCell align="center">{user?.phoneNo}</TableCell>
                     <TableCell align="center">{user?.address}</TableCell>
-                    <TableCell align="center"><img src={user?.avatar} alt='avatar' width={'50px'} height={'50px'}/></TableCell>
-                    <TableCell align="center"><ChangeStatusUser user={user} /></TableCell>
+                    <TableCell align="center"><img src={user?.avatar} alt='avatar' width={'50px'} height={'50px'} /></TableCell>
+                    <TableCell align="center">
+                      <FormControl size={'small'} fullWidth>
+                        <Select value={user?.enabled} onChange={(e) => handleUpdateStatus(user?.id, e.target.value)} >
+                          <MenuItem value={true}>Enable</MenuItem>
+                          <MenuItem value={false}>Disable</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </TableCell>
                   </TableRow>
                 )
               })}
@@ -82,7 +113,7 @@ function Users() {
                 <TablePagination
                   colSpan={12}
                   rowsPerPageOptions={[6, 10]}
-                  count={users?.length}
+                  count={Array.isArray(users) ? users.length : 0}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onPageChange={handleChangePage}

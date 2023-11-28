@@ -3,14 +3,16 @@ import { useEffect, useState } from 'react'
 import AddProduct from './FormProduct/AddProduct'
 import UpdateProduct from './FormProduct/UpdateProduct'
 import DeleteProduct from './FormProduct/DeleteProduct'
-import Search from '../../../components/Search/Search'
 import productApi from '../../../apis/productApi'
+import SearchProduct from './SearchProduct/SearchProduct'
+import { sortByMaxId, sortByMinId } from '../../../utils/sort'
 
 function Products() {
   const [products, setProducts] = useState([])
   const [update, setUpdate] = useState(0)
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(6)
+  const [select, setSelect] = useState(1)
 
   const handleChangePage = (e, newPage) => {
     setPage(newPage)
@@ -19,27 +21,37 @@ function Products() {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
-  const [select, setSelect] = useState(1)
-  const handleChange = () => {
+  const handleChange = (event) => {
     setSelect(event.target.value)
   }
   useEffect(() => {
     productApi.getAllProducts()
       .then(response => {
-        setProducts(response.data)
-        setUpdate(0)
+        setProducts(sortByMaxId(response.data))
       })
       .catch(error => {
         console.error(error)
       })
   }, [update])
+  useEffect(() => {
+    switch (select) {
+      case 1:
+        setProducts(sortByMaxId(products))
+        break
+      case 2:
+        setProducts(sortByMinId(products))
+        break
+      default:
+        break
+    }
+  }, [select])
   return (
     <Box sx={{ m: 5 }}>
       <Typography variant='h7' >Trang chủ / Quản lý sản phẩm</Typography>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <AddProduct setUpdate={setUpdate}/>
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
-          <Search />
+          <SearchProduct setProducts={setProducts} />
           <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
           <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
             <Select value={select} onChange={handleChange} >
@@ -62,12 +74,13 @@ function Products() {
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">SubCategory</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Provider</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Image</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Status</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Update</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {products?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((product, index) => {
+              {Array.isArray(products) && products?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((product, index) => {
                 return (
                   <TableRow key={index}>
                     <TableCell align="center">{product?.id}</TableCell>
@@ -78,8 +91,9 @@ function Products() {
                     <TableCell align="center">{product?.subCategory?.name}</TableCell>
                     <TableCell align="center">{product?.provider?.name}</TableCell>
                     <TableCell align="center">{<img src={product?.image} alt='avatar' width={'50px'} height={'50px'} />}</TableCell>
+                    <TableCell align="center">{product?.enabled == 1 ? 'Enable': 'Disable'}</TableCell>
                     <TableCell align="center"><UpdateProduct setUpdate={setUpdate} product={product} /></TableCell>
-                    <TableCell align="center"><DeleteProduct setUpdate={setUpdate} productId={product?.id} /></TableCell>
+                    {product.enabled == 1 && <TableCell align="center"><DeleteProduct setUpdate={setUpdate} productId={product?.id} /></TableCell>}
                   </TableRow>
                 )
               })}

@@ -8,13 +8,13 @@ const providerApi = {
         const url = `http://localhost:8080/api/v1/provider/${id}`
         return axios.get(url)
     },
-    addProvider(name, phoneNo, address) {
+    addProvider(name, brand, phoneNo, address) {
         const url = 'http://localhost:8080/api/v1/add-provider'
-        return axios.post(url, { name, phoneNo, address })
+        return axios.post(url, { name, brand, phoneNo, address })
     },
-    updateProvider(id, name, phoneNo, address) {
+    updateProvider(id, name, brand, phoneNo, address, enabled) {
         const url = 'http://localhost:8080/api/v1/update-provider'
-        return axios.put(url, { id, name, phoneNo, address } )
+        return axios.put(url, { id, name, brand, phoneNo, address, enabled } )
     },
     deleteProvider(id) {
         const url = `http://localhost:8080/api/v1/delete-provider/${id}`

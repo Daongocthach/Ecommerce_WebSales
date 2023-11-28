@@ -8,6 +8,7 @@ function AddProvider({ setUpdate }) {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [name, setName] = useState('')
+    const [brand, setBrand] = useState('')
     const [phone, setPhone] = useState('')
     const [address, setAddress] = useState('')
 
@@ -18,7 +19,7 @@ function AddProvider({ setUpdate }) {
         setOpen(false)
     }
     const handleClickAdd = () => {
-        providerApi.addProvider(name, phone, address)
+        providerApi.addProvider(name, brand, phone, address)
         .then(() => {
             alert('Add Success')
             setUpdate(1)
@@ -41,6 +42,10 @@ function AddProvider({ setUpdate }) {
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <Typography minWidth={'100px'}>Name: </Typography>
                             <TextField fullWidth size='small' onChange={(e) => setName(e.target.value)} />
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <Typography minWidth={'100px'}>Brand: </Typography>
+                            <TextField fullWidth size='small' onChange={(e) => setBrand(e.target.value)} />
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <Typography minWidth={'100px'}>PhoneNo: </Typography>

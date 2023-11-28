@@ -1,18 +1,18 @@
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import AddProvider from './FormProvider/AddProvider'
 import UpdateProvider from './FormProvider/UpdateProvider'
 import DeleteProvider from './FormProvider/DeleteProvider'
-import Search from '../../../components/Search/Search'
+import SearchProvider from './SearchProvider/SearchProvider'
 import providerApi from '../../../apis/providerApi'
+import { sortByMaxId, sortByMinId } from '../../../utils/sort'
 
 function Providers() {
   const [providers, setProviders] = useState([])
   const [update, setUpdate] = useState(0)
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(6)
-
+  const [select, setSelect] = useState(1)
   const handleChangePage = (e, newPage) => {
     setPage(newPage)
   }
@@ -20,27 +20,37 @@ function Providers() {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
-  const [select, setSelect] = useState(1)
   const handleChange = (event) => {
     setSelect(event.target.value)
   }
+
   useEffect(() => {
     providerApi.getAllProviders()
       .then(response => {
-        setProviders(response.data)
-        setUpdate(0)
+        setProviders(sortByMaxId(response.data))
       })
       .catch(error => {
         console.error(error)
       })
   }, [update])
-
+  useEffect(() => {
+    switch (select) {
+      case 1:
+        setProviders(sortByMaxId(providers))
+        break
+      case 2:
+        setProviders(sortByMinId(providers))
+        break
+      default:
+        break
+    }
+  }, [select])
   return ( <Box sx={{ m: 5 }}>
       <Typography variant='h7' >Trang chủ / Quản lý nhà cung cấp</Typography>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <AddProvider setUpdate={setUpdate}/>
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
-          <Search />
+          <SearchProvider setProviders={setProviders}/>
           <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
           <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
             <Select value={select} onChange={handleChange} >
@@ -57,10 +67,12 @@ function Providers() {
               <TableRow >
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Id</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Name</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Brand</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">PhoneNo</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Address</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Status</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Update</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">Delete</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Disable</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -69,10 +81,12 @@ function Providers() {
                   <TableRow key={index}>
                     <TableCell align="center">{provider?.id}</TableCell>
                     <TableCell align="center">{provider?.name}</TableCell>
+                    <TableCell align="center">{provider?.brand}</TableCell>
                     <TableCell align="center">{provider?.phoneNo}</TableCell>
                     <TableCell align="center">{provider?.address}</TableCell>
+                    <TableCell align="center">{provider?.enabled == 1 ? 'Enable': 'Disable'}</TableCell>
                     <TableCell align="center"><UpdateProvider setUpdate={setUpdate} provider={provider} /></TableCell>
-                    <TableCell align="center"><DeleteProvider setUpdate={setUpdate} providerId={provider?.id} /></TableCell>
+                    {provider.enabled == 1 && <TableCell align="center"><DeleteProvider setUpdate={setUpdate} providerId={provider?.id} /></TableCell>}
                   </TableRow>
                 )
               })}

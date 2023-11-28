@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography } from '@mui/material'
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, FormControl, Select, MenuItem } from '@mui/material'
 import { Create } from '@mui/icons-material'
 import categoryApi from '../../../../apis/categoryApi'
 
 function UpdateCategory({ setUpdate, category }) {
   const [name, setName] = useState(category?.name)
+  const [enabled, setEnabled] = useState(category?.enabled)
   const [open, setOpen] = useState(false)
 
   const handleClickOpen = () => {
@@ -14,7 +15,7 @@ function UpdateCategory({ setUpdate, category }) {
     setOpen(false)
   }
   const handleUpdate = () => {
-    categoryApi.updateCategory(category?.id, name)
+    categoryApi.updateCategory(category?.id, name, enabled)
     .then(() => {
         alert('Update Success')
         setUpdate(3)
@@ -35,6 +36,15 @@ function UpdateCategory({ setUpdate, category }) {
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Typography minWidth={'100px'}>Name: </Typography>
               <TextField fullWidth size='small' value={name} onChange={(e) => setName(e.target.value)} />
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography minWidth={'100px'}>Status: </Typography>
+              <FormControl size={'small'} fullWidth>
+                <Select value={enabled} onChange={(e) => setEnabled(e.target.value)} >
+                    <MenuItem value={true}>Enable</MenuItem>
+                    <MenuItem value={false}>Disable</MenuItem>
+                </Select>
+              </FormControl>
             </Box>
           </Box>
         </DialogContent>

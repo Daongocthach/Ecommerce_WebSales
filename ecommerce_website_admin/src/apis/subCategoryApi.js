@@ -16,9 +16,9 @@ const subCategoryApi = {
         const url = 'http://localhost:8080/api/v1/add-sub-category'
         return axios.post(url, { name, category: { id: cateId } })
     },
-    updateSubCategory(id, name, cateId) {
+    updateSubCategory(id, name, cateId, enabled ) {
         const url = 'http://localhost:8080/api/v1/update-sub-category'
-        return axios.put(url, { id, name, category: { id: cateId } })
+        return axios.put(url, { id, name, category: { id: cateId, enabled } })
     },
     deleteSubCategory(id) {
         const url = `http://localhost:8080/api/v1/del-sub-category/${id}`

@@ -8,6 +8,7 @@ function UpdateCategory({ setUpdate, subCategory }) {
   const [categories, setCategories] = useState([])
   const [name, setName] = useState(subCategory?.name)
   const [select, setSelect] = useState(subCategory?.category?.id)
+  const [enabled, setEnabled] = useState(subCategory?.enabled)
   const [open, setOpen] = useState(false)
   const handleChange = (event) => {
     setSelect(event.target.value)
@@ -20,16 +21,16 @@ function UpdateCategory({ setUpdate, subCategory }) {
   }
   useEffect(() => {
     categoryApi.getAllCategories()
-        .then(response => {
-            setCategories(response.data)
-            setUpdate(0)
-        })
-        .catch(error => {
-            console.error(error)
-        })
-}, [])
+      .then(response => {
+        setCategories(response.data)
+        setUpdate(0)
+      })
+      .catch(error => {
+        console.error(error)
+      })
+  }, [])
   const handleUpdate = () => {
-    subCategoryApi.updateSubCategory(subCategory?.id, name, select)
+    subCategoryApi.updateSubCategory(subCategory?.id, name, select, enabled)
       .then(() => {
         alert('Update Success')
         setUpdate(3)
@@ -60,6 +61,15 @@ function UpdateCategory({ setUpdate, subCategory }) {
                       <MenuItem key={index} value={category?.id}>{category?.name}</MenuItem>
                     )
                   })}
+                </Select>
+              </FormControl>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography minWidth={'100px'}>Status: </Typography>
+              <FormControl size={'small'} fullWidth>
+                <Select value={enabled} onChange={(e) => setEnabled(e.target.value)} >
+                  <MenuItem value={true}>Enable</MenuItem>
+                  <MenuItem value={false}>Disable</MenuItem>
                 </Select>
               </FormControl>
             </Box>
