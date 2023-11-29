@@ -95,7 +95,7 @@ function ProductDetail() {
                 <li style={{ display: 'flex', alignItems: 'center', gap: 1 }}> <CheckCircleOutline /> 'Tích xu đổi thưởng khi đơn hàng thành công'</li>
               </ul>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Button sx={{ color: 'white', ':hover': { bgcolor: 'gray' }, bgcolor: '#EE3B3B' }} startIcon={<PointOfSale />} onClick={handleClickBuy}>Mua Ngay</Button>
+                <Button sx={{ color: 'white', ':hover': { bgcolor: 'gray' }, bgcolor: '#EE3B3B' }} startIcon={<PointOfSale />} onClick={handleClickAddToCart}>Mua Ngay</Button>
                 <Button sx={{ bgcolor: '#1E90FF', color: 'white', ':hover': { bgcolor: 'gray' } }} startIcon={<ShoppingCart />} onClick={handleClickAddToCart}>Thêm vào giỏ</Button>
               </Box>
             </Box>

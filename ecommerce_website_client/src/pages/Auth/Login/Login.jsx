@@ -22,7 +22,7 @@ function Login() {
         setCookie('userId', response.data.id, 1)
         cartItemApi.getCartItemsByCustomerId(response.data.id)
           .then(response => { dispatch(setCart(response.data)) })
-        alert('Login Successful')
+        alert('Login Success')
         navigate('/')
       })
       .catch(error => {

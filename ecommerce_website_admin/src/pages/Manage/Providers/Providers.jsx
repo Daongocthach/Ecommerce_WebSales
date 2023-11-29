@@ -1,4 +1,4 @@
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
+import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, Paper, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
 import { useEffect, useState } from 'react'
 import AddProvider from './FormProvider/AddProvider'
 import UpdateProvider from './FormProvider/UpdateProvider'
@@ -61,7 +61,7 @@ function Providers() {
         </Box>
       </Box>
       <Box sx={{ height: 'fit-content', bgcolor: 'white', boxShadow: '0px 0px 10px' }}>
-        <TableContainer >
+        <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow >

@@ -1,4 +1,4 @@
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
+import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, Paper, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Search from '../../../components/Search/Search'
@@ -45,7 +45,7 @@ function Inventory() {
         </Box>
       </Box>
       <Box sx={{ height: 'fit-content', bgcolor: 'white', boxShadow: '0px 0px 10px' }}>
-        <TableContainer >
+        <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow >

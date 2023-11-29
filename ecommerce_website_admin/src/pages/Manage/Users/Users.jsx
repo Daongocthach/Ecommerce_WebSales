@@ -1,4 +1,4 @@
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableContainer, TableFooter, TablePagination, FormControl, Select, MenuItem } from '@mui/material'
+import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableContainer, Paper, TableFooter, TablePagination, FormControl, Select, MenuItem } from '@mui/material'
 import { useEffect, useState } from 'react'
 import SearchUser from './SearchUser/SearchUser'
 import userApi from '../../../apis/userApi'
@@ -71,7 +71,7 @@ function Users() {
         </Box>
       </Box>
       <Box sx={{ height: 'fit-content', bgcolor: 'white', boxShadow: '0px 0px 10px' }}>
-        <TableContainer >
+        <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow >

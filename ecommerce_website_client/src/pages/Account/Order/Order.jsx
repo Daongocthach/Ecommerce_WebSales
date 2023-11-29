@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Typography, Box, Button, Grid } from '@mui/material'
 import { LocalShipping, FiberManualRecord } from '@mui/icons-material'
-import Search from '../../../components/Appbar/Search/Search'
 import { formatCurrency } from '../../../utils/price'
 import emptyOrder from '../../../assets/img/empty-order.png'
 import orderApi from '../../../apis/orderApi'
@@ -17,6 +17,7 @@ const useStyles = {
   }
 }
 function Order() {
+  const navigate = useNavigate()
   const [orders, setOrders] = useState([])
   const user = useSelector(state => state.auth)
   const customerId = user.id
@@ -44,11 +45,14 @@ function Order() {
     orderApi.getOrderByCustomerIdSuccess(customerId)
       .then((response) => { setOrders(response.data) })
   }
+  useEffect(() => {
+    orderApi.getOrderByCustomerId(customerId)
+      .then((response) => { setOrders(response.data) })
+  }, [customerId])
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant='h6' sx={{ fontWeight: 'bold', minWidth: '100px' }}>Đơn hàng của tôi</Typography>
-        <Search />
       </Box>
       <Box sx={{ mb: 2 }}>
         <Grid container spacing={3} mt={2} >
@@ -101,11 +105,13 @@ function Order() {
             <img src={emptyOrder} />
             <Typography variant='h7' >Bạn chưa có đơn hàng nào</Typography>
             <Typography variant='h6' >Cùng khám phá hàng ngàn sản phẩm tại G2Store nhé!</Typography>
-            <Button sx={{ bgcolor: '#CD3333', borderRadius: 10, color: 'white', fontWeight: 'bold', ':hover': { bgcolor: 'red' } }} >
+            <Button
+              sx={{ bgcolor: '#CD3333', borderRadius: 10, color: 'white', fontWeight: 'bold', ':hover': { bgcolor: 'red' } }} 
+              onClick={() => navigate('/genre-detail')}>
               Khám phá ngay
             </Button>
           </Box>}
-          
+
         </Box>
       </Box>
     </Box >

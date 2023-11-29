@@ -18,7 +18,7 @@ function DeleteItem({ customerId, productId }) {
         cartItemApi.deleteCartItem(customerId, productId)
             .then(response => {
                 dispatch(removeFromCart(productId))
-                alert('Delete successfull')
+                alert('Delete success')
             })
             .catch(err => {
                 console.log(err)

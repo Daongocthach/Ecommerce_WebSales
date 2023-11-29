@@ -22,7 +22,7 @@ function Register() {
     else {
       authenApi.signup(username, password, email, fullName, phoneNo)
         .then(response => {
-          alert('Sign Up Successful')
+          alert('Sign Up Success')
           navigate('/login')
         })
         .catch(error => {
@@ -112,7 +112,7 @@ function Register() {
               sx={{ bgcolor: 'white', borderRadius: 3 }}
               onChange={e => setPhoneNo(e.target.value)}
             />
-            <Button sx={{ bgcolor: 'red', borderRadius: '5px', color: 'white', fontWeight: 'bold' }}
+            <Button sx={{ bgcolor: 'red', borderRadius: '5px', color: 'white', fontWeight: 'bold', ':hover': { bgcolor: 'brown' } }}
               onClick={onFinish}>Sign Up
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

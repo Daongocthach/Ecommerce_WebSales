@@ -21,6 +21,7 @@ function Account() {
         setAnchorEl(null)
     }
     const handleLogout = () => {
+        deleteCookie()
         dispatch(logout())
         persistor.purge()
         alert('Logout sucessfull')

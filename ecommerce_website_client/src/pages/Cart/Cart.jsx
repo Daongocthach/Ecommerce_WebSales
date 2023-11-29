@@ -14,7 +14,7 @@ function Cart() {
   const [cartItems, setCartItems] = useState([])
   const user = useSelector(state => state.auth)
   useEffect(() => {
-    if (user && cart && userId) {
+    if (userId) {
       setCartItems(cart?.cartItems)
     }
     else {

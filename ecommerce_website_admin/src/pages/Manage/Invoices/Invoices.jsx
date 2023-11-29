@@ -34,7 +34,7 @@ function Invoices() {
         <DownloadForOffline/>
       </Box>
       <Box sx={{ height: 'fit-content', bgcolor: 'white', boxShadow: '0px 0px 10px' }}>
-        <TableContainer >
+        <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow >

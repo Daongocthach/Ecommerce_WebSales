@@ -1,4 +1,4 @@
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
+import { Box, Typography, Table, TableBody, TableCell, TableHead, Paper, TableRow, TableFooter, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { MoneyOff } from '@mui/icons-material'
@@ -51,7 +51,7 @@ function Promotions() {
         </Box>
       </Box>
       <Box sx={{ height: 'fit-content', bgcolor: 'white', boxShadow: '0px 0px 10px' }}>
-        <TableContainer >
+        <TableContainer component={Paper} >
           <Table>
             <TableHead>
               <TableRow >
