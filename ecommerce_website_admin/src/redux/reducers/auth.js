@@ -1,13 +1,10 @@
 const initialState = {
-    _id: '',
-    fullname: '',
+    id: '',
     username: '',
     email: '',
-    password: '',
-    phone: '',
-    address: '',
-    avatar: '',
-    role: -1
+    fullName: '',
+    phoneNo: '',
+    address: ''
 }
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -15,7 +12,7 @@ const authReducer = (state = initialState, action) => {
         case 'LOGIN': {
             console.log({
                 ...state,
-                ...action.payload
+                ...action
             })
             return {
                 ...state,
@@ -34,28 +31,17 @@ const authReducer = (state = initialState, action) => {
             }
         }
 
-        case 'UPDATE_AVATAR': {
-            console.log({
-                ...state,
-                avatar: action?.payload
-            })
-            return {
-                ...state,
-                avatar: action?.payload
-            }
-        }
 
         case 'LOGOUT': {
             return {
-                _id: '',
-                fullname: '',
+                id: '',
                 username: '',
                 email: '',
-                password: '',
-                phone: '',
+                fullName: '',
+                phoneNo: '',
+                point: '',
                 address: '',
-                avatar: '',
-                role: -1
+                avatar: ''
             }
         }
 

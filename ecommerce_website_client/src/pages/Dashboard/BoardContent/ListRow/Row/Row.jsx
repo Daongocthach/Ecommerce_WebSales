@@ -6,19 +6,21 @@ import productApi from '../../../../../apis/productApi'
 function Row({ category }) {
     const [products, setProducts] = useState([])
     useEffect(() => {
-        productApi.getAllProducts()
-            .then(response => {
-                setProducts(response.data)
-            })
-            .catch(error => {
-                console.error(error)
-            })
+        if (category.id) {
+            productApi.getProductsByCategoryId(category.id)
+                .then(response => {
+                    setProducts(response.data)
+                })
+                .catch(error => {
+                    console.error(error)
+                })
+        }
     }, [])
     return (
         <Box >
-            <Typography variant={'h6'} sx={{ mt: 2, ml: 10, mb: 2, fontWeight: 'bold' }}>
+            { products.length > 0 && <Typography variant={'h6'} sx={{ mt: 2, ml: 10, mb: 2, fontWeight: 'bold' }}>
                 {category?.name}
-            </Typography>
+            </Typography> }
             <Box sx={{ borderRadius: '6px', width: 'fit-content' }}>
                 <ListProduct products={products} />
             </Box>

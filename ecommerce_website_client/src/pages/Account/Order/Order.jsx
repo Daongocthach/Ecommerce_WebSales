@@ -7,6 +7,8 @@ import { formatCurrency } from '../../../utils/price'
 import emptyOrder from '../../../assets/img/empty-order.png'
 import orderApi from '../../../apis/orderApi'
 import OrderItem from './OrderItem/OrderItem'
+import DeleteOrder from './DeleteOrder/DeleteOrder'
+import { sortByMaxId } from '../../../utils/price'
 
 const useStyles = {
   flexBox: {
@@ -23,31 +25,31 @@ function Order() {
   const customerId = user.id
   const handleAllOrders = () => {
     orderApi.getOrderByCustomerId(customerId)
-      .then((response) => { setOrders(response.data) })
+      .then((response) => { setOrders(sortByMaxId(response.data)) })
   }
   const handlePending = () => {
     orderApi.getOrderByCustomerIdPending(customerId)
-      .then((response) => { setOrders(response.data) })
+      .then((response) => { setOrders(sortByMaxId(response.data)) })
   }
   const handleConfirmed = () => {
     orderApi.getOrderByCustomerIdConfirmed(customerId)
-      .then((response) => { setOrders(response.data) })
+      .then((response) => { setOrders(sortByMaxId(response.data)) })
   }
   const handleOnDelivery = () => {
     orderApi.getOrderByCustomerIdOnDelivery(customerId)
-      .then((response) => { setOrders(response.data) })
+      .then((response) => { setOrders(sortByMaxId(response.data)) })
   }
   const handleCancel = () => {
     orderApi.getOrderByCustomerIdCancel(customerId)
-      .then((response) => { setOrders(response.data) })
+      .then((response) => { setOrders(sortByMaxId(response.data)) })
   }
   const handleSuccess = () => {
     orderApi.getOrderByCustomerIdSuccess(customerId)
-      .then((response) => { setOrders(response.data) })
+      .then((response) => { setOrders(sortByMaxId(response.data)) })
   }
   useEffect(() => {
     orderApi.getOrderByCustomerId(customerId)
-      .then((response) => { setOrders(response.data) })
+      .then((response) => { setOrders(sortByMaxId(response.data)) })
   }, [customerId])
   return (
     <Box>
@@ -88,7 +90,10 @@ function Order() {
                     <LocalShipping />
                     <Typography variant='h7' sx={{ fontWeight: 'bold', minWidth: '100px' }}>Giao hàng tận nơi</Typography>
                   </Box>
-                  <Box sx={{ display: 'flex', gap: 1 }} color={'red'}>
+                  <Box sx={{ display: 'flex', gap: 1 }}
+                    color={order?.orderStatus == 'SUCCESS' ? 'green' :
+                      order?.orderStatus == 'ON_DELIVERY' ? 'orange' :
+                        order?.orderStatus == 'CONFIRMED' ? 'gold' : order?.orderStatus == 'PENDING' ? 'blue' : 'red'}>
                     <FiberManualRecord />
                     <Typography variant='body1'>{order?.orderStatus}</Typography>
                   </Box>
@@ -97,7 +102,8 @@ function Order() {
               {order?.orderItems.map((orderItem, index) =>
                 <OrderItem key={index} orderItem={orderItem} />)}
               <Box sx={useStyles.flexBox}>
-                <Button size={'small'} sx={{ bgcolor: '#CD3333', color: 'white', borderRadius: 10, fontWeight: 'bold', ':hover': { bgcolor: 'red' } }}>Xem chi tiết</Button>
+              {order?.orderStatus == 'CONFIRMED' || order?.orderStatus == 'PENDING' ?
+                <DeleteOrder handleAllOrders={handleAllOrders} orderId={order?.id}/> : <Typography variant='h6' color={'gray'}>Hủy đơn hàng</Typography>}
                 <Typography variant='h6'>Thành tiền: {formatCurrency(order.total)}</Typography>
               </Box>
             </Box>)}
@@ -106,7 +112,7 @@ function Order() {
             <Typography variant='h7' >Bạn chưa có đơn hàng nào</Typography>
             <Typography variant='h6' >Cùng khám phá hàng ngàn sản phẩm tại G2Store nhé!</Typography>
             <Button
-              sx={{ bgcolor: '#CD3333', borderRadius: 10, color: 'white', fontWeight: 'bold', ':hover': { bgcolor: 'red' } }} 
+              sx={{ bgcolor: '#CD3333', borderRadius: 10, color: 'white', fontWeight: 'bold', ':hover': { bgcolor: 'red' } }}
               onClick={() => navigate('/genre-detail')}>
               Khám phá ngay
             </Button>

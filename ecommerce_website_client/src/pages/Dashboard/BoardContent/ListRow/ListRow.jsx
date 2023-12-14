@@ -1,8 +1,19 @@
+import { useState, useEffect } from 'react'
+import categoryApi from '../../../../apis/categoryApi'
 import Row from './Row/Row'
-import { mockData } from '../../../../apis/mockdata'
 
 function ListRow() {
-  const categories = mockData?.categories
+  const [categories, setCategories] = useState([])
+  useEffect(() => {
+    categoryApi.getAllEnabledCategories()
+      .then(response => {
+        setCategories(response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }, [])
+
   return (
     <>
       {categories?.map((category, index) => <Row category={category} key={index} />)}

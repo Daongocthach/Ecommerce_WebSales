@@ -4,8 +4,8 @@ export const mockData = {
             _id: 'product-id-01',
             name: 'Bánh gạo',
             description: 'Pro MERN stack Course',
-            price: 27000,
-            image: 'https://cf.shopee.vn/file/7af07542440785944f35316f30ba53d7',
+            price: 100000,
+            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
             category: [
                 {
                     name: 'Thực phẩm'
@@ -43,8 +43,8 @@ export const mockData = {
             _id: 'product-id-02',
             name: 'Chai nước',
             description: 'Pro MERN stack Course',
-            price: 5000,
-            image: 'https://nuocsuoi.com.vn/wp-content/uploads/2021/04/nuoc-suoi-13.jpg',
+            price: 100000,
+            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
             category: 'Nước uống',
             provider: 'MasanGroup'
         },
@@ -52,8 +52,8 @@ export const mockData = {
             _id: 'product-id-03',
             name: 'Mì omachi',
             description: 'Pro MERN stack Course',
-            price: 8000,
-            image: 'https://trongoivanphongpham.com/wp-content/uploads/2021/09/mi-omachi-1757.jpg',
+            price: 100000,
+            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
             category: 'Thực phẩm',
             provider: 'MasanGroup'
         },
@@ -61,8 +61,8 @@ export const mockData = {
             _id: 'product-id-04',
             name: 'Bóng đèn 10W',
             description: 'Pro MERN stack Course',
-            price: 45000,
-            image: 'https://th.bing.com/th/id/OIP.i0-PyGivP2vkxU28CioLiAHaHa?pid=ImgDet&rs=1',
+            price: 100000,
+            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
             category: 'Đồ điện tử',
             provider: 'MasanGroup'
         },
@@ -71,52 +71,52 @@ export const mockData = {
             name: 'Dao thái',
             description: 'Pro MERN stack Course',
             price: 100000,
-            image: 'https://topcomshop.com/uploads/images/a-adao/2/12070802423-1778177338.jpg',
+            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
             category: 'Đồ gia dụng',
             provider: 'MasanGroup'
         },
         {
             _id: 'product-id-06',
-            name: 'Snack Lays',
+            name: 'Dao thái1',
             description: 'Pro MERN stack Course',
-            price: 10000,
-            image: 'https://th.bing.com/th/id/OIP.R_Uyabt-iEE7oki8DCJp2AHaHa?pid=ImgDet&rs=1',
+            price: 100000,
+            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
             category: 'Đồ gia dụng',
             provider: 'MasanGroup'
         },
         {
             _id: 'product-id-07',
-            name: 'Keo mut Chupa Chups',
+            name: 'Dao thái2',
             description: 'Pro MERN stack Course',
-            price: 1000,
-            image: 'https://th.bing.com/th/id/OIP.LPJAyms0EE1ZUJjrGAOMmAHaHa?pid=ImgDet&rs=1',
+            price: 100000,
+            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
             category: 'Đồ gia dụng',
             provider: 'MasanGroup'
         },
         {
             _id: 'product-id-08',
-            name: 'Sữa tươi Vinamilk hộp',
+            name: 'Dao thái',
             description: 'Pro MERN stack Course',
-            price: 7000,
-            image: 'https://th.bing.com/th/id/OIP.uAsn1C6xKHXsub6DpMKvFgHaHa?pid=ImgDet&rs=1',
+            price: 100000,
+            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
             category: 'Đồ gia dụng',
             provider: 'MasanGroup'
         },
         {
             _id: 'product-id-09',
-            name: 'Sữa Milo Hộp',
+            name: 'Dao thái1',
             description: 'Pro MERN stack Course',
-            price: 9000,
-            image: 'https://th.bing.com/th/id/OIP.dOpwJcAms5LhC5px-IjYHgHaFj?pid=ImgDet&rs=1',
+            price: 100000,
+            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
             category: 'Đồ gia dụng',
             provider: 'MasanGroup'
         },
         {
             _id: 'product-id-010',
-            name: 'Sữa ovaltine Hộp',
+            name: 'Dao thái2',
             description: 'Pro MERN stack Course',
             price: 100000,
-            image: 'https://th.bing.com/th/id/R.c2b295844c82ab01ad9675685b928a9f?rik=N4Y3IM2U2m%2b%2bfw&pid=ImgRaw&r=0',
+            image: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
             category: 'Đồ gia dụng',
             provider: 'MasanGroup'
         },
@@ -173,6 +173,7 @@ export const mockData = {
             phone: '012345678',
             address: 'TPHCM',
             avatar: 'https://cdn1.iconfinder.com/data/icons/mix-color-3/502/Untitled-7-512.png',
+            status: 0,
             role: 0
         },
         {
@@ -184,6 +185,7 @@ export const mockData = {
             phone: '012345678',
             address: 'TPHCM',
             avatar: 'https://cdn1.iconfinder.com/data/icons/mix-color-3/502/Untitled-7-512.png',
+            status: 0,
             role: 0
         },
         {
@@ -195,6 +197,7 @@ export const mockData = {
             phone: '012345678',
             address: 'TPHCM',
             avatar: 'https://cdn1.iconfinder.com/data/icons/mix-color-3/502/Untitled-7-512.png',
+            status: 0,
             role: 0
         },
         {
@@ -206,6 +209,7 @@ export const mockData = {
             phone: '012345678',
             address: 'TPHCM',
             avatar: 'https://cdn1.iconfinder.com/data/icons/mix-color-3/502/Untitled-7-512.png',
+            status: 0,
             role: 0
         }
 

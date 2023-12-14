@@ -1,20 +1,29 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { Container, TextField, Stack, Button, Box } from '@mui/material'
+import { Container, TextField, Stack, Button, Box, Checkbox } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { setCookie } from '../../utils/cookie'
-import { mockData } from '../../apis/mockdata'
 import loginImage from '../../assets/img/loginImage.jpg'
 import { login } from '../../redux/actions/auth'
-
+import authenApi from '../../apis/authenApi'
 function Login() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const users = mockData.users
+
   const onFinish = () => {
-    navigate('/dashboard')
+    authenApi.adminSignin(username, password)
+      .then(response => {
+        dispatch(login(response.data))
+        setCookie('userId', response.data.id, 1)
+        alert('Login Success')
+        navigate('/dashboard')
+      })
+      .catch(error => {
+        console.log(error)
+        alert('Wrong Username or Password')
+      })
   }
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
@@ -28,7 +37,7 @@ function Login() {
         <img src={loginImage} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} />
         <Box sx={{
           position: 'absolute',
-          width: '400px',
+          width: { xs: '90%', sm: '70%', md: '30%' },
           height: 'auto',
           borderRadius: '5px',
           top: '30%',
@@ -44,13 +53,15 @@ function Login() {
             spacing={4}
           >
             <TextField
-              placeholder='Input email'
+              id="filled-hidden-label-small"
+              placeholder='Input Username'
               variant="filled"
               size="small"
               sx={{ bgcolor: 'white', borderRadius: 3 }}
-              onChange={e => setEmail(e.target.value)}
+              onChange={e => setUsername(e.target.value)}
             />
             <TextField
+              id="filled-hidden-label-normal"
               placeholder='Input password'
               variant="filled"
               size="small"
@@ -58,7 +69,17 @@ function Login() {
               type="password"
               onChange={e => setPassword(e.target.value)}
             />
-            <Button sx={{ bgcolor: 'red', color: 'white', fontWeight: 'bold' }} onClick={() => onFinish()}>Sign In</Button>
+            <Button
+              sx={{ bgcolor: 'red', color: 'white', fontWeight: 'bold' }}
+              onClick={() => onFinish()}
+            >Sign In</Button>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', m: 0, color: 'white' }}>
+                <Checkbox sx={{ color: 'white' }} />
+                Remember me?
+              </Box>
+              <Link to={'/register'} style={{ color: 'white' }}>Sign Up Now?</Link>
+            </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <Link to={'/reset-password'} style={{ color: 'white' }}>Forgot Password?</Link>
               <Link to={'/'} style={{ color: 'white' }}>Need help?</Link>

@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
-import promotionApi from '../../../../apis/promotionApi'
+import orderApi from '../../../../apis/orderApi'
 
-
-function DeletePromotion({ setUpdate, promotionId }) {
+function DeleteOrder({ handleAllOrders, orderId }) {
     const [open, setOpen] = useState(false)
     const handleClickOpen = () => {
         setOpen(true)
@@ -13,20 +12,21 @@ function DeletePromotion({ setUpdate, promotionId }) {
         setOpen(false)
     }
     const handleClickDelete = () => {
-        promotionApi.deletePromotion(promotionId)
-        .then(() => {
-            alert('Delete Success')
-            setUpdate(2)
-        })
-        .catch(error => {
-            console.log(error)
-            alert('Delete Fail')
-        })
+        orderApi.deleteOrder(orderId)
+            .then(() => {
+                alert('Delete Success')
+                handleAllOrders()
+            })
+            .catch(error => {
+                console.log(error)
+                alert('Delete Fail')
+            })
         handleClose()
     }
     return (
         <div>
-            <Button sx={{ bgcolor: '#EE0000', color:'white' }} variant="outlined" onClick={handleClickOpen}><DeleteIcon/></Button>
+            <Button size={'small'} sx={{ bgcolor: '#CD3333', color: 'white', borderRadius: 10, fontWeight: 'bold', ':hover': { bgcolor: 'red' } }}
+                onClick={handleClickOpen} >Hủy đơn hàng</Button>
             <Dialog open={open} onClose={handleClose} >
                 <DialogTitle >Are you sure you want to delete this item?</DialogTitle>
                 <DialogActions>
@@ -37,4 +37,4 @@ function DeletePromotion({ setUpdate, promotionId }) {
         </div>
     )
 }
-export default DeletePromotion
+export default DeleteOrder

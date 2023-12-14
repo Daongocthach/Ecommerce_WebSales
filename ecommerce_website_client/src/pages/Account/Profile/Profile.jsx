@@ -11,7 +11,6 @@ function Profile() {
   const [fullName, setFullName] = useState(user?.fullName || '')
   const [phoneNo, setPhoneNo] = useState(user?.phoneNo || '')
   const [avatar, setAvatar] = useState(user?.avatar || '')
-  const [address, setAdress] = useState(user?.address || '')
   const handleAvatarChange = (e) => {
     const file = e.target.files[0]
     if (file) {
@@ -24,7 +23,7 @@ function Profile() {
   }
   const onUpdate = () => {
 
-    authenApi.updateProfile(user?.id, fullName, phoneNo, address, avatar)
+    authenApi.updateProfile(user?.id, fullName, phoneNo, avatar)
       .then(response => {
         dispatch(login(response.data))
         alert('Cập nhật thông tin thành công')
@@ -53,7 +52,7 @@ function Profile() {
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, mt: 1, mb: 1 }}>
           <Typography variant='h6' sx={{ fontWeight: 'bold', minWidth: '100px' }}>Địa chỉ</Typography>
-          <Input sx={{ minWidth: '500px' }} value={address} onChange={e => setAdress(e.target.value)} />
+          <Input sx={{ minWidth: '500px' }} value={user?.address + ', ' + user?.ward + ', ' + user?.district + ', Tỉnh ' + user?.province} />
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, mt: 1, mb: 1 }}>
           <Typography variant='h6' sx={{ fontWeight: 'bold', minWidth: '100px' }}>Avatar</Typography>

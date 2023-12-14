@@ -1,27 +1,39 @@
-import { Container, Grid, Typography, Button, Box, Input, Radio } from '@mui/material'
+import { Container, Grid, Typography, Button, Box, Input, Radio, TextField } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { formatCurrency } from '../../utils/price'
 import imgMomo from '../../assets/img/imgMomo.png'
 import Product from './Product/Product'
 import orderApi from '../../apis/orderApi'
+import promotionApi from '../../apis/promotionApi'
 import { getCurrentTime } from '../../utils/date'
-
-const useStyles = {
-  flexBox: {
-    display: 'flex', alignItem: 'center', justifyContent: 'flex-start', gap: 1, mt: 1
-  },
-  flexBoxPrice: {
-    display: 'flex', alignItem: 'center', justifyContent: 'space-between', mt: 2
-  }
-}
+import { useEffect, useState } from 'react'
+import useStyles from './useStyles'
+import ghnApi from '../../apis/ghnApi'
 
 function Checkout() {
+  const [code, setCode] = useState('')
+  const [voucher, setVoucher] = useState()
+  const [feeShip, setFeeShip] = useState(0)
   const cart = useSelector(state => state.cart)
+  var valueVoucher = voucher?.value || 0
+  var total = cart?.total ? cart.total + feeShip - valueVoucher : 0
   const cartItems = cart.cartItems
   const user = useSelector(state => state.auth)
   const navigate = useNavigate()
 
+  function handleClickPromotion() {
+    promotionApi.checkPromotion(code)
+      .then(response => {
+        setVoucher(response.data)
+        total = total - response.data
+        alert('Thêm voucher thành công')
+      })
+      .catch(err => {
+        console.log(err)
+        alert('Thêm voucher thất bại')
+      })
+  }
   function handleClickOrder() {
     if (user) {
       const currentTimeString = getCurrentTime()
@@ -41,7 +53,10 @@ function Checkout() {
         'orderItems': orderItems
       }
       orderApi.addOrder(order)
-        .then(response => {
+        .then(() => {
+          if (voucher) {
+            promotionApi.usePromotion(voucher?.id)
+          }
           alert('Đặt hàng thành công')
           navigate(`/thanks?${cartItems.length}`)
         })
@@ -54,63 +69,79 @@ function Checkout() {
       navigate('/login')
     }
   }
+  useEffect(() => {
+    if (user)
+      ghnApi.calculateFeeShip(user.districtId)
+        .then((response) => {
+          setFeeShip(response.data.data.total)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+  }, [])
   return (
     <Container maxWidth="lg" sx={{ mb: 2 }}>
       <Grid container spacing={3} mt={2}>
         {/* Phần thông tin đơn hàng */}
         <Grid item xs={12} sm={6} md={6} lg={8}>
           <Typography variant="body1" mb={2}>Trang chủ / Checkout</Typography>
-          <Typography variant="h5">Thông tin đơn hàng</Typography>
+          <Typography variant='h5'>Thông tin người nhận</Typography>
+          <Box sx={useStyles.flexBox}>
+            <Typography variant='h6' sx={useStyles.titleAddress}>Họ và tên:</Typography>
+            <Input sx={{ minWidth: '200px', width: '500px' }} value={user?.fullName} />
+          </Box>
+          <Box sx={useStyles.flexBox}>
+            <Typography variant='h6' sx={useStyles.titleAddress}>Phone:</Typography>
+            <Input sx={{ minWidth: '200px', width: '500px' }} value={user?.phoneNo} />
+          </Box>
+          <Box sx={useStyles.flexBox}>
+            <Typography variant='h6' sx={useStyles.titleAddress}>Địa chỉ:</Typography>
+            <Input sx={{ minWidth: '200px', width: '500px' }} value={user?.address + ', ' + user?.ward + ', ' + user?.district + ', Tỉnh ' + user?.province} />
+          </Box>
+          <Button sx={useStyles.button} onClick={() => { navigate('/account') }}>Chỉnh sửa thông tin</Button>
+          <Typography variant="h5" mt={2}>Thông tin đơn hàng</Typography>
           {Array.isArray(cartItems) && cartItems.map((cartItem, index) =>
             <Product key={index} product={cartItem.product} quantity={cartItem.quantity} />)}
         </Grid>
 
         {/* Phần tổng cộng và thanh toán */}
         <Grid item xs={12} sm={6} md={6} lg={4}>
-          <Typography variant='h5' sx={useStyles.textPrice}>Thông tin người nhận</Typography>
-          <Box sx={useStyles.flexBox}>
-            <Typography variant='h6' sx={{ fontWeight: 'bold', color: 'gray', minWidth: '100px' }}>Họ và tên:</Typography>
-            <Input sx={{ minWidth: '200px', width: '500px' }} value={user?.fullName} />
+          <Box sx={{ ...useStyles.flexBoxPrice, alignItems: 'center' }}>
+            <Typography variant='h8' >Mã khuyến mãi: </Typography>
+            <TextField value={code} size='small' sx={{ width: '150px' }} onChange={(e) => { setCode(e.target.value) }}></TextField>
+            <Button sx={useStyles.buttonVoucher} onClick={handleClickPromotion}>Nhập</Button>
           </Box>
-          <Box sx={useStyles.flexBox}>
-            <Typography variant='h6' sx={{ fontWeight: 'bold', color: 'gray', minWidth: '100px' }}>Phone:</Typography>
-            <Input sx={{ minWidth: '200px', width: '500px' }} value={user?.phoneNo} />
-          </Box>
-          <Box sx={useStyles.flexBox}>
-            <Typography variant='h6' sx={{ fontWeight: 'bold', color: 'gray', minWidth: '100px' }}>Địa chỉ:</Typography>
-            <Input sx={{ minWidth: '200px', width: '500px' }} value={user?.address} />
-          </Box>
-          <Button sx={{ bgcolor: '#EE3B3B', color: 'white', mt: 2, borderRadius: 2, alignItems: 'center' }}>Xác nhận thông tin</Button>
           <Box sx={{ ...useStyles.flexBoxPrice, borderTop: '1px solid gray' }}>
-            <Typography variant='h5' sx={useStyles.textPrice}>Tổng tiền: </Typography>
-            <Typography variant='h7' sx={useStyles.textPrice}>{formatCurrency(cart?.total)}</Typography>
+            <Typography variant='h5' >Tổng tiền: </Typography>
+            <Typography variant='h7' sx={{ color: 'red', fontWeight: 'bold' }}>{formatCurrency(total)}</Typography>
           </Box>
           <Box sx={useStyles.flexBoxPrice}>
-            <Typography variant='h7' sx={useStyles.textPrice}>Phí vận chuyển: </Typography>
-            <Typography variant='h7' sx={useStyles.textPrice}>{formatCurrency(5000)}</Typography>
+            <Typography variant='h7' >Tiền hàng: </Typography>
+            <Typography variant='h7' >{formatCurrency(cart?.total)}</Typography>
           </Box>
           <Box sx={useStyles.flexBoxPrice}>
-            <Typography variant='h7' sx={useStyles.textPrice}>Giảm giá khuyến mãi: </Typography>
-            <Typography variant='h7' sx={useStyles.textPrice}>{formatCurrency(0)}</Typography>
+            <Typography variant='h7' >Phí vận chuyển: </Typography>
+            <Typography variant='h7' >{formatCurrency(feeShip)}</Typography>
           </Box>
-          <Box sx={{ ...useStyles.flexBoxPrice, borderBottom: '1px solid gray' }}>
-            <Typography variant='h7' sx={useStyles.textPrice}>Giảm giá voucher: </Typography>
-            <Typography variant='h7' sx={useStyles.textPrice}>{formatCurrency(0)}</Typography>
+          <Box sx={useStyles.flexBoxPrice}>
+            <Typography variant='h7' >Giảm giá khuyến mãi: </Typography>
+            <Typography variant='h7' >{formatCurrency(0)}</Typography>
           </Box>
+          {voucher && <Box sx={{ ...useStyles.flexBoxPrice, borderBottom: '1px solid gray' }}>
+            <Typography variant='h7' >Giảm giá voucher: </Typography>
+            <Typography variant='h7' >{formatCurrency(voucher?.value)}</Typography>
+          </Box>}
           <Typography variant='h5' sx={{ mt: 3 }}>Phương thức thanh toán</Typography>
           <Box sx={useStyles.flexBox}>
-            <Radio sx={{ height: '30px', width: '30px' }} />
+            <Radio sx={useStyles.radio} checked={true} />
             <Typography variant='h7'>Thanh toán khi nhận hàng</Typography>
           </Box>
           <Box sx={useStyles.flexBox}>
-            <Radio sx={{ height: '30px', width: '30px' }} />
+            <Radio sx={useStyles.radio} />
             <Typography variant='h7' >Thanh toán bằng momo</Typography>
             <img src={imgMomo} alt='thanh toan momo' style={{ height: '30px', width: '30px' }} />
           </Box>
-          <Button sx={{ width: '100%', bgcolor: '#EE3B3B', color: 'white', mt: 2, borderRadius: 2, alignItems: 'center' }}
-            onClick={handleClickOrder}>
-            Hoàn tất đặt hàng
-          </Button>
+          <Button sx={useStyles.button} onClick={handleClickOrder}> Hoàn tất đặt hàng </Button>
         </Grid>
       </Grid>
     </Container>

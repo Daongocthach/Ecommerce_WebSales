@@ -1,5 +1,5 @@
 import { Box, TextField, Typography, Menu, MenuItem, Slider, Button } from '@mui/material'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { formatCurrency } from '../../../utils/price'
 import { sortByMaxIdAndPriceRange } from '../../../utils/price'
 
@@ -33,15 +33,15 @@ function FilterByPrice({ products, setProducts }) {
                             ---
                             <TextField value={formatCurrency(maxPrice)} InputProps={{ readOnly: true }} />
                         </Box>
-                        <Slider value={value} onChange={handleChange} min={1} max={1000}/>
+                        <Slider value={value} onChange={handleChange} min={1} max={1000} />
                     </Box>
                 </MenuItem>
             </Menu>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
                 <Typography variant='body1' fontWeight={'bold'} minWidth={'70px'}>Chọn giá</Typography>
                 <TextField onClick={handleClick} sx={{ minWidth: '250px' }} size='small' value={'Từ ' + formatCurrency(minPrice) + ' - ' + formatCurrency(maxPrice)} />
-                <Button onClick={()=> {setProducts(sortByMaxIdAndPriceRange(products, minPrice, maxPrice))}}>abc</Button>
-                
+                <Button onClick={() => { setProducts(sortByMaxIdAndPriceRange(products, minPrice, maxPrice)) }}>abc</Button>
+
             </Box>
         </>
     )

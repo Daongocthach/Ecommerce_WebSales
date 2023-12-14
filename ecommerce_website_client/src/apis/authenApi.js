@@ -1,7 +1,7 @@
 import axios from 'axios'
 const authenApi = {
     signin(username, password) {
-        const url = 'http://localhost:8080/api/v1/signin'
+        const url = 'http://localhost:8080/api/v1/signin/customer'
         return axios.get(url, { params: { username, password } })
     },
     signup(username, password, email, fullName, phoneNo) {
@@ -15,10 +15,10 @@ const authenApi = {
 
         })
     },
-    updateProfile(id, fullName, phoneNo, address, avatar) {
+    updateProfile(id, fullName, phoneNo, province, district, districtId, ward, address, avatar) {
         const url = 'http://localhost:8080/api/v1/update-profile'
         return axios.put(url, {
-           id, fullName, phoneNo, address, avatar
+           id, fullName, phoneNo, province, district, districtId, ward, address, avatar
         })
     }
 }

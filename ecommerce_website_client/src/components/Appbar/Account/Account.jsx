@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Menu, Box, Divider, MenuItem, ListItemIcon, Avatar, IconButton, Tooltip } from '@mui/material'
 import { Settings, PersonAdd } from '@mui/icons-material'
 import { Link, useNavigate } from 'react-router-dom'
-import { deleteCookie, getCookie } from '../../../utils/cookie'
+import { deleteCookie } from '../../../utils/cookie'
 import { logout } from '../../../redux/actions/auth'
 import { persistor } from '../../../redux/store'
 

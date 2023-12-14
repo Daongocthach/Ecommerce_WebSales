@@ -1,25 +1,16 @@
 import { Box, Typography, Table, TableBody, TableCell, TableHead, Paper, TableRow, TableFooter, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { MoneyOff } from '@mui/icons-material'
 import AddPromotion from './FormPromotion/AddPromotion'
 import UpdatePromotion from './FormPromotion/UpdatePromotion'
 import DeletePromotion from './FormPromotion/DeletePromotion'
-import Search from '../../../components/Search/Search'
-
-function createData(id, name, description, start, end, productid) {
-  return { id, name, description, start, end, productid }
-}
-const promotions = [
-  createData(1, 'Frozen yoghurt', '12345', 6.0, 24, 4.0),
-  createData(2, 'Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData(3, 'Eclair', 262, 16.0, 24, 6.0),
-  createData(4, 'Cupcake', 305, 3.7, 67, 4.3),
-  createData(5, 'Gingerbread', 356, 16.0, 49, 3.9)
-]
+import SearchPromotion from './SearchPromotion/SearchPromotion'
+import { sortByMaxId, sortByMinId } from '../../../utils/sort'
+import promotionApi from '../../../apis/promotionApi'
 
 function Promotions() {
-  const categories = ''
+  const [promotions, setPromotions] = useState([])
+  const [update, setUpdate] = useState(0)
+  const [select, setSelect] = useState(1)
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(6)
 
@@ -30,20 +21,40 @@ function Promotions() {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
-  const [select, setSelect] = useState(1)
-  const handleChange = () => {
-
+  const handleChange = (event) => {
+    setSelect(event.target.value)
   }
+  useEffect(() => {
+    promotionApi.getAllPromotions()
+      .then(response => {
+        setPromotions(sortByMaxId(response.data))
+      })
+      .catch(error => {
+        console.error(error)
+      })
+  }, [update])
+  useEffect(() => {
+    switch (select) {
+      case 1:
+        setPromotions(sortByMaxId(promotions))
+        break
+      case 2:
+        setPromotions(sortByMinId(promotions))
+        break
+      default:
+        break
+    }
+  }, [select])
   return (
     <Box sx={{ m: 5 }}>
       <Typography variant='h7' >Trang chủ / Quản lý khuyến mãi</Typography>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-        <AddPromotion/>
+        <AddPromotion setUpdate={setUpdate} />
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
-          <Search />
+          <SearchPromotion setPromotions={setPromotions}/>
           <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
           <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
-            <Select value={select} onChange={handleChange} defaultValue={1} >
+            <Select value={select} onChange={handleChange} >
               <MenuItem value={1}>Mới nhất</MenuItem>
               <MenuItem value={2}>Cũ nhất</MenuItem>
             </Select>
@@ -56,25 +67,27 @@ function Promotions() {
             <TableHead>
               <TableRow >
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Id</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">Name</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">Description</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">Start</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">End</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Code</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Value</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">DateStart</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">DateEnd</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Quantity</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Update</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {promotions?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((promotion, index) => {
+              {Array.isArray(promotions) && promotions?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((promotion, index) => {
                 return (
                   <TableRow key={index}>
                     <TableCell align="center">{promotion?.id}</TableCell>
-                    <TableCell align="center">{promotion?.name}</TableCell>
-                    <TableCell align="center">{promotion?.description}</TableCell>
-                    <TableCell align="center">{promotion?.start}</TableCell>
-                    <TableCell align="center">{promotion?.end}</TableCell>
-                    <TableCell align="center"><UpdatePromotion promotion={promotion} /></TableCell>
-                    <TableCell align="center"><DeletePromotion promotion={promotion} /></TableCell>
+                    <TableCell align="center">{promotion?.code}</TableCell>
+                    <TableCell align="center">{promotion?.value}</TableCell>
+                    <TableCell align="center">{promotion?.startDate}</TableCell>
+                    <TableCell align="center">{promotion?.endDate}</TableCell>
+                    <TableCell align="center">{promotion?.quantity}</TableCell>
+                    <TableCell align="center"><UpdatePromotion setUpdate={setUpdate} promotion={promotion} /></TableCell>
+                    <TableCell align="center"><DeletePromotion setUpdate={setUpdate} promotionId={promotion?.id} /></TableCell>
                   </TableRow>
                 )
               })}
@@ -84,7 +97,7 @@ function Promotions() {
                 <TablePagination
                   colSpan={12}
                   rowsPerPageOptions={[6, 10]}
-                  count={promotions?.length}
+                  count={Array.isArray(promotions) ? promotions?.length : 0}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onPageChange={handleChangePage}

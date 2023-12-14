@@ -1,5 +1,4 @@
 import { Container, Grid, Typography, Box, FormControl, Select, MenuItem, FormGroup, FormControlLabel, Checkbox, Menu, Slider, TextField, Button } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import Product from '../Dashboard/BoardContent/ListRow/Row/ListProduct/Product/Product'
@@ -47,7 +46,7 @@ function GenreDetail() {
   }
   useEffect(() => {
     if (subCategoryId == 0) {
-      productApi.getAllProducts()
+      productApi.getAllEnabledProducts()
         .then(response => {
           setProducts(response.data)
           setProductsBySelect(response.data)
@@ -64,7 +63,7 @@ function GenreDetail() {
           console.error(error)
         })
     }
-    providerApi.getAllProviders()
+    providerApi.getAllEnabledProviders()
       .then(response => {
         setProviders(response.data)
       })
@@ -90,7 +89,6 @@ function GenreDetail() {
   useEffect(() => {
     setProducts(sortByMaxIdAndPriceRange(products, minPrice, maxPrice))
   }, [minPrice, maxPrice])
-  console.log(checked)
   useEffect(() => {
     const productsByProviders = productsBySelect.filter(product => checked.includes(product.provider.id))
     setProducts(productsByProviders)

@@ -1,7 +1,7 @@
 import axios from 'axios'
 const categoryApi = {
-    getAllCategories() {
-        const url = 'http://localhost:8080/api/v1/categories'
+    getAllEnabledCategories() {
+        const url = 'http://localhost:8080/api/v1/categories-enabled'
         return axios.get(url)
     },
     getCategoryById(id) {

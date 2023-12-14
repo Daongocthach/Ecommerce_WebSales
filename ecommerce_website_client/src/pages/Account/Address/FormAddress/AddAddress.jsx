@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Provider, useDispatch } from 'react-redux'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, MenuItem, Switch } from '@mui/material'
-import { Business, Home } from '@mui/icons-material'
-import addressApi from '../../../../apis/addressApi'
+import ghnApi from '../../../../apis/ghnApi'
 
 function AddAddress() {
     const [provinces, setProvinces] = useState([])
@@ -15,32 +13,34 @@ function AddAddress() {
     const [fullName, setFullName] = useState('')
     const [phoneNo, setPhoneNo] = useState('')
     const [open, setOpen] = useState(false)
-    useEffect(() => {
-        addressApi.getProvices()
-            .then(response => { setProvinces(response.data) })
-    }, [])
     const handleProvinceChange = (code) => {
         setProvinceName(code)
-        addressApi.getDistricts(code)
-            .then(response => {setDistricts(response.data.districts)})
-        console.log(districts)
+        ghnApi.getDistricts(code)
+            .then(response => { setDistricts(response.data.data) })
     }
     const handleDistrictChange = (code) => {
         setDistrictName(code)
-        addressApi.getWards(code)
-            .then(response => {setWards(response.data.wards)})
+        ghnApi.getWards(code)
+            .then(response => { setWards(response.data.data) })
     }
     const handleWardChange = (code) => {
         setWardName(code)
     }
     const handleClickOpen = () => {
+        ghnApi.getProvices()
+            .then(response => {
+                setProvinces(response.data.data)
+                console.log(response.data.data)
+            })
+            .catch(err => { console.log(err) })
+
         setOpen(true)
     }
     const handleClose = () => {
         setOpen(false)
     }
     const handleClickAdd = () => {
-        
+
         console.log(provinceName)
         handleClose()
     }
@@ -57,30 +57,30 @@ function AddAddress() {
                             <TextField fullWidth size='small' label="Nhập số điện thoại" value={phoneNo} onChange={(e) => setPhoneNo(e.target.value)} />
                         </Box>
                         <Typography minWidth={'100px'} fontWeight={'bold'}>Địa chỉ nhận hàng</Typography>
-                        <TextField fullWidth select size='small' label='Tỉnh/Thành phố' value={provinceName} onChange={(e) => handleProvinceChange(e.target.value)}>
+                        {Array.isArray(provinces) && <TextField fullWidth select size='small' label='Tỉnh/Thành phố' value={provinceName} onChange={(e) => handleProvinceChange(e.target.value)}>
                             {provinces.map((province, index) => (
-                                <MenuItem key={index} value={province.code}>
-                                    {province.name}
+                                <MenuItem key={index} value={province.ProvinceID}>
+                                    {province.ProvinceName}
                                 </MenuItem>
                             ))}
-                        </TextField>
+                        </TextField>}
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <TextField fullWidth select size='small' label="Quận/Huyện" value={districtName} onChange={(e) => handleDistrictChange(e.target.value)}>
                                 {Array.isArray(districts) && districts.map((district, index) => (
-                                    <MenuItem key={index} value={district.code}>
-                                        {district.name}
+                                    <MenuItem key={index} value={district.DistrictID}>
+                                        {district.DistrictName}
                                     </MenuItem>
                                 ))}
                             </TextField>
                             <TextField fullWidth select size='small' label="Phường/Xã" value={wardName} onChange={(e) => handleWardChange(e.target.value)}>
                                 {Array.isArray(wards) && wards.map((ward, index) => (
-                                    <MenuItem key={index} value={ward.code}>
-                                        {ward.name}
+                                    <MenuItem key={index} value={ward.WardName}>
+                                        {ward.WardName}
                                     </MenuItem>
                                 ))}
                             </TextField>
                         </Box>
-                        <TextField fullWidth inputMode='text' size='small' label="Đường/Tòa nhà" value={road} onChange={(e) => setRoad(e.target.value)}/>
+                        <TextField fullWidth inputMode='text' size='small' label="Đường/Tòa nhà" value={road} onChange={(e) => setRoad(e.target.value)} />
                         {/* <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'space-between' }}>
                             <Typography variant='h7' fontWeight={'bold'}>Loại địa chỉ</Typography>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

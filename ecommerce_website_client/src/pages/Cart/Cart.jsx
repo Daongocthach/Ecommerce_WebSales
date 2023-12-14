@@ -13,6 +13,13 @@ function Cart() {
   const cart = useSelector(state => state.cart)
   const [cartItems, setCartItems] = useState([])
   const user = useSelector(state => state.auth)
+  const handleClickCheckout = () => {
+    if (cartItems.length < 1)
+      alert('Bạn chưa có sản phẩm nào trong giỏ!')
+    else {
+      navigate('/checkout')
+    }
+  }
   useEffect(() => {
     if (userId) {
       setCartItems(cart?.cartItems)
@@ -44,21 +51,9 @@ function Cart() {
             <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Tổng tiền: </Typography>
             <Typography variant='h7' sx={{ fontWeight: 'bold' }}>{formatCurrency(cart?.total)}</Typography>
           </Box>
-          <Box sx={{ display: 'flex', alignItem: 'center', justifyContent: 'space-between', mt: 2 }}>
-            <Typography variant='h7' sx={{ fontWeight: 'bold' }}>Phí vận chuyển: </Typography>
-            <Typography variant='h7' sx={{ fontWeight: 'bold' }}>{formatCurrency(0)}</Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItem: 'center', justifyContent: 'space-between', mt: 2 }}>
-            <Typography variant='h7' sx={{ fontWeight: 'bold' }}>Giảm giá khuyến mãi: </Typography>
-            <Typography variant='h7' sx={{ fontWeight: 'bold' }}>{formatCurrency(0)}</Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItem: 'center', justifyContent: 'space-between', mt: 2, borderBottom: '1px solid gray' }}>
-            <Typography variant='h7' sx={{ fontWeight: 'bold' }}>Giảm giá voucher: </Typography>
-            <Typography variant='h7' sx={{ fontWeight: 'bold' }}>{formatCurrency(0)}</Typography>
-          </Box>
-          <Button sx={{ width: '100%', bgcolor: '#EE3B3B', color: 'white', mt: 2, borderRadius: 2, alignItems: 'center' }}
-            onClick={() => navigate('/checkout')}>
-            Đặt hàng
+          <Button sx={{ width: '100%', bgcolor: '#EE3B3B', color: 'white', mt: 2, borderRadius: 2, alignItems: 'center', ':hover': { bgcolor: 'red' } }}
+            onClick={handleClickCheckout}>
+            Thanh toán
           </Button>
         </Grid>
       </Grid>

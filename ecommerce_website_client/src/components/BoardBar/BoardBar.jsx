@@ -6,7 +6,7 @@ import MenuCategory from './MenuCategory/MenuCategory'
 function BoardBar() {
     const [categories, setCategories] = useState([])
     useEffect(() => {
-        categoryApi.getAllCategories()
+        categoryApi.getAllEnabledCategories()
             .then(response => {
                 setCategories(response.data)
             })

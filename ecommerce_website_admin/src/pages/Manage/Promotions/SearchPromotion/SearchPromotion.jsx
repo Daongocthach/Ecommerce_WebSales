@@ -1,22 +1,25 @@
 import SearchIcon from '@mui/icons-material/Search'
-import { InputAdornment, TextField, Autocomplete, Stack, ListItem, ListItemAvatar, ListItemText, Avatar } from '@mui/material'
+import { InputAdornment, TextField, Autocomplete, Stack } from '@mui/material'
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import productApi from '../../../apis/productApi'
+import promotionApi from '../../../../apis/promotionApi'
 
-function Search() {
-    const navigate = useNavigate()
+function SearchPromotion({ setPromotions }) {
+    const [datas, setDatas] = useState([])
     const colorChangeByTheme = (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black')
-    const [products, setProducts] = useState([])
-    const handleProductSelect = (event, value) => {
-        if (value) {
-          navigate(`/product-detail?${value.id}`)
+    const handleDatasSelect = (event, value) => {
+        if (value !== null) {
+            promotionApi.getPromotionById(value.id)
+                .then(response => {
+                    setPromotions([response.data])
+                })
+                .catch(err => { console.log(err) })
         }
-      }
+        else { setPromotions(datas) }
+    }
     useEffect(() => {
-        productApi.getAllEnabledProducts()
+        promotionApi.getAllPromotions()
             .then(response => {
-                setProducts(response.data)
+                setDatas(response.data)
             })
             .catch(error => {
                 console.error(error)
@@ -26,23 +29,12 @@ function Search() {
         <Stack spacing={2} sx={{ width: 300 }}>
             <Autocomplete
                 freeSolo
-                id="free-solo-2-demo"
-                options={products}
-                getOptionLabel={(product) => (product && product.name) || ''}
-                onChange={handleProductSelect}
-                renderOption={(props, product) => (
-                    <ListItem {...props}>
-                        <ListItemAvatar>
-                            <Avatar alt={product.name} src={product.image} />
-                        </ListItemAvatar>
-                        <ListItemText primary={product.name} />
-                    </ListItem>
-                )}
-
+                options={datas}
+                getOptionLabel={(data) => (data && data.code) || ''}
+                onChange={handleDatasSelect}
                 renderInput={(params) => (
                     <TextField
                         {...params}
-                        id="outlined-search"
                         label="Search..."
                         type="text"
                         size='small'
@@ -70,4 +62,4 @@ function Search() {
     )
 }
 
-export default Search
+export default SearchPromotion

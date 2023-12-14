@@ -1,14 +1,6 @@
 import axios from 'axios'
 
 const orderApi = {
-  getAllOrders() {
-    const url = 'http://localhost:8080/api/v1/orders'
-    return axios.get(url)
-  },
-  getOrderById(orderId) {
-    const url = `http://localhost:8080/api/v1/order/${orderId}`
-    return axios.get(url)
-  },
   getOrderByCustomerId(customerId) {
     const url = `http://localhost:8080/api/v1/orders-customer?customerId=${customerId}`
     return axios.get(url)
@@ -36,10 +28,6 @@ const orderApi = {
   addOrder(order) {
     const url = 'http://localhost:8080/api/v1/add-order'
     return axios.post(url, order)
-  },
-  updateOrderStatus(order) {
-    const url = 'http://localhost:8080/api/v1/update-order-status'
-    return axios.put(url, order)
   },
   deleteOrder(orderId) {
     const url = `http://localhost:8080/api/v1/delete-order/${orderId}`

@@ -5,7 +5,6 @@ import AddCircle from '@mui/icons-material/AddCircle'
 import categoryApi from '../../../../apis/categoryApi'
 
 function AddCategory({ setUpdate }) {
-    const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [name, setName] = useState('')
 

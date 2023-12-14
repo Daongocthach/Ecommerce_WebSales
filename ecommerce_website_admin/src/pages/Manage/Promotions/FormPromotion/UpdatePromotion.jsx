@@ -1,13 +1,15 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography } from '@mui/material'
 import { Create } from '@mui/icons-material'
+import { format, parse } from 'date-fns'
+import promotionApi from '../../../../apis/promotionApi'
 
-function UpdatePromotion({ Promotion }) {
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-  const [discount, setDiscount] = useState('')
-  const [start, setStart] = useState('')
-  const [end, setEnd] = useState('')
+function UpdatePromotion({ setUpdate, promotion }) {
+  const [startDate, setStartDate] = useState(format(new Date(promotion?.startDate), 'yyyy-MM-dd'))
+  const [endDate, setEndDate] = useState(format(new Date(promotion?.endDate), 'yyyy-MM-dd'))
+  const [code, setCode] = useState(promotion?.code)
+  const [value, setValue] = useState(promotion?.value)
+  const [quantity, setQuantity] = useState(promotion?.quantity)
   const [open, setOpen] = useState(false)
 
   const handleClickOpen = () => {
@@ -17,9 +19,18 @@ function UpdatePromotion({ Promotion }) {
     setOpen(false)
   }
   const handleUpdate = () => {
-
+    promotionApi.updatePromotion(promotion?.id, startDate, endDate, code, value, quantity)
+    .then(() => {
+        alert('Update Success')
+        setUpdate(3)
+    })
+    .catch(error => {
+        console.log(error)
+        alert('Update Fail')
+    })
     handleClose()
   }
+
   return (
     <div>
       <Button sx={{ bgcolor: 'orange', color: 'black' }} variant="outlined" onClick={handleClickOpen}><Create /></Button>
@@ -28,28 +39,24 @@ function UpdatePromotion({ Promotion }) {
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, width: '350px' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography minWidth={'100px'}>Name: </Typography>
-              <TextField fullWidth size='small' onChange={(e) => setName(e.target.value)} />
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography minWidth={'100px'}>Description: </Typography>
-              <TextField fullWidth size='small' onChange={(e) => setDescription(e.target.value)} />
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography minWidth={'100px'}>Discount: </Typography>
-              <TextField fullWidth size='small' onChange={(e) => setDiscount(e.target.value)} />
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Typography minWidth={'100px'}>Code: </Typography>
-              <TextField fullWidth size='small' onChange={(e) => setName(e.target.value)} />
+              <TextField fullWidth size='small' value={code} onChange={(e) => setCode(e.target.value)} />
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography minWidth={'100px'}>DayStart: </Typography>
-              <TextField fullWidth size='small' type='date' onChange={(e) => setStart(e.target.value)} />
+              <Typography minWidth={'100px'}>Value: </Typography>
+              <TextField fullWidth size='small' value={value} onChange={(e) => setValue(e.target.value)} />
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography minWidth={'100px'}>DayEnd: </Typography>
-              <TextField fullWidth size='small' type='date' onChange={(e) => setEnd(e.target.value)} />
+              <Typography minWidth={'100px'}>Quantity: </Typography>
+              <TextField fullWidth size='small' value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography minWidth={'100px'}>StartDate: </Typography>
+              <TextField fullWidth size='small' type='date' value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography minWidth={'100px'}>EndDate: </Typography>
+              <TextField fullWidth size='small' type='date' value={endDate} onChange={(e) => setEndDate(e.target.value)} />
             </Box>
           </Box>
         </DialogContent>

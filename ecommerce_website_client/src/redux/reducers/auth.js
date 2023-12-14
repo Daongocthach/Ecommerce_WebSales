@@ -5,6 +5,10 @@ const initialState = {
     fullName: '',
     phoneNo: '',
     point: '',
+    province:'',
+    district:'',
+    districtId: '',
+    ward:'',
     address: '',
     avatar: ''
 }
@@ -12,10 +16,6 @@ const authReducer = (state = initialState, action) => {
     switch (action.type) {
 
         case 'LOGIN': {
-            console.log({
-                ...state,
-                ...action
-            })
             return {
                 ...state,
                 ...action.payload
@@ -23,10 +23,6 @@ const authReducer = (state = initialState, action) => {
         }
 
         case 'UPDATE_FULLNAME': {
-            console.log({
-                ...state,
-                fullName: action?.payload?.fullName
-            })
             return {
                 ...state,
                 fullName: action?.payload?.fullName
@@ -34,10 +30,6 @@ const authReducer = (state = initialState, action) => {
         }
 
         case 'UPDATE_AVATAR': {
-            console.log({
-                ...state,
-                avatar: action?.payload
-            })
             return {
                 ...state,
                 avatar: action?.payload

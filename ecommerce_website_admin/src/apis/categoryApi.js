@@ -1,7 +1,7 @@
 import axios from 'axios'
 const categoryApi = {
     getAllCategories() {
-        const url = 'http://localhost:8080/api/v1/categories'
+        const url = 'http://localhost:8080/api/v1/admin/categories'
         return axios.get(url)
     },
     getCategoryById(id) {
@@ -9,15 +9,15 @@ const categoryApi = {
         return axios.get(url)
     },
     addCategory(name) {
-        const url = 'http://localhost:8080/api/v1/add-category'
+        const url = 'http://localhost:8080/api/v1/admin/add-category'
         return axios.post(url, { name })
     },
     updateCategory(id, name, enabled) {
-        const url = 'http://localhost:8080/api/v1/update-category'
+        const url = 'http://localhost:8080/api/v1/admin/update-category'
         return axios.put(url, { id, name, enabled } )
     },
     deleteCategory(id) {
-        const url = `http://localhost:8080/api/v1/delete-category/${id}`
+        const url = `http://localhost:8080/api/v1/admin/delete-category/${id}`
         return axios.put(url)
     }
 }

@@ -25,7 +25,7 @@ const publicRoutes = [
     { path:'/manage/promotions', component: Promotions },
     { path:'/manage/inventory', component: Inventory },
     { path:'/manage/invoices', component: Invoices },
-    { path:'/manage/orders', component: Orders },
+    { path:'/manage/orders', component: Orders }
 ]
 
 const privateRoutes = [
