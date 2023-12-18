@@ -22,7 +22,6 @@ function Profile() {
     }
   }
   const onUpdate = () => {
-
     authenApi.updateProfile(user?.id, fullName, phoneNo, avatar)
       .then(response => {
         dispatch(login(response.data))

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { Box, Button, Typography, Input, Container } from '@mui/material'
 import { PersonOutline } from '@mui/icons-material'
 
@@ -8,8 +9,9 @@ const useStyles = {
   }
 }
 function Profile() {
-  const [fullName, setFullName] = useState('')
-  const [phone, setPhone] = useState('')
+  const user = useSelector(state => state.auth)
+  const [fullName, setFullName] = useState(user?.fullName)
+  const [phone, setPhone] = useState(user?.phoneNo)
   const onUpdate = () => {
   }
 
@@ -42,7 +44,7 @@ function Profile() {
         </Box>
         <Box sx={useStyles.flexBox}>
             <Button sx={{ color: 'white', width: '100px', height: '40px', ':hover': { bgcolor: '#666666' }, bgcolor: '#FF0000' }} onClick={() => onUpdate()}>Cập nhật</Button>
-            <Button sx={{ color: 'white', width: '100px', height: '40px', ':hover': { bgcolor: '#666666' }, bgcolor: '#EE9A00' }}>Cài Đặt</Button>
+            {/* <Button sx={{ color: 'white', width: '100px', height: '40px', ':hover': { bgcolor: '#666666' }, bgcolor: '#EE9A00' }}>Cài Đặt</Button> */}
           </Box>
         <Box sx={useStyles.flexBox}>
           <Typography variant='h6' sx={{ minWidth: '250px', fontWeight: 'bold' }}>Thông tin gói dịch vụ</Typography>

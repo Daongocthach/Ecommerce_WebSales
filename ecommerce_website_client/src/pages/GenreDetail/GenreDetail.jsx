@@ -109,7 +109,7 @@ function GenreDetail() {
           </FormGroup>
         </Grid>
         <Grid mt={1} item container xs={12} sm={12} md={10} lg={10} >
-          <Grid item xs={12} sm={12} md={10} lg={10}>
+          <Box sx={{}}>
             <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
               <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
               <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
@@ -136,12 +136,14 @@ function GenreDetail() {
                 <TextField onClick={handleClick} sx={{ minWidth: '250px' }} size='small' value={'Từ ' + formatCurrency(minPrice) + ' - ' + formatCurrency(maxPrice)} />
               </Box>
             </Box>
-          </Grid>
-          {products.map((product) => (
-            <Grid key={product.id} item xs={6} sm={6} md={3} lg={3}>
-              <Product product={product} />
+            <Grid container spacing={1} >
+              {products.map((product) => (
+                <Grid key={product.id} item xs={12} sm={12} md={4} lg={3} >
+                  <Product product={product} />
+                </Grid>
+              ))}
             </Grid>
-          ))}
+          </Box>
         </Grid>
       </Grid>
     </Container >

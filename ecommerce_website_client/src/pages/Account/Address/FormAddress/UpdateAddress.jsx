@@ -50,7 +50,7 @@ function UpdateAddress({ user }) {
             alert('Bạn chưa nhập địa chỉ mới!')
         }
         else {
-            authenApi.updateProfile(user?.id, fullName, phoneNo, province.ProvinceName, district.DistrictName, district.DistrictID, ward.WardName, address)
+            authenApi.updateProfile(user?.id, fullName, phoneNo, user?.avatar, province.ProvinceName, district.DistrictName, district.DistrictID, ward.WardName, address)
             .then((response) => {
                 alert('Cập nhật thông tin nhận hàng thành công')
                 dispatch(login(response.data))

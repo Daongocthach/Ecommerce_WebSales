@@ -52,7 +52,7 @@ function Account() {
                 }}
             >
                 {user && <MenuItem onClick={handleClose}>
-                    <Link to={'/account'} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Link to={'/profile'} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Avatar sx={{ mr: 3 }} />
                         Cá nhân
                     </Link>

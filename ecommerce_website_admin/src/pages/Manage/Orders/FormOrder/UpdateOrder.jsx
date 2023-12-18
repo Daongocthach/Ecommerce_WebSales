@@ -10,7 +10,7 @@ const steps = [
   'CANCEL',
   'SUCCESS'
 ]
-function UpdateOrder({ setUpdate, order }) {
+function UpdateOrder({ order }) {
   var status
   if (order?.orderStatus == 'PENDING') {
     status = 0
@@ -29,24 +29,45 @@ function UpdateOrder({ setUpdate, order }) {
   }
   const [activeStep, setActiveStep] = useState(status || 0)
   const [open, setOpen] = useState(false)
-
+  const [open1, setOpen1] = useState(false)
   const handleClickOpen = () => {
     setOpen(true)
   }
   const handleClose = () => {
     setOpen(false)
   }
-  const handleUpdate = () => {
+  const handleClickOpen1 = () => {
+    setOpen1(true)
+  }
+  const handleClose1 = () => {
+    setOpen1(false)
+    setOpen(false)
+  }
+  const handleSuccess = () => {
     orderApi.updateOrderStatus(order?.id, activeStep)
       .then(() => {
         alert('Update Success')
-        setUpdate(3)
       })
       .catch(error => {
         console.log(error)
         alert('Update Fail')
       })
-    console.log(activeStep)
+    handleClose1()
+  }
+  const handleUpdate = () => {
+    if (activeStep == 4) {
+      handleClickOpen1()
+    }
+    else {
+      orderApi.updateOrderStatus(order?.id, activeStep)
+        .then(() => {
+          alert('Update Success')
+        })
+        .catch(error => {
+          console.log(error)
+          alert('Update Fail')
+        })
+    }
     handleClose()
   }
   const handleNext = () => {
@@ -83,6 +104,13 @@ function UpdateOrder({ setUpdate, order }) {
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleUpdate}>Update</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={open1} onClose={handleClose1} >
+        <DialogTitle >Are you sure to complete this order?</DialogTitle>
+        <DialogActions>
+          <Button onClick={handleClose1}>Cancel</Button>
+          <Button onClick={handleSuccess}>Update</Button>
         </DialogActions>
       </Dialog>
     </div>

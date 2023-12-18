@@ -12,7 +12,6 @@ function Orders() {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(6)
   const [select, setSelect] = useState(1)
-
   const handleChangePage = (e, newPage) => {
     setPage(newPage)
   }
