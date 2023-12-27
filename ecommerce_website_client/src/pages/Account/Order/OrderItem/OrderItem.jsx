@@ -1,6 +1,18 @@
-import { Typography, Box, Button, Grid } from '@mui/material'
+import { Typography, Box } from '@mui/material'
 import { formatCurrency } from '../../../../utils/price'
-function OrderItem({ orderItem }) {
+import ReviewProduct from '../ReviewProduct/ReviewProduct'
+import reviewApi from '../../../../apis/reviewApi'
+import { useEffect, useState } from 'react'
+function OrderItem({ customerId, orderItem, orderStatus }) {
+    var isReviewed = false
+    const [review, setReview] = useState()
+    if (orderStatus != 'SUCCESS') {
+        isReviewed = true
+    }
+    useEffect(() => {
+        reviewApi.getReviewByCustomerAndProduct(customerId, orderItem?.product.id)
+            .then((response) => { setReview(response.data) })
+    }, [])
     return (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1, justifyContent: 'space-between' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1, justifyContent: 'space-between' }}>
@@ -11,8 +23,8 @@ function OrderItem({ orderItem }) {
                 <Typography variant='h7'>{formatCurrency(orderItem?.product.price)}</Typography>
                 <Typography variant='h7'>x{orderItem?.quantity}</Typography>
             </Box>
+            {!isReviewed && !review && <ReviewProduct product={orderItem?.product} customerId={customerId} />}
         </Box>
     )
 }
-
 export default OrderItem

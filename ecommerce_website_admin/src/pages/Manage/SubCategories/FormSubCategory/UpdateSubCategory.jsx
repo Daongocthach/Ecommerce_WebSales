@@ -1,39 +1,35 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, FormControl, Select, MenuItem } from '@mui/material'
 import { Create } from '@mui/icons-material'
+import { useDispatch, useSelector } from 'react-redux'
 import subCategoryApi from '../../../../apis/subCategoryApi'
-import categoryApi from '../../../../apis/categoryApi'
+import { updateSubCategory } from '../../../../redux/actions/subCategories'
 
 function UpdateCategory({ setUpdate, subCategory }) {
-  const [categories, setCategories] = useState([])
-  const [name, setName] = useState(subCategory?.name)
-  const [select, setSelect] = useState(subCategory?.category?.id)
-  const [enabled, setEnabled] = useState(subCategory?.enabled)
+  const dispatch = useDispatch()
+  const categories = useSelector(state => state.categories.categories)
+  const [name, setName] = useState()
+  const [select, setSelect] = useState()
+  const [enabled, setEnabled] = useState()
   const [open, setOpen] = useState(false)
   const handleChange = (event) => {
     setSelect(event.target.value)
   }
   const handleClickOpen = () => {
     setOpen(true)
+    setName(subCategory?.name)
+    setSelect(subCategory?.category?.id)
+    setEnabled(subCategory?.enabled)
   }
   const handleClose = () => {
     setOpen(false)
   }
-  useEffect(() => {
-    categoryApi.getAllCategories()
-      .then(response => {
-        setCategories(response.data)
-        setUpdate(0)
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }, [])
   const handleUpdate = () => {
     subCategoryApi.updateSubCategory(subCategory?.id, name, select, enabled)
-      .then(() => {
+      .then((response) => {
         alert('Update Success')
-        setUpdate(3)
+        setUpdate(response.data.id)
+        dispatch(updateSubCategory(response.data))
       })
       .catch(error => {
         console.log(error)

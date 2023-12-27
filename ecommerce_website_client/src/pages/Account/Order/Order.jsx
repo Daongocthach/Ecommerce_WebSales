@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { Typography, Box, Button, Grid } from '@mui/material'
+import { Typography, Box, Button, Grid, Tab, Tabs } from '@mui/material'
 import { LocalShipping, FiberManualRecord } from '@mui/icons-material'
 import { formatCurrency } from '../../../utils/price'
 import emptyOrder from '../../../assets/img/empty-order.png'
@@ -9,13 +9,11 @@ import orderApi from '../../../apis/orderApi'
 import OrderItem from './OrderItem/OrderItem'
 import DeleteOrder from './DeleteOrder/DeleteOrder'
 import { sortByMaxId } from '../../../utils/price'
+import GoodsReceived from './GoodsReceived/GoodsReceived'
 
 const useStyles = {
   flexBox: {
     display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1, justifyContent: 'space-between'
-  },
-  button: {
-    width: '120px', height: '40px', color: 'inherit', ':focus': { borderBottom: '2px solid red' }
   }
 }
 function Order() {
@@ -23,6 +21,8 @@ function Order() {
   const [orders, setOrders] = useState([])
   const user = useSelector(state => state.auth)
   const customerId = user.id
+  const [tab, setTab] = useState(1)
+
   const handleAllOrders = () => {
     orderApi.getOrderByCustomerId(customerId)
       .then((response) => { setOrders(sortByMaxId(response.data)) })
@@ -47,8 +47,12 @@ function Order() {
     orderApi.getOrderByCustomerIdSuccess(customerId)
       .then((response) => { setOrders(sortByMaxId(response.data)) })
   }
+  const handleChange = (event, newTab) => {
+    setTab(newTab)
+
+  }
   useEffect(() => {
-    orderApi.getOrderByCustomerId(customerId)
+    orderApi.getOrderByCustomerIdPending(customerId)
       .then((response) => { setOrders(sortByMaxId(response.data)) })
   }, [customerId])
   return (
@@ -57,26 +61,16 @@ function Order() {
         <Typography variant='h6' sx={{ fontWeight: 'bold', minWidth: '100px' }}>Đơn hàng của tôi</Typography>
       </Box>
       <Box sx={{ mb: 2 }}>
-        <Grid container spacing={3} mt={2} >
-          <Grid item xs={12} sm={2} md={2} lg={2} >
-            <Button sx={useStyles.button} onClick={handleAllOrders}>Tất cả</Button>
-          </Grid>
-          <Grid item xs={12} sm={2} md={2} lg={2} >
-            <Button sx={useStyles.button} onClick={handlePending}>Đã đặt hàng</Button>
-          </Grid>
-          <Grid item xs={12} sm={2} md={2} lg={2} >
-            <Button sx={useStyles.button} onClick={handleConfirmed}>Đã xác nhận</Button>
-          </Grid>
-          <Grid item xs={12} sm={2} md={2} lg={2} >
-            <Button sx={useStyles.button} onClick={handleOnDelivery}>Đang giao</Button>
-          </Grid>
-          <Grid item xs={12} sm={2} md={2} lg={2} >
-            <Button sx={useStyles.button} onClick={handleCancel}>Đã hủy</Button>
-          </Grid>
-          <Grid item xs={12} sm={2} md={2} lg={2} >
-            <Button sx={useStyles.button} onClick={handleSuccess}>Hoàn tất</Button>
-          </Grid>
-        </Grid>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs value={tab} onChange={handleChange} >
+            <Tab label='Đã đặt hàng' value={1} onClick={handlePending} />
+            <Tab label='Đã xác nhận' value={2} onClick={handleConfirmed} />
+            <Tab label='Đang giao' value={3} onClick={handleOnDelivery} />
+            <Tab label='Hoàn tất' value={4} onClick={handleSuccess} />
+            <Tab label='Đã hủy' value={5} onClick={handleCancel} />
+            <Tab label='Tất cả' value={6} onClick={handleAllOrders} />
+          </Tabs>
+        </Box>
         <Box>
           {Array.isArray(orders) && orders.map((order, index) =>
             <Box key={index}>
@@ -100,10 +94,11 @@ function Order() {
                 </Box>
               </Box>
               {order?.orderItems.map((orderItem, index) =>
-                <OrderItem key={index} orderItem={orderItem} />)}
+                <OrderItem key={index} customerId={customerId} orderItem={orderItem} orderStatus={order?.orderStatus}/>)}
               <Box sx={useStyles.flexBox}>
-              {order?.orderStatus == 'CONFIRMED' || order?.orderStatus == 'PENDING' ?
-                <DeleteOrder handleAllOrders={handleAllOrders} orderId={order?.id}/> : <Typography variant='h6' color={'gray'}>Hủy đơn hàng</Typography>}
+                {order?.orderStatus == 'CONFIRMED' || order?.orderStatus == 'PENDING' ?
+                  <DeleteOrder handleAllOrders={handleAllOrders} orderId={order?.id} /> : <Typography variant='h6' color={'gray'}>Hủy đơn hàng</Typography>}
+                {order?.orderStatus == 'ON_DELIVERY' && <GoodsReceived orderId={order?.id} />}
                 <Typography variant='h6'>Thành tiền: {formatCurrency(order.total)}</Typography>
               </Box>
             </Box>)}

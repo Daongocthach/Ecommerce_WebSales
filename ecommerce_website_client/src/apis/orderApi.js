@@ -25,6 +25,13 @@ const orderApi = {
     const url = `http://localhost:8080/api/v1/orders-customer-success?customerId=${customerId}`
     return axios.get(url)
   },
+  updateOrderStatus(id, orderStatus) {
+    if (orderStatus > 4) {
+      return
+    }
+    const url = 'http://localhost:8080/api/v1/update-order-status'
+    return axios.put(url, { id, orderStatus })
+  },
   addOrder(order) {
     const url = 'http://localhost:8080/api/v1/add-order'
     return axios.post(url, order)

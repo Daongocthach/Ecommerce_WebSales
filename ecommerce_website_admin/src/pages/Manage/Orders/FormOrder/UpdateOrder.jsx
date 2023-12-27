@@ -1,16 +1,18 @@
 import { useState } from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stepper, Step, StepLabel, Box } from '@mui/material'
 import { Create } from '@mui/icons-material'
+import { useDispatch } from 'react-redux'
 import orderApi from '../../../../apis/orderApi'
+import { updateOrder } from '../../../../redux/actions/orders'
 
 const steps = [
   'PENDING',
   'CONFIRMED',
   'ON_DELIVERY',
-  'CANCEL',
   'SUCCESS'
 ]
-function UpdateOrder({ order }) {
+
+function UpdateOrder({ setUpdate, order }) {
   var status
   if (order?.orderStatus == 'PENDING') {
     status = 0
@@ -21,53 +23,47 @@ function UpdateOrder({ order }) {
   if (order?.orderStatus == 'ON_DELIVERY') {
     status = 2
   }
-  if (order?.orderStatus == 'CANCEL') {
-    status = 3
-  }
-  if (order?.orderStatus == 'SUCCESS') {
-    status = 4
-  }
+  const dispatch = useDispatch()
   const [activeStep, setActiveStep] = useState(status || 0)
   const [open, setOpen] = useState(false)
-  const [open1, setOpen1] = useState(false)
+  const [openCancel, setOpenCancel] = useState(false)
   const handleClickOpen = () => {
     setOpen(true)
+  }
+  const handleClickOpenCancel = () => {
+    setOpenCancel(true)
   }
   const handleClose = () => {
     setOpen(false)
   }
-  const handleClickOpen1 = () => {
-    setOpen1(true)
+  const handleCloseCancel = () => {
+    setOpenCancel(false)
   }
-  const handleClose1 = () => {
-    setOpen1(false)
-    setOpen(false)
-  }
-  const handleSuccess = () => {
-    orderApi.updateOrderStatus(order?.id, activeStep)
-      .then(() => {
+  const handleCancel = () => {
+    orderApi.updateOrderStatus(order?.id, 4)
+      .then((response) => {
         alert('Update Success')
+        dispatch(updateOrder(response.data))
+        setUpdate(activeStep)
       })
       .catch(error => {
         console.log(error)
         alert('Update Fail')
       })
-    handleClose1()
+    setOpenCancel(false)
+    setOpen(false)
   }
   const handleUpdate = () => {
-    if (activeStep == 4) {
-      handleClickOpen1()
-    }
-    else {
-      orderApi.updateOrderStatus(order?.id, activeStep)
-        .then(() => {
-          alert('Update Success')
-        })
-        .catch(error => {
-          console.log(error)
-          alert('Update Fail')
-        })
-    }
+    orderApi.updateOrderStatus(order?.id, activeStep)
+      .then((response) => {
+        alert('Update Success')
+        setUpdate(activeStep)
+        dispatch(updateOrder(response.data))
+      })
+      .catch(error => {
+        console.log(error)
+        alert('Update Fail')
+      })
     handleClose()
   }
   const handleNext = () => {
@@ -85,32 +81,39 @@ function UpdateOrder({ order }) {
   return (
     <div>
       <Button sx={{ bgcolor: 'orange', color: 'black' }} variant="outlined" onClick={handleClickOpen}><Create /></Button>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} fullWidth >
         <DialogTitle>Update Order</DialogTitle>
         <DialogContent>
           <Stepper activeStep={activeStep} alternativeLabel>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
+            {steps.map((step) => (
+              <Step key={step}>
+                <StepLabel>{step}</StepLabel>
               </Step>
             ))}
           </Stepper>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
+            <Button onClick={handleClickOpenCancel}
+              sx={{ bgcolor: '#EE6363', color: 'white', borderRadius: 5, '&:hover': { bgcolor: '#BEBEBE' } }}>Cancel Order
+            </Button>
+            <Button onClick={handleBack}
+              sx={{ bgcolor: '#1874CD', color: 'white', borderRadius: 10, '&:hover': { bgcolor: '#BEBEBE' } }}>Back
+            </Button>
+            <Button onClick={handleNext}
+              sx={{ bgcolor: '#1874CD', color: 'white', borderRadius: 10, '&:hover': { bgcolor: '#BEBEBE' } }}>Next
+            </Button>
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Button onClick={handleBack}>Back</Button>
-            <Button onClick={handleNext}>Next</Button>
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>Close</Button>
           <Button onClick={handleUpdate}>Update</Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={open1} onClose={handleClose1} >
-        <DialogTitle >Are you sure to complete this order?</DialogTitle>
+      <Dialog open={openCancel} onClose={handleCloseCancel} >
+        <DialogTitle >Are you sure to cancel this order?</DialogTitle>
         <DialogActions>
-          <Button onClick={handleClose1}>Cancel</Button>
-          <Button onClick={handleSuccess}>Update</Button>
+          <Button onClick={handleCloseCancel}>Close</Button>
+          <Button onClick={handleCancel}>Update</Button>
         </DialogActions>
       </Dialog>
     </div>

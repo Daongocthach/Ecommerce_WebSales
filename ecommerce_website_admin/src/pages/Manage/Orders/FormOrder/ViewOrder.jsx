@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, TextField, Box } from '@mui/material'
 import { Visibility } from '@mui/icons-material'
+import { format } from 'date-fns'
 import Product from './Product/Product'
 import { formatCurrency } from '../../../../../../ecommerce_website_client/src/utils/price'
 
@@ -38,7 +39,7 @@ function ViewOrder({ order }) {
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Typography minWidth={'100px'}>CreatedDate: </Typography>
-              <TextField fullWidth size='small' value={Date(order?.createdDate)} />
+              <TextField fullWidth size='small' value={format(new Date(order?.createdDate), 'yyyy-MM-dd')} />
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Typography minWidth={'100px'}>OrderStatus: </Typography>

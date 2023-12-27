@@ -1,9 +1,12 @@
 import { useState } from 'react'
 import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material'
+import { useDispatch } from 'react-redux'
 import DeleteIcon from '@mui/icons-material/Delete'
 import categoryApi from '../../../../apis/categoryApi'
+import { updateCategory } from '../../../../redux/actions/categories'
 
 function DeleteCategory({ setUpdate, categoryId }) {
+    const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const handleClickOpen = () => {
         setOpen(true)
@@ -13,9 +16,10 @@ function DeleteCategory({ setUpdate, categoryId }) {
     }
     const handleClickDelete = () => {
         categoryApi.deleteCategory(categoryId)
-        .then(() => {
+        .then((response) => {
             alert('Delete Success')
-            setUpdate(2)
+            dispatch(updateCategory(response.data))
+            setUpdate(categoryId)
         })
         .catch(error => {
             console.log(error)
@@ -25,7 +29,7 @@ function DeleteCategory({ setUpdate, categoryId }) {
     }
     return (
         <div>
-            <Button sx={{ bgcolor: '#EE0000', color: 'white' }} variant="outlined" onClick={handleClickOpen}><DeleteIcon /></Button>
+            <Button sx={{ bgcolor: '#EE6363', color: 'black' }} variant="outlined" onClick={handleClickOpen}><DeleteIcon /></Button>
             <Dialog open={open} onClose={handleClose} >
                 <DialogTitle >Are you sure you want to delete this item?</DialogTitle>
                 <DialogActions>

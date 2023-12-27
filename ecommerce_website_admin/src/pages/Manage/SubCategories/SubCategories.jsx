@@ -1,17 +1,18 @@
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, Paper, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import AddSubCategory from './FormSubCategory/AddSubCategory'
 import UpdateSubCategory from './FormSubCategory/UpdateSubCategory'
 import DeleteSubCategory from './FormSubCategory/DeleteSubCategory'
-import subCategoryApi from '../../../apis/subCategoryApi'
 import { sortByMaxId, sortByMinId } from '../../../utils/sort'
 import SearchSubCategory from './SearchSubCategory/SearchSubCategory'
 
 function SubCategories() {
-  const [subCategories, setSubCategories] = useState([])
   const [update, setUpdate] = useState(0)
+  var subCategoriesRedux = useSelector(state => state.subCategories.subCategories)
+  const [subCategories, setSubCategories] = useState(sortByMaxId(subCategoriesRedux))
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(6)
+  const [rowsPerPage, setRowsPerPage] = useState(5)
   const [select, setSelect] = useState(1)
 
   const handleChangePage = (e, newPage) => {
@@ -25,14 +26,8 @@ function SubCategories() {
     setSelect(event.target.value)
   }
   useEffect(() => {
-    subCategoryApi.getAllSubCategories()
-      .then(response => {
-        setSubCategories(sortByMaxId(response.data))
-        setUpdate(0)
-      })
-      .catch(error => {
-        console.error(error)
-      })
+    setSubCategories(sortByMaxId(subCategoriesRedux))
+    setUpdate(0)
   }, [update])
   useEffect(() => {
     switch (select) {
@@ -93,7 +88,7 @@ function SubCategories() {
               <TableRow>
                 <TablePagination
                   colSpan={12}
-                  rowsPerPageOptions={[6, 10]}
+                  rowsPerPageOptions={[5, 10, { value: subCategories?.length, label: 'All' }]}
                   count={Array.isArray(subCategories) ? subCategories?.length : 0}
                   rowsPerPage={rowsPerPage}
                   page={page}

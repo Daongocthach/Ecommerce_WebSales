@@ -1,12 +1,22 @@
 import { useState } from 'react'
 import { Container, TextField, Stack, Button, Box, Checkbox } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import loginImage from '../../../assets/img/loginImage.jpg'
+import authenApi from '../../../apis/authenApi'
+import { validateEmail } from '../../../utils/email'
 
 function ResetPassword() {
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const onFinish = () => {
-
+    if (!validateEmail(email)) {
+      alert('Error infomation!')
+    }
+    else {
+      authenApi.forgotPassword(email)
+      alert('Xem mật khẩu đăng nhập của bạn trong email!')
+      navigate('/login')
+    }
   }
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
@@ -44,7 +54,7 @@ function ResetPassword() {
               onChange={e => setEmail(e.target.value)}
             />
             <Button
-              sx={{ bgcolor: 'red', color: 'white', fontWeight: 'bold' }}
+              sx={{ bgcolor: 'red', color: 'white', fontWeight: 'bold', ':hover':{ bgcolor:'red' } }}
               onClick={() => onFinish()}
             >Get New Password From Email</Button>
           </Stack>

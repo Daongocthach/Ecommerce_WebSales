@@ -6,10 +6,9 @@ import { sortByMaxId, sortByMinId } from '../../../utils/sort'
 
 function Users() {
   const [users, setUsers] = useState([])
-  const [update, setUpdate] = useState(0)
-  const [enabled, setEnabled] = useState()
+  const [update, setUpdate] = useState()
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(6)
+  const [rowsPerPage, setRowsPerPage] = useState(5)
   const [select, setSelect] = useState(1)
 
   const handleChangePage = (e, newPage) => {
@@ -30,7 +29,7 @@ function Users() {
         alert('Update Success')
       })
       .catch(() => alert('Update Fail'))
-      setUpdate(3)
+      setUpdate(enabled)
   }
   useEffect(() => {
     userApi.getAllCustomers()
@@ -53,7 +52,7 @@ function Users() {
       default:
         break
     }
-  }, [select, users])
+  }, [select])
 
   return (
     <Box sx={{ m: 5 }}>
@@ -112,7 +111,7 @@ function Users() {
               <TableRow>
                 <TablePagination
                   colSpan={12}
-                  rowsPerPageOptions={[6, 10]}
+                  rowsPerPageOptions={[5, 10, { value: users?.length, label: 'All' }]}
                   count={Array.isArray(users) ? users.length : 0}
                   rowsPerPage={rowsPerPage}
                   page={page}

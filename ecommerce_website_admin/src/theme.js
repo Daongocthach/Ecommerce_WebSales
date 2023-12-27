@@ -29,7 +29,7 @@ const theme = extendTheme({
           borderWidth: '0.5px',
           fontFamily:'sans-serif',
           color: (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black'),
-          '&:hover': { borderWidth: '0.5px', opacity: 0.7 },
+          '&:hover': { borderWidth: '0.5px', opacity: 0.9, bgcolor:'#BEBEBE' },
           '&.MuiButtonBase-root': {
             fontSize: '17px',
             backgroundColor: (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black')

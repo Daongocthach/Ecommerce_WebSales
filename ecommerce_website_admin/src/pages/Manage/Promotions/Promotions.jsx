@@ -1,5 +1,6 @@
 import { Box, Typography, Table, TableBody, TableCell, TableHead, Paper, TableRow, TableFooter, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
 import { useEffect, useState } from 'react'
+import { format } from 'date-fns'
 import AddPromotion from './FormPromotion/AddPromotion'
 import UpdatePromotion from './FormPromotion/UpdatePromotion'
 import DeletePromotion from './FormPromotion/DeletePromotion'
@@ -12,7 +13,7 @@ function Promotions() {
   const [update, setUpdate] = useState(0)
   const [select, setSelect] = useState(1)
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(6)
+  const [rowsPerPage, setRowsPerPage] = useState(5)
 
   const handleChangePage = (e, newPage) => {
     setPage(newPage)
@@ -83,8 +84,8 @@ function Promotions() {
                     <TableCell align="center">{promotion?.id}</TableCell>
                     <TableCell align="center">{promotion?.code}</TableCell>
                     <TableCell align="center">{promotion?.value}</TableCell>
-                    <TableCell align="center">{promotion?.startDate}</TableCell>
-                    <TableCell align="center">{promotion?.endDate}</TableCell>
+                    <TableCell align="center">{format(new Date(promotion?.startDate), 'yyyy-MM-dd')}</TableCell>
+                    <TableCell align="center">{format(new Date(promotion?.endDate), 'yyyy-MM-dd')}</TableCell>
                     <TableCell align="center">{promotion?.quantity}</TableCell>
                     <TableCell align="center"><UpdatePromotion setUpdate={setUpdate} promotion={promotion} /></TableCell>
                     <TableCell align="center"><DeletePromotion setUpdate={setUpdate} promotionId={promotion?.id} /></TableCell>
@@ -96,7 +97,7 @@ function Promotions() {
               <TableRow >
                 <TablePagination
                   colSpan={12}
-                  rowsPerPageOptions={[6, 10]}
+                  rowsPerPageOptions={[5, 10, { value: promotions?.length, label: 'All' }]}
                   count={Array.isArray(promotions) ? promotions?.length : 0}
                   rowsPerPage={rowsPerPage}
                   page={page}

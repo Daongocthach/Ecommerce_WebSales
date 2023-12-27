@@ -2,18 +2,17 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography } from '@mui/material'
 import AddCircle from '@mui/icons-material/AddCircle'
-import { mockData } from '../../../../apis/mockdata'
 import promotionApi from '../../../../apis/promotionApi'
+import { addPromotion } from '../../../../redux/actions/promotions'
 
 function AddPromotion({ setUpdate }) {
+    const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
-    const date = Date
     const [startDate, setStartDate] = useState(null)
     const [endDate, setEndDate] = useState(null)
     const [code, setCode] = useState('')
     const [value, setValue] = useState('')
     const [quantity, setQuantity] = useState('')
-
     const handleClickOpen = () => {
         setOpen(true)
     }
@@ -22,9 +21,10 @@ function AddPromotion({ setUpdate }) {
     }
     const handleClickAdd = () => {
         promotionApi.addPromotion(startDate, endDate, code, value, quantity)
-            .then(() => {
+            .then((response) => {
                 alert('Add Success')
-                setUpdate(1)
+                dispatch(addPromotion(response.data))
+                setUpdate(response.data.id + 1)
             })
             .catch(error => {
                 console.log(error)

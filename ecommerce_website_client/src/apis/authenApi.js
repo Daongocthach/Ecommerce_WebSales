@@ -12,13 +12,22 @@ const authenApi = {
             email,
             fullName,
             phoneNo
-
         })
+    },
+    forgotPassword(email) {
+        const url = `http://localhost:8080/api/v1/customer/forgot-password?email=${email}`
+        return axios.get(url)
     },
     updateProfile(id, fullName, phoneNo, avatar, province, district, districtId, ward, address) {
         const url = 'http://localhost:8080/api/v1/update-profile'
         return axios.put(url, {
            id, fullName, phoneNo, avatar, province, district, districtId, ward, address
+        })
+    },
+    updatePassword(id, password, newPassword) {
+        const url = `http://localhost:8080/api/v1/customer/update-password?newPassword=${newPassword}`
+        return axios.post(url, {
+           id, password
         })
     }
 }

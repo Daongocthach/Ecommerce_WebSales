@@ -1,28 +1,36 @@
 import { useEffect, useState } from 'react'
-import { Rating, Box, Typography, Button } from '@mui/material'
+import { Rating, Box, Typography, Button, Avatar } from '@mui/material'
 import { CheckCircleOutline, ShoppingCart, PointOfSale } from '@mui/icons-material'
-import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import CommentSection from './CommentSection/CommentSection'
 import momo from '../../assets/img/momo.png'
 import productApi from '../../apis/productApi'
+import reviewApi from '../../apis/reviewApi'
 import { formatCurrency } from '../../utils/price'
 import cartItemApi from '../../apis/cartItemApi'
-import { addToCart } from '../../redux/actions/cart'
+import { addToCart, updateQuantity } from '../../redux/actions/cart'
 
 function ProductDetail() {
-  const navigate = useNavigate()
   const dispatch = useDispatch()
   const user = useSelector(state => state.auth)
+  const cartItems = useSelector(state => state.cart.cartItems)
   var productId = window.location.search.substring(1)
   const [product, setProduct] = useState()
+  const [reviews, setReviews] = useState([])
   const [showMore, setShowMore] = useState(3)
 
-  // function handleShowMoreClick() {
-  //   setShowMore(showMore + 3)
-  // }
+  function handleShowMoreClick() {
+    setShowMore(showMore + 3)
+  }
   function handleClickAddToCart() {
-    if (user && product) {
+    if (user && product && cartItems) {
+      var update = false
+      var quantity = 1
+      cartItems.forEach(cartItem => {
+        if (cartItem.product.id == product.id) {
+          update = true
+          quantity = cartItem.quantity + 1
+        }
+      })
       const cartItem = {
         'id': {
           'customerId': user.id,
@@ -34,16 +42,28 @@ function ProductDetail() {
         'product': {
           'id': product.id
         },
-        'quantity': 1
+        'quantity': quantity
       }
-      cartItemApi.addCartItem(cartItem)
-        .then(response => {
-          alert('Thêm vào giỏ hàng thành công')
-          dispatch(addToCart(response.data))
-        })
-        .catch(error => {
-          console.error('Lỗi khi thêm vào giỏ hàng:', error)
-        })
+      if (update) {
+        cartItemApi.updateCartItem(cartItem)
+          .then(response => {
+            alert('Cập nhật số lượng sản phẩm')
+            dispatch(updateQuantity(response.data))
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      }
+      else {
+        cartItemApi.addCartItem(cartItem)
+          .then(response => {
+            alert('Thêm vào giỏ hàng thành công')
+            dispatch(addToCart(response.data))
+          })
+          .catch(error => {
+            console.error('Lỗi khi thêm vào giỏ hàng:', error)
+          })
+      }
     } else {
       console.error('User hoặc Product không tồn tại.')
     }
@@ -59,10 +79,17 @@ function ProductDetail() {
       .catch(error => {
         console.error(error)
       })
+    reviewApi.getReviewByProduct(productId)
+      .then(response => {
+        setReviews(response.data)
+      })
+      .catch(error => {
+        console.error(error)
+      })
   }, [productId])
   return (
     <div>
-      <Box sx={{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center' }}>
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
         <Box sx={{
           width: '80vw', height: '100%', overflow: 'hidden', pt: 5, pl: 5,
           bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#363636' : '#FFFFF0')
@@ -100,13 +127,13 @@ function ProductDetail() {
               </Box>
             </Box>
           </Box>
-          {/* <Box sx={{ mb: 2 }}>
-            <Typography variant='h4' fontWeight={'bold'}>Đánh giá sản phẩm</Typography>
+          <Box sx={{ mb: 2, mt: 5 }}>
+            <Typography variant='h5' fontWeight={'bold'}>Đánh giá sản phẩm</Typography>
             {reviews?.slice(0, showMore).map((review, index) =>
               <Box key={index} sx={{ display: 'flex', borderRadius: 3, width: '100%', gap: 2, alignItems: 'center', mt: 3 }}>
-                <Avatar alt="Remy Sharp" src={review?.avatar} />
+                <Avatar>{review?.customerId}</Avatar>
                 <Box sx={{}}>
-                  <Typography variant='subtitle1'>{review?.name}</Typography>
+                  <Typography variant='subtitle1'>User {review?.customerId}</Typography>
                   <Typography variant='body1'>{review?.comment}</Typography>
                 </Box>
               </Box>
@@ -114,8 +141,7 @@ function ProductDetail() {
             {reviews.length > showMore && (
               <Button onClick={handleShowMoreClick} sx={{ color: 'gray', '&:hover': { bgcolor: 'darkgray' } }}>Show More</Button>
             )}
-            <CommentSection />
-          </Box> */}
+          </Box>
         </Box>
       </Box>
     </div>

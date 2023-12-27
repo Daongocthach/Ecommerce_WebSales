@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material'
+import { useDispatch } from 'react-redux'
 import DeleteIcon from '@mui/icons-material/Delete'
 import promotionApi from '../../../../apis/promotionApi'
-
+import { deletePromotion } from '../../../../redux/actions/promotions'
 
 function DeletePromotion({ setUpdate, promotionId }) {
+    const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const handleClickOpen = () => {
         setOpen(true)
@@ -14,9 +16,10 @@ function DeletePromotion({ setUpdate, promotionId }) {
     }
     const handleClickDelete = () => {
         promotionApi.deletePromotion(promotionId)
-        .then(() => {
+        .then((response) => {
             alert('Delete Success')
-            setUpdate(2)
+            dispatch(deletePromotion(response.data))
+            setUpdate(promotionId)
         })
         .catch(error => {
             console.log(error)
@@ -26,7 +29,7 @@ function DeletePromotion({ setUpdate, promotionId }) {
     }
     return (
         <div>
-            <Button sx={{ bgcolor: '#EE0000', color:'white' }} variant="outlined" onClick={handleClickOpen}><DeleteIcon/></Button>
+            <Button sx={{ bgcolor: '#EE6363', color: 'black' }} variant="outlined" onClick={handleClickOpen}><DeleteIcon/></Button>
             <Dialog open={open} onClose={handleClose} >
                 <DialogTitle >Are you sure you want to delete this item?</DialogTitle>
                 <DialogActions>

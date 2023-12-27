@@ -1,25 +1,34 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, FormControl, Select, MenuItem } from '@mui/material'
 import { Create } from '@mui/icons-material'
-import subCategoryApi from '../../../../apis/subCategoryApi'
-import providerApi from '../../../../apis/providerApi'
+import { useDispatch, useSelector } from 'react-redux'
 import productApi from '../../../../apis/productApi'
+import { updateProduct } from '../../../../redux/actions/products'
 
 function UpdateProduct({ setUpdate, product }) {
-  const [subCategories, setSubCategories] = useState([])
-  const [providers, setProviders] = useState([])
-  const [name, setName] = useState(product?.name)
-  const [price, setPrice] = useState(product?.price)
-  const [description, setDescription] = useState(product?.description)
-  const [discount, setDiscount] = useState(product?.discount)
-  const [subCategory, setSubCategory] = useState(product?.subCategory?.id || 1)
-  const [provider, setProvider] = useState(product?.provider?.id || 1)
-  const [image, setImage] = useState(product?.image)
-  const [enabled, setEnabled] = useState(product?.enabled)
+  const dispatch = useDispatch()
+  const subCategories = useSelector(state => state.subCategories.subCategories)
+  const providers = useSelector(state => state.providers.providers)
+  const [name, setName] = useState()
+  const [price, setPrice] = useState()
+  const [description, setDescription] = useState()
+  const [discount, setDiscount] = useState()
+  const [subCategory, setSubCategory] = useState()
+  const [provider, setProvider] = useState()
+  const [image, setImage] = useState()
+  const [enabled, setEnabled] = useState()
   const [open, setOpen] = useState(false)
 
   const handleClickOpen = () => {
     setOpen(true)
+    setName(product?.name)
+    setPrice(product?.price)
+    setDescription(product?.description)
+    setDiscount(product?.discount)
+    setSubCategory(product?.subCategory?.id)
+    setProvider(product?.provider?.id)
+    setImage(product?.image)
+    setEnabled(product?.enabled)
   }
   const handleClose = () => {
     setOpen(false)
@@ -40,27 +49,12 @@ function UpdateProduct({ setUpdate, product }) {
       reader.readAsDataURL(file)
     }
   }
-  useEffect(() => {
-    subCategoryApi.getAllSubCategories()
-      .then(response => {
-        setSubCategories(response.data)
-      })
-      .catch(error => {
-        console.error(error)
-      })
-    providerApi.getAllProviders()
-      .then(response => {
-        setProviders(response.data)
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }, [])
   const handleUpdate = () => {
     productApi.updateProduct(product?.id, name, price, description, discount, subCategory, provider, image, enabled)
-      .then(() => {
+      .then((response) => {
         alert('Update Success')
-        setUpdate(3)
+        setUpdate(response.data.id)
+        dispatch(updateProduct(response.data))
       })
       .catch(error => {
         console.log(error)

@@ -1,10 +1,11 @@
 import SearchIcon from '@mui/icons-material/Search'
 import { InputAdornment, TextField, Autocomplete, Stack } from '@mui/material'
-import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { sortByMaxId } from '../../../../utils/sort'
 import userApi from '../../../../apis/userApi'
 
 function SearchUser({ setUsers }) {
-    const [datas, setDatas] = useState([])
+    const datas = useSelector(state => state.users.users)
     const colorChangeByTheme = (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black')
 
     const handleUsersSelect = (event, value) => {
@@ -15,20 +16,9 @@ function SearchUser({ setUsers }) {
                 })
                 .catch(err => { console.log(err) })
         } else {
-            setUsers(datas)
+            setUsers(sortByMaxId(datas))
         }
     }
-
-    useEffect(() => {
-        userApi.getAllCustomers()
-            .then(response => {
-                setDatas(response.data)
-            })
-            .catch(error => {
-                console.error(error)
-            })
-    }, [])
-
     return (
         <Stack spacing={2} sx={{ width: 300 }}>
             <Autocomplete

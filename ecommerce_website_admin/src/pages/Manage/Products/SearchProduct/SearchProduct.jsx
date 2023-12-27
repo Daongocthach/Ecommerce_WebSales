@@ -1,10 +1,11 @@
 import SearchIcon from '@mui/icons-material/Search'
 import { InputAdornment, TextField, Autocomplete, Stack } from '@mui/material'
-import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import productApi from '../../../../apis/productApi'
+import { sortByMaxId } from '../../../../utils/sort'
 
 function SearchProduct({ setProducts }) {
-    const [datas, setDatas] = useState([])
+    const datas = useSelector(state => state.products.products)
     const colorChangeByTheme = (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black')
     const handleDatasSelect = (event, value) => {
         if (value !== null) {
@@ -14,19 +15,9 @@ function SearchProduct({ setProducts }) {
                 })
                 .catch(err => { console.log(err) })
         } else {
-            setProducts(datas)
+            setProducts(sortByMaxId(datas))
         }
     }
-
-    useEffect(() => {
-        productApi.getAllProducts()
-            .then(response => {
-                setDatas(response.data)
-            })
-            .catch(error => {
-                console.error(error)
-            })
-    }, [])
 
     return (
         <Stack spacing={2} sx={{ width: 300 }}>

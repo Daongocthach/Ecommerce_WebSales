@@ -14,7 +14,10 @@ const orderApi = {
     return axios.get(url)
   },
   updateOrderStatus(id, orderStatus) {
-    const url = 'http://localhost:8080/api/v1/admin/update-order-status'
+    if (orderStatus > 4) {
+      return
+    }
+    const url = 'http://localhost:8080/api/v1/update-order-status'
     return axios.put(url, { id, orderStatus })
   },
   deleteOrder(orderId) {

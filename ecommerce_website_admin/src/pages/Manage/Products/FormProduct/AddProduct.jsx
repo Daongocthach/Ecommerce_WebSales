@@ -1,20 +1,20 @@
-import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, FormControl, Select, MenuItem } from '@mui/material'
 import AddCircle from '@mui/icons-material/AddCircle'
-import subCategoryApi from '../../../../apis/subCategoryApi'
-import providerApi from '../../../../apis/providerApi'
 import productApi from '../../../../apis/productApi'
+import { addProduct } from '../../../../redux/actions/products'
 
 function AddProduct({ setUpdate }) {
-    const [subCategories, setSubCategories] = useState([])
-    const [providers, setProviders] = useState([])
+    const dispatch = useDispatch()
+    const subCategories = useSelector(state => state.subCategories.subCategories)
+    const providers = useSelector(state => state.providers.providers)
     const [name, setName] = useState('')
     const [price, setPrice] = useState('')
     const [description, setDescription] = useState('')
     const [discount, setDiscount] = useState('')
-    const [subCategory, setSubCategory] = useState(subCategories[0]?.id || 1)
-    const [provider, setProvider] = useState(providers[0]?.id || 1)
+    const [subCategory, setSubCategory] = useState(subCategories[0]?.id)
+    const [provider, setProvider] = useState(providers[0]?.id)
     const [image, setImage] = useState('')
     const [open, setOpen] = useState(false)
     const handleClickOpen = () => {
@@ -39,27 +39,12 @@ function AddProduct({ setUpdate }) {
             reader.readAsDataURL(file)
         }
     }
-    useEffect(() => {
-        subCategoryApi.getAllSubCategories()
-            .then(response => {
-                setSubCategories(response.data)
-            })
-            .catch(error => {
-                console.error(error)
-            })
-        providerApi.getAllProviders()
-            .then(response => {
-                setProviders(response.data)
-            })
-            .catch(error => {
-                console.error(error)
-            })
-    }, [])
     const handleClickAdd = () => {
         productApi.addProduct(name, price, description, discount, subCategory, provider, image)
-            .then(() => {
+            .then((response) => {
                 alert('Add Success')
-                setUpdate(1)
+                dispatch(addProduct(response.data))
+                setUpdate(response.data.id + 1)
             })
             .catch(error => {
                 console.log(error)

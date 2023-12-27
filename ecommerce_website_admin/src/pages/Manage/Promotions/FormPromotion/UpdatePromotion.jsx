@@ -1,28 +1,36 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography } from '@mui/material'
 import { Create } from '@mui/icons-material'
-import { format, parse } from 'date-fns'
+import { useDispatch } from 'react-redux'
+import { format } from 'date-fns'
 import promotionApi from '../../../../apis/promotionApi'
+import { updatePromotion } from '../../../../redux/actions/promotions'
 
 function UpdatePromotion({ setUpdate, promotion }) {
-  const [startDate, setStartDate] = useState(format(new Date(promotion?.startDate), 'yyyy-MM-dd'))
-  const [endDate, setEndDate] = useState(format(new Date(promotion?.endDate), 'yyyy-MM-dd'))
-  const [code, setCode] = useState(promotion?.code)
-  const [value, setValue] = useState(promotion?.value)
-  const [quantity, setQuantity] = useState(promotion?.quantity)
+  const dispatch = useDispatch()
+  const [startDate, setStartDate] = useState()
+  const [endDate, setEndDate] = useState()
+  const [code, setCode] = useState()
+  const [value, setValue] = useState()
+  const [quantity, setQuantity] = useState()
   const [open, setOpen] = useState(false)
-
   const handleClickOpen = () => {
     setOpen(true)
+    setStartDate(format(new Date(promotion?.startDate), 'yyyy-MM-dd'))
+    setEndDate(format(new Date(promotion?.endDate), 'yyyy-MM-dd'))
+    setCode(promotion?.code)
+    setValue(promotion?.value)
+    setQuantity(promotion?.quantity)
   }
   const handleClose = () => {
     setOpen(false)
   }
   const handleUpdate = () => {
     promotionApi.updatePromotion(promotion?.id, startDate, endDate, code, value, quantity)
-    .then(() => {
+    .then((response) => {
         alert('Update Success')
-        setUpdate(3)
+        setUpdate(response.data.id)
+        dispatch(updatePromotion(response.data))
     })
     .catch(error => {
         console.log(error)
@@ -30,7 +38,6 @@ function UpdatePromotion({ setUpdate, promotion }) {
     })
     handleClose()
   }
-
   return (
     <div>
       <Button sx={{ bgcolor: 'orange', color: 'black' }} variant="outlined" onClick={handleClickOpen}><Create /></Button>
@@ -62,7 +69,7 @@ function UpdatePromotion({ setUpdate, promotion }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={() => handleUpdate()}>Update</Button>
+          <Button onClick={handleUpdate}>Update</Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -1,10 +1,11 @@
 import SearchIcon from '@mui/icons-material/Search'
 import { InputAdornment, TextField, Autocomplete, Stack } from '@mui/material'
-import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import promotionApi from '../../../../apis/promotionApi'
+import { sortByMaxId } from '../../../../utils/sort'
 
 function SearchPromotion({ setPromotions }) {
-    const [datas, setDatas] = useState([])
+    const datas = useSelector(state => state.promotions.promotions)
     const colorChangeByTheme = (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black')
     const handleDatasSelect = (event, value) => {
         if (value !== null) {
@@ -14,17 +15,8 @@ function SearchPromotion({ setPromotions }) {
                 })
                 .catch(err => { console.log(err) })
         }
-        else { setPromotions(datas) }
+        else { setPromotions(sortByMaxId(datas)) }
     }
-    useEffect(() => {
-        promotionApi.getAllPromotions()
-            .then(response => {
-                setDatas(response.data)
-            })
-            .catch(error => {
-                console.error(error)
-            })
-    }, [])
     return (
         <Stack spacing={2} sx={{ width: 300 }}>
             <Autocomplete

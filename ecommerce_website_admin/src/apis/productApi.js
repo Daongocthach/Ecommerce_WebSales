@@ -20,7 +20,7 @@ const productApi = {
     },
     deleteProduct(id) {
         const url = `http://localhost:8080/api/v1/admin/del-product/${id}`
-        return axios.delete(url)
+        return axios.put(url)
     }
 }
 

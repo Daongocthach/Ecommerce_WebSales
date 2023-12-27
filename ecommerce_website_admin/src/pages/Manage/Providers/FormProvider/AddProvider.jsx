@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography } from '@mui/material'
 import AddCircle from '@mui/icons-material/AddCircle'
 import providerApi from '../../../../apis/providerApi'
+import { addProvider } from '../../../../redux/actions/providers'
 
 function AddProvider({ setUpdate }) {
     const dispatch = useDispatch()
@@ -20,9 +21,10 @@ function AddProvider({ setUpdate }) {
     }
     const handleClickAdd = () => {
         providerApi.addProvider(name, brand, phone, address)
-        .then(() => {
+        .then((response) => {
             alert('Add Success')
-            setUpdate(1)
+            dispatch(addProvider(response.data))
+            setUpdate(response.data.id + 1)
         })
         .catch(error => {
             console.log(error)

@@ -1,16 +1,19 @@
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Paper, TableFooter, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Reorder } from '@mui/icons-material'
+import { format } from 'date-fns'
 import UpdateOrder from './FormOrder/UpdateOrder'
 import ViewOrder from './FormOrder/ViewOrder'
-import orderApi from '../../../apis/orderApi'
 import { sortByMaxId, sortByMinId } from '../../../utils/sort'
+import Searchorder from './SearchOrder/SearchOrder'
 
 function Orders() {
-  const [orders, setOrders] = useState([])
   const [update, setUpdate] = useState(0)
+  var ordersRedux = useSelector(state => state.orders.orders)
+  const [orders, setOrders] = useState(sortByMaxId(ordersRedux))
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(6)
+  const [rowsPerPage, setRowsPerPage] = useState(5)
   const [select, setSelect] = useState(1)
   const handleChangePage = (e, newPage) => {
     setPage(newPage)
@@ -23,13 +26,7 @@ function Orders() {
     setSelect(event.target.value)
   }
   useEffect(() => {
-    orderApi.getAllOrders()
-      .then(response => {
-        setOrders(sortByMaxId(response.data))
-      })
-      .catch(error => {
-        console.error(error)
-      })
+    setOrders(sortByMaxId(ordersRedux))
   }, [update])
   useEffect(() => {
     switch (select) {
@@ -49,6 +46,7 @@ function Orders() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <Reorder />
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
+          <Searchorder setOrders={setOrders}/>
           <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
           <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
             <Select value={select} onChange={handleChange} defaultValue={10} >
@@ -69,8 +67,8 @@ function Orders() {
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Notes</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">CustomerId</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">Status</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">Update</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }} align="center">View</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} align="center">Update Status</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -78,13 +76,14 @@ function Orders() {
                 return (
                   <TableRow key={index}>
                     <TableCell align="center">{order?.id}</TableCell>
-                    <TableCell align="center">{Date(order?.createdDate)}</TableCell>
+                    <TableCell align="center">{format(new Date(order?.createdDate), 'yyyy-MM-dd')}</TableCell>
                     <TableCell align="center">{order?.total}</TableCell>
                     <TableCell align="center">{order?.note}</TableCell>
                     <TableCell align="center">{order?.customer.id}</TableCell>
                     <TableCell align="center">{order?.orderStatus}</TableCell>
-                    <TableCell align="center"><UpdateOrder setUpdate={setUpdate} order={order} /></TableCell>
                     <TableCell align="center"><ViewOrder order={order} /></TableCell>
+                    {order?.orderStatus != 'CANCEL' && order?.orderStatus != 'SUCCESS' &&
+                    <TableCell align="center"><UpdateOrder setUpdate={setUpdate} order={order}/></TableCell> }
                   </TableRow>
                 )
               })}
@@ -93,7 +92,7 @@ function Orders() {
               <TableRow>
                 <TablePagination
                   colSpan={12}
-                  rowsPerPageOptions={[6, 10]}
+                  rowsPerPageOptions={[5, 10, { value: orders?.length, label: 'All' }]}
                   count={orders?.length}
                   rowsPerPage={rowsPerPage}
                   page={page}

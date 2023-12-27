@@ -1,6 +1,6 @@
 import { Box, Typography, TextField, Checkbox, Button } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import DeleteItem from '../DeleteItem/DeleteItem'
 import { formatCurrency } from '../../../utils/price'
 import cartItemApi from '../../../apis/cartItemApi'
@@ -15,16 +15,12 @@ function Product({ product, quantity, customerId }) {
                 'customerId': customerId,
                 'productId': product.id
             },
-            'customer': {
-                'id': customerId
-            },
-            'product': product,
             'quantity': changeQuantity
         }
 
         cartItemApi.updateCartItem(cartItem)
             .then(response => [
-                dispatch(updateQuantity(cartItem))
+                dispatch(updateQuantity(response.data))
             ])
             .catch(err => {
                 console.log(err)

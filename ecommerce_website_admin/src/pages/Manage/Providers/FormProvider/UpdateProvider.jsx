@@ -1,27 +1,35 @@
 import { useState } from 'react'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, FormControl, Select, MenuItem } from '@mui/material'
 import { Create } from '@mui/icons-material'
+import { useDispatch } from 'react-redux'
 import providerApi from '../../../../apis/providerApi'
+import { updateProvider } from '../../../../redux/actions/providers'
 
 function UpdateProvider({ provider, setUpdate }) {
-  const [name, setName] = useState(provider?.name)
-  const [brand, setBrand] = useState(provider?.brand)
-  const [phoneNo, setPhoneNo] = useState(provider?.phoneNo)
-  const [address, setAddress] = useState(provider?.address)
-  const [enabled, setEnabled] = useState(provider?.enabled)
+  const dispatch = useDispatch()
   const [open, setOpen] = useState(false)
-
+  const [name, setName] = useState()
+  const [brand, setBrand] = useState()
+  const [phoneNo, setPhoneNo] = useState()
+  const [address, setAddress] = useState()
+  const [enabled, setEnabled] = useState()
   const handleClickOpen = () => {
     setOpen(true)
+    setName(provider?.name)
+    setBrand(provider?.brand)
+    setPhoneNo(provider?.phoneNo)
+    setAddress(provider?.address)
+    setEnabled(provider?.enabled)
   }
   const handleClose = () => {
     setOpen(false)
   }
   const handleUpdate = () => {
     providerApi.updateProvider(provider?.id, name, brand, phoneNo, address, enabled)
-      .then(() => {
+      .then((response) => {
         alert('Update Success')
-        setUpdate(3)
+        setUpdate(response.data.id)
+        dispatch(updateProvider(response.data))
       })
       .catch(() => alert('Update Fail'))
     handleClose()

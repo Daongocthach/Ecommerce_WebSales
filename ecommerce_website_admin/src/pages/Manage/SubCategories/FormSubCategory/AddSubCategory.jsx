@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, FormControl, Select, MenuItem } from '@mui/material'
 import AddCircle from '@mui/icons-material/AddCircle'
 import subCategoryApi from '../../../../apis/subCategoryApi'
-import categoryApi from '../../../../apis/categoryApi'
+import { addSubCategory } from '../../../../redux/actions/subCategories'
 
 function AddSubCategory({ setUpdate }) {
-    const [categories, setCategories] = useState([])
+    const categories = useSelector(state => state.categories.categories)
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [name, setName] = useState('')
-    const [category, setCategory] = useState(categories[0]?.id || 1)
+    const [category, setCategory] = useState(categories[0]?.id)
     const handleChange = (event) => {
         setCategory(event.target.value)
     }
@@ -20,20 +20,12 @@ function AddSubCategory({ setUpdate }) {
     const handleClose = () => {
         setOpen(false)
     }
-    useEffect(() => {
-        categoryApi.getAllCategories()
-            .then(response => {
-                setCategories(response.data)
-            })
-            .catch(error => {
-                console.error(error)
-            })
-    }, [])
     const handleClickAdd = () => {
         subCategoryApi.addSubCategory(name, category)
-            .then(() => {
+            .then((response) => {
                 alert('Add Success')
-                setUpdate(1)
+                dispatch(addSubCategory(response.data))
+                setUpdate(response.data.id + 1)
             })
             .catch(error => {
                 console.log(error)

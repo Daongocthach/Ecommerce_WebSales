@@ -1,24 +1,29 @@
 import { useState } from 'react'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, FormControl, Select, MenuItem } from '@mui/material'
 import { Create } from '@mui/icons-material'
+import { useDispatch } from 'react-redux'
 import categoryApi from '../../../../apis/categoryApi'
+import { updateCategory } from '../../../../redux/actions/categories'
 
 function UpdateCategory({ setUpdate, category }) {
-  const [name, setName] = useState(category?.name)
-  const [enabled, setEnabled] = useState(category?.enabled)
+  const dispatch = useDispatch()
+  const [name, setName] = useState()
+  const [enabled, setEnabled] = useState()
   const [open, setOpen] = useState(false)
-
   const handleClickOpen = () => {
     setOpen(true)
+    setName(category?.name)
+    setEnabled(category?.enabled)
   }
   const handleClose = () => {
     setOpen(false)
   }
   const handleUpdate = () => {
     categoryApi.updateCategory(category?.id, name, enabled)
-    .then(() => {
+    .then((response) => {
         alert('Update Success')
-        setUpdate(3)
+        setUpdate(response.data.id)
+        dispatch(updateCategory(response.data))
     })
     .catch(error => {
         console.log(error)

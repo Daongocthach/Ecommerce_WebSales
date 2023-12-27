@@ -1,10 +1,11 @@
 import SearchIcon from '@mui/icons-material/Search'
 import { InputAdornment, TextField, Autocomplete, Stack } from '@mui/material'
-import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import orderApi from '../../../../apis/orderApi'
+import { sortByMaxId } from '../../../../utils/sort'
 
-function SearchOrder({ setOrders }) {
-    const [datas, setDatas] = useState([])
+function Searchorder({ setOrders }) {
+    const datas = useSelector(state => state.orders.orders)
     const colorChangeByTheme = (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black')
     const handleDatasSelect = (event, value) => {
         if (value !== null) {
@@ -13,27 +14,16 @@ function SearchOrder({ setOrders }) {
                     setOrders([response.data])
                 })
                 .catch(err => { console.log(err) })
-        } else {
-            setOrders(datas)
         }
+        else { setOrders(sortByMaxId(datas)) }
+
     }
-
-    useEffect(() => {
-        orderApi.getAllOrders()
-            .then(response => {
-                setDatas(response.data)
-            })
-            .catch(error => {
-                console.error(error)
-            })
-    }, [])
-
     return (
         <Stack spacing={2} sx={{ width: 300 }}>
             <Autocomplete
                 freeSolo
                 options={datas}
-                getOptionLabel={(data) => (data && Date(data.createdDate) || '')}
+                getOptionLabel={(data) => (data ? data.id.toString() : '')}
                 onChange={handleDatasSelect}
                 renderInput={(params) => (
                     <TextField
@@ -60,12 +50,9 @@ function SearchOrder({ setOrders }) {
                                 '&:hover fieldset': { borderColor: colorChangeByTheme },
                                 '&.Mui-focused fieldset': { borderColor: colorChangeByTheme }
                             }
-                        }}
-                    />
-                )}
-            />
+                        }} />)} />
         </Stack>
     )
 }
 
-export default SearchOrder
+export default Searchorder

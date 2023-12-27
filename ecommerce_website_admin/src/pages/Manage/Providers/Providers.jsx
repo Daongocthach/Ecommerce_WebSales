@@ -1,17 +1,18 @@
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, Paper, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import AddProvider from './FormProvider/AddProvider'
 import UpdateProvider from './FormProvider/UpdateProvider'
 import DeleteProvider from './FormProvider/DeleteProvider'
 import SearchProvider from './SearchProvider/SearchProvider'
-import providerApi from '../../../apis/providerApi'
 import { sortByMaxId, sortByMinId } from '../../../utils/sort'
 
 function Providers() {
-  const [providers, setProviders] = useState([])
   const [update, setUpdate] = useState(0)
+  var providersRedux = useSelector(state => state.providers.providers)
+  const [providers, setProviders] = useState(sortByMaxId(providersRedux))
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(6)
+  const [rowsPerPage, setRowsPerPage] = useState(5)
   const [select, setSelect] = useState(1)
   const handleChangePage = (e, newPage) => {
     setPage(newPage)
@@ -25,13 +26,8 @@ function Providers() {
   }
 
   useEffect(() => {
-    providerApi.getAllProviders()
-      .then(response => {
-        setProviders(sortByMaxId(response.data))
-      })
-      .catch(error => {
-        console.error(error)
-      })
+    setProviders(sortByMaxId(providersRedux))
+    setUpdate(0)
   }, [update])
   useEffect(() => {
     switch (select) {
@@ -95,7 +91,7 @@ function Providers() {
               <TableRow>
                 <TablePagination
                   colSpan={12}
-                  rowsPerPageOptions={[6, 10]}
+                  rowsPerPageOptions={[5, 10, { value: providers?.length, label: 'All' }]}
                   count={Array.isArray(providers) ? providers.length : 0}
                   rowsPerPage={rowsPerPage}
                   page={page}

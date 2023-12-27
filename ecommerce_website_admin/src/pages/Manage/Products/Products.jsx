@@ -1,17 +1,18 @@
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, TablePagination, Paper, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import AddProduct from './FormProduct/AddProduct'
 import UpdateProduct from './FormProduct/UpdateProduct'
 import DeleteProduct from './FormProduct/DeleteProduct'
-import productApi from '../../../apis/productApi'
 import SearchProduct from './SearchProduct/SearchProduct'
 import { sortByMaxId, sortByMinId } from '../../../utils/sort'
 
 function Products() {
-  const [products, setProducts] = useState([])
   const [update, setUpdate] = useState(0)
+  var productsRedux = useSelector(state => state.products.products)
+  const [products, setProducts] = useState(sortByMaxId(productsRedux))
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(6)
+  const [rowsPerPage, setRowsPerPage] = useState(5)
   const [select, setSelect] = useState(1)
 
   const handleChangePage = (e, newPage) => {
@@ -25,13 +26,8 @@ function Products() {
     setSelect(event.target.value)
   }
   useEffect(() => {
-    productApi.getAllProducts()
-      .then(response => {
-        setProducts(sortByMaxId(response.data))
-      })
-      .catch(error => {
-        console.error(error)
-      })
+    setProducts(sortByMaxId(productsRedux))
+    setUpdate(0)
   }, [update])
   useEffect(() => {
     switch (select) {
@@ -102,7 +98,7 @@ function Products() {
               <TableRow>
                 <TablePagination
                   colSpan={12}
-                  rowsPerPageOptions={[6, 10]}
+                  rowsPerPageOptions={[5, 10, { value: products?.length, label: 'All' }]}
                   count={products?.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
