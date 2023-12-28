@@ -16,6 +16,7 @@ import { listProducts } from '../../../redux/actions/products'
 import { listUsers } from '../../../redux/actions/users'
 import { listPromotions } from '../../../redux/actions/promotions'
 import promotionApi from '../../../apis/promotionApi'
+import { formatCurrency } from '../../../utils/price'
 
 function Data() {
     const dispatch = useDispatch()
@@ -26,6 +27,11 @@ function Data() {
     const [promotions, setPromotions] = useState([])
     const [categories, setCategories] = useState([])
     const [subCategories, setSubCategories] = useState([])
+    var revenue = 0
+    orders.forEach(order => {
+        if (order?.orderStatus == 'SUCCESS')
+            revenue += order?.total
+    })
     useEffect(() => {
         orderApi.getAllOrders()
             .then(response => {
@@ -108,7 +114,7 @@ function Data() {
                 <Chip icon={<Money />} label={'Khuyến mãi: ' + promotions.length} />
             </Grid>
             <Grid item xs={12} sm={6} md={3} lg={3} >
-                <Chip icon={<Money />} label={'Doanh thu: ' + promotions.length} />
+                <Chip icon={<Money />} label={'Doanh thu: ' + formatCurrency(revenue)} />
             </Grid>
         </Grid>
     )

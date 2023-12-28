@@ -38,9 +38,7 @@ function BoardBar() {
             <Link to={'/manage/users'}><Chip icon={<People />} label={'Quản lý tài khoản khách hàng'} clickable sx={useStyles.chip} ></Chip></Link>
             <Link to={'/manage/providers'}><Chip icon={<AddHomeWork />} label={'Quản lý nhà cung cấp'} clickable sx={useStyles.chip} ></Chip></Link>
             <Link to={'/manage/products'}><Chip icon={<Filter9Plus />} label={'Quản lý sản phẩm'} clickable sx={useStyles.chip} ></Chip></Link>
-            <Link to={'/manage/inventory'}><Chip icon={<Inventory/>} label={'Quản lý kho hàng'} clickable sx={useStyles.chip} ></Chip></Link>
             <Link to={'/manage/promotions'}><Chip icon={<MoneyOff />} label={'Khuyến mãi'} clickable sx={useStyles.chip} ></Chip></Link>
-            <Link to={'/manage/invoices'}><Chip icon={<ReceiptLong />} label={'Xem Hóa đơn'} clickable sx={useStyles.chip} ></Chip></Link>
         </Box>
     )
 }
