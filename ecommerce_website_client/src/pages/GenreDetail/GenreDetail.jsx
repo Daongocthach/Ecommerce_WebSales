@@ -9,8 +9,11 @@ import providerApi from '../../apis/providerApi'
 
 function GenreDetail() {
   const subCategoryId = useSelector(state => state.subCategory.id)
+  
   const [products, setProducts] = useState([])
   const [productsBySelect, setProductsBySelect] = useState([])
+  const [productsByPrice, setProductsByPrice] = useState([])
+  const [productsByProvider, setProductsByProvider] = useState([])
   const [providers, setProviders] = useState([])
   const [checked, setChecked] = useState([])
   const [select, setSelect] = useState(1)
@@ -28,10 +31,13 @@ function GenreDetail() {
   const handleClose = () => {
     setAnchorEl(null)
   }
-  const handleChange = (event, newValue) => {
+  const handleSlider = (e, newValue) => {
     setValue(newValue)
     setMinPrice(newValue[0])
     setMaxPrice(newValue[1])
+  }
+  const handleFileterByPrice = () => {
+    setProductsByPrice(sortByMaxIdAndPriceRange(products, minPrice, maxPrice))
   }
   const handleCheck = (id) => {
     setChecked(prev => {
@@ -87,18 +93,18 @@ function GenreDetail() {
     }
   }, [select])
   useEffect(() => {
-    setProducts(sortByMaxIdAndPriceRange(products, minPrice, maxPrice))
+
   }, [minPrice, maxPrice])
   useEffect(() => {
     const productsByProviders = productsBySelect.filter(product => checked.includes(product.provider.id))
-    setProducts(productsByProviders)
+    setProductsByProvider(productsByProviders)
   }, [checked])
   return (
     <Container sx={{ mb: 2 }}>
       <Grid container mt={2} maxWidth='lg' spacing={1} >
         <Grid item xs={12} sm={12} md={2} lg={2} >
           <Typography variant="body1" mb={2} >Trang chủ / Sản phẩm</Typography>
-          <Typography variant="h6" fontWeight={'bold'} >Thương hiệu</Typography>
+          <Typography variant="h6" fontWeight={'bold'} >Danh Mục</Typography>
           <FormGroup>
             {providers.map((provider, index) => (<FormControlLabel key={index} control={
               <Checkbox
@@ -108,7 +114,7 @@ function GenreDetail() {
             } label={provider?.brand} />))}
           </FormGroup>
         </Grid>
-        <Grid mt={1} item container xs={12} sm={12} md={10} lg={10} >
+        <Grid mt={1} item xs={12} sm={12} md={10} lg={10} >
           <Box sx={{}}>
             <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
               <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
@@ -121,13 +127,17 @@ function GenreDetail() {
               </FormControl>
               <Menu id="basic-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
                 <MenuItem >
-                  <Box sx={{ width: 500, height: 100 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                  <Box sx={{ width: 500, height: 120, display:'flex', flexDirection:'column' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <TextField value={formatCurrency(minPrice)} InputProps={{ readOnly: true }} />
                       ---
                       <TextField value={formatCurrency(maxPrice)} InputProps={{ readOnly: true }} />
                     </Box>
-                    <Slider value={value} onChange={handleChange} min={1000} max={1000000} />
+                    <Slider step={1000} value={value} onChange={handleSlider} min={1000} max={1000000} />
+                    <Button sx={{ bgcolor:'#1874CD', color:'white', ':hover': { bgcolor:'#1874CD' } }} fullWidth
+                      onClick={handleFileterByPrice}>
+                      Xem kết quả
+                    </Button>
                   </Box>
                 </MenuItem>
               </Menu>
@@ -136,7 +146,7 @@ function GenreDetail() {
                 <TextField onClick={handleClick} sx={{ minWidth: '250px' }} size='small' value={'Từ ' + formatCurrency(minPrice) + ' - ' + formatCurrency(maxPrice)} />
               </Box>
             </Box>
-            <Grid container spacing={1} >
+            <Grid container spacing={1} maxWidth='lg' >
               {products.map((product) => (
                 <Grid key={product.id} item xs={12} sm={12} md={4} lg={3} >
                   <Product product={product} />

@@ -8,6 +8,7 @@ import reviewApi from '../../apis/reviewApi'
 import { formatCurrency } from '../../utils/price'
 import cartItemApi from '../../apis/cartItemApi'
 import { addToCart, updateQuantity } from '../../redux/actions/cart'
+import { randomColor } from '../../utils/color'
 
 function ProductDetail() {
   const dispatch = useDispatch()
@@ -16,6 +17,10 @@ function ProductDetail() {
   var productId = window.location.search.substring(1)
   const [product, setProduct] = useState()
   const [reviews, setReviews] = useState([])
+  const [review, setReview] = useState()
+  var avarageReviews = 0
+  reviews.map((review) => { avarageReviews += review?.rating })
+  avarageReviews = avarageReviews / reviews.length
   const [showMore, setShowMore] = useState(3)
 
   function handleShowMoreClick() {
@@ -68,9 +73,7 @@ function ProductDetail() {
       console.error('User hoặc Product không tồn tại.')
     }
   }
-  function handleClickBuy() {
 
-  }
   useEffect(() => {
     productApi.getProductById(productId)
       .then(response => {
@@ -86,6 +89,14 @@ function ProductDetail() {
       .catch(error => {
         console.error(error)
       })
+    if (user)
+      reviewApi.getReviewByCustomer(user?.id)
+        .then(response => {
+          setReview(response.data)
+        })
+        .catch(error => {
+          console.error(error)
+        })
   }, [productId])
   return (
     <div>
@@ -105,9 +116,9 @@ function ProductDetail() {
               <Typography variant='h5' fontWeight={'bold'} sx={{ color: 'red' }} >{formatCurrency(product?.price)}</Typography>
               <Typography variant='h7' >Giảm giá: {product?.discount}%</Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
-                <Typography variant='body1' color={'blue'}>{'1583 Đánh giá'}</Typography>
-                <Rating name="size-medium" size='large' value={4.5} precision={0.1} />
-                <Typography variant='subtitle2'>Your Rating: 5</Typography>
+                <Typography variant='body1' color={'blue'}>{reviews.length + ' Đánh giá'}</Typography>
+                <Rating name="size-medium" size='large' value={avarageReviews} precision={0.1} readOnly/>
+                { review?.rating && <Typography variant='subtitle2'>Your Rating: {review?.rating}</Typography>}
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
                 <b>Loại sản phẩm:</b> <Typography variant='body1'>{product?.subCategory?.name}</Typography>
@@ -131,9 +142,12 @@ function ProductDetail() {
             <Typography variant='h5' fontWeight={'bold'}>Đánh giá sản phẩm</Typography>
             {reviews?.slice(0, showMore).map((review, index) =>
               <Box key={index} sx={{ display: 'flex', borderRadius: 3, width: '100%', gap: 2, alignItems: 'center', mt: 3 }}>
-                <Avatar>{review?.customerId}</Avatar>
-                <Box sx={{}}>
-                  <Typography variant='subtitle1'>User {review?.customerId}</Typography>
+                <Avatar sx={{ bgcolor: randomColor }}>{review?.customerId}</Avatar>
+                <Box >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                    <Typography variant='subtitle1' fontWeight={'bold'}>User Id: {review?.customerId}</Typography>
+                    <Rating name="size-medium" size='large' value={review?.rating} precision={1} readOnly/>
+                  </Box>
                   <Typography variant='body1'>{review?.comment}</Typography>
                 </Box>
               </Box>

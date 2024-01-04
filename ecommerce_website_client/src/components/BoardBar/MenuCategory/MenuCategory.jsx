@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { FiberManualRecord, KeyboardArrowDown } from '@mui/icons-material'
-import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { Button, Menu, MenuItem, Chip, Typography } from '@mui/material'
+import { KeyboardArrowDown } from '@mui/icons-material'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { Button, Menu, MenuItem, Typography } from '@mui/material'
 import subCategoryApi from '../../../apis/subCategory'
 import { setSubCategory } from '../../../redux/actions/subCategory'
 

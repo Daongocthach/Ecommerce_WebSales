@@ -15,6 +15,6 @@ const reviewApi = {
     getReviewByCustomerAndProduct(customerId, productId) {
         const url = `http://localhost:8080/api/v1/review-customer-product?customerId=${customerId}&productId=${productId}`
         return axios.get(url)
-    },
+    }
 }
 export default reviewApi

@@ -18,6 +18,8 @@ function Checkout() {
   const cart = useSelector(state => state.cart)
   var valueVoucher = voucher?.value || 0
   var total = cart?.total ? cart.total + feeShip - valueVoucher : 0
+  if (total < 0)
+    total = 0
   const cartItems = cart.cartItems
   const user = useSelector(state => state.auth)
   const navigate = useNavigate()
