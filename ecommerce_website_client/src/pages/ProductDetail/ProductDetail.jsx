@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Rating, Box, Typography, Button, Avatar } from '@mui/material'
+import { Rating, Box, Typography, Button, Avatar, Alert, Snackbar } from '@mui/material'
 import { CheckCircleOutline, ShoppingCart, PointOfSale } from '@mui/icons-material'
 import { useSelector, useDispatch } from 'react-redux'
 import momo from '../../assets/img/momo.png'
@@ -22,6 +22,8 @@ function ProductDetail() {
   reviews.map((review) => { avarageReviews += review?.rating })
   avarageReviews = avarageReviews / reviews.length
   const [showMore, setShowMore] = useState(3)
+  const [showAlertUpdate, setShowAlertUpdate] = useState(false)
+  const [showAlertAdd, setShowAlertAdd] = useState(false)
 
   function handleShowMoreClick() {
     setShowMore(showMore + 3)
@@ -52,7 +54,7 @@ function ProductDetail() {
       if (update) {
         cartItemApi.updateCartItem(cartItem)
           .then(response => {
-            alert('Cập nhật số lượng sản phẩm')
+            setShowAlertUpdate(true)
             dispatch(updateQuantity(response.data))
           })
           .catch(err => {
@@ -62,7 +64,7 @@ function ProductDetail() {
       else {
         cartItemApi.addCartItem(cartItem)
           .then(response => {
-            alert('Thêm vào giỏ hàng thành công')
+            setShowAlertAdd(true)
             dispatch(addToCart(response.data))
           })
           .catch(error => {
@@ -100,6 +102,18 @@ function ProductDetail() {
   }, [productId])
   return (
     <div>
+      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={showAlertUpdate} autoHideDuration={2000} onClose={() => setShowAlertUpdate(false)}>
+        <Alert severity="success" variant='filled' onClose={() => setShowAlertUpdate(false)}>
+          Cập nhật số lượng sản phẩm thành công!
+        </Alert>
+      </Snackbar>
+      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={showAlertAdd} autoHideDuration={2000} onClose={() => setShowAlertAdd(false)}>
+        <Alert severity="success" variant='filled' onClose={() => setShowAlertAdd(false)}>
+          Thêm sản phẩm vào giỏ thành công!
+        </Alert>
+      </Snackbar>
       <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
         <Box sx={{
           width: '80vw', height: '100%', overflow: 'hidden', pt: 5, pl: 5,
@@ -117,8 +131,8 @@ function ProductDetail() {
               <Typography variant='h7' >Giảm giá: {product?.discount}%</Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
                 <Typography variant='body1' color={'blue'}>{reviews.length + ' Đánh giá'}</Typography>
-                <Rating name="size-medium" size='large' value={avarageReviews} precision={0.1} readOnly/>
-                { review?.rating && <Typography variant='subtitle2'>Your Rating: {review?.rating}</Typography>}
+                <Rating name="size-medium" size='large' value={avarageReviews} precision={0.1} readOnly />
+                {review?.rating && <Typography variant='subtitle2'>Your Rating: {review?.rating}</Typography>}
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
                 <b>Loại sản phẩm:</b> <Typography variant='body1'>{product?.subCategory?.name}</Typography>
@@ -146,7 +160,7 @@ function ProductDetail() {
                 <Box >
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                     <Typography variant='subtitle1' fontWeight={'bold'}>User Id: {review?.customerId}</Typography>
-                    <Rating name="size-medium" size='large' value={review?.rating} precision={1} readOnly/>
+                    <Rating name="size-medium" size='large' value={review?.rating} precision={1} readOnly />
                   </Box>
                   <Typography variant='body1'>{review?.comment}</Typography>
                 </Box>

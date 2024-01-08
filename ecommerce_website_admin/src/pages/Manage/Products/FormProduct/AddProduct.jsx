@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, FormControl, Select, MenuItem } from '@mui/material'
+import {
+    Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box,
+    Typography, FormControl, Select, MenuItem, Alert, Snackbar
+} from '@mui/material'
 import AddCircle from '@mui/icons-material/AddCircle'
 import productApi from '../../../../apis/productApi'
 import { addProduct } from '../../../../redux/actions/products'
@@ -17,6 +20,8 @@ function AddProduct({ setUpdate }) {
     const [provider, setProvider] = useState(providers[0]?.id)
     const [image, setImage] = useState('')
     const [open, setOpen] = useState(false)
+    const [showAlert, setShowAlert] = useState(false)
+    const [showAlertFail, setShowAlertFail] = useState(false)
     const handleClickOpen = () => {
         setOpen(true)
     }
@@ -42,18 +47,30 @@ function AddProduct({ setUpdate }) {
     const handleClickAdd = () => {
         productApi.addProduct(name, price, description, discount, subCategory, provider, image)
             .then((response) => {
-                alert('Add Success')
+                setShowAlert(true)
                 dispatch(addProduct(response.data))
                 setUpdate(response.data.id + 1)
             })
             .catch(error => {
                 console.log(error)
-                alert('Add Fail')
+                setShowAlertFail(true)
             })
         handleClose()
     }
     return (
         <div>
+            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                open={showAlert} autoHideDuration={1000} onClose={() => setShowAlert(false)}>
+                <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
+                    Thêm sản phẩm thành công!
+                </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                open={showAlertFail} autoHideDuration={1000} onClose={() => setShowAlertFail(false)}>
+                <Alert severity="error" variant='filled' onClose={() => setShowAlertFail(false)}>
+                    Thêm sản phẩm thất bại!
+                </Alert>
+            </Snackbar>
             <Button sx={{ fontWeight: 'bold' }} startIcon={<AddCircle />} variant="outlined" onClick={handleClickOpen}>
                 New Product
             </Button>

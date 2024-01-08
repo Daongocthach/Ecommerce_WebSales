@@ -1,4 +1,5 @@
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, Paper, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
+import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter,
+   Paper, TablePagination, TableContainer, FormControl, Select, MenuItem, Breadcrumbs, Link } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import AddSubCategory from './FormSubCategory/AddSubCategory'
@@ -43,7 +44,14 @@ function SubCategories() {
   }, [select])
   return (
     <Box sx={{ m: 5 }}>
-      <Typography variant='h7' >Trang chủ / Quản lý loại sản phẩm</Typography>
+            <Breadcrumbs>
+        <Link underline="hover" color="inherit" href="/dashboard">
+          Trang chủ
+        </Link>
+        <Link underline="hover" color="inherit" href="/manage/subCategories">
+          Quản lý danh mục con
+        </Link>
+      </Breadcrumbs>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <AddSubCategory setUpdate={setUpdate} />
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>

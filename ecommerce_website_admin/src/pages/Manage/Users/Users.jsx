@@ -1,4 +1,7 @@
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableContainer, Paper, TableFooter, TablePagination, FormControl, Select, MenuItem } from '@mui/material'
+import {
+  Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableContainer,
+  Paper, TableFooter, TablePagination, FormControl, Select, MenuItem, Alert, Snackbar, Breadcrumbs, Link
+} from '@mui/material'
 import { useEffect, useState } from 'react'
 import SearchUser from './SearchUser/SearchUser'
 import userApi from '../../../apis/userApi'
@@ -10,6 +13,8 @@ function Users() {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [select, setSelect] = useState(1)
+  const [showAlert, setShowAlert] = useState(false)
+  const [showAlertFail, setShowAlertFail] = useState(false)
 
   const handleChangePage = (e, newPage) => {
     setPage(newPage)
@@ -26,10 +31,10 @@ function Users() {
   const handleUpdateStatus = (id, enabled) => {
     userApi.updateStatus(id, enabled)
       .then(() => {
-        alert('Update Success')
+        setShowAlert(true)
       })
-      .catch(() => alert('Update Fail'))
-      setUpdate(enabled)
+      .catch(() => setShowAlertFail(true))
+    setUpdate(enabled)
   }
   useEffect(() => {
     userApi.getAllCustomers()
@@ -56,7 +61,26 @@ function Users() {
 
   return (
     <Box sx={{ m: 5 }}>
-      <Typography variant='h7' >Trang chủ / Quản lý tài khoản khách hàng</Typography>
+      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={showAlert} autoHideDuration={1000} onClose={() => setShowAlert(false)}>
+        <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
+          Cập nhật danh mục thành công!
+        </Alert>
+      </Snackbar>
+      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={showAlertFail} autoHideDuration={1000} onClose={() => setShowAlertFail(false)}>
+        <Alert severity="error" variant='filled' onClose={() => setShowAlertFail(false)}>
+          Cập nhật danh mục thất bại!
+        </Alert>
+      </Snackbar>
+      <Breadcrumbs>
+        <Link underline="hover" color="inherit" href="/dashboard">
+          Trang chủ
+        </Link>
+        <Link underline="hover" color="inherit" href="/manage/users">
+          Quản lý tài khoản khách hàng
+        </Link>
+      </Breadcrumbs>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
           <SearchUser setUsers={setUsers} />

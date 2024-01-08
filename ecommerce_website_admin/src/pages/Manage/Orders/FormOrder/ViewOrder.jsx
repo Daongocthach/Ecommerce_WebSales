@@ -18,7 +18,7 @@ function ViewOrder({ order }) {
     <div>
       <Button sx={{ bgcolor: '#EE6363', color: 'black' }} variant="outlined" onClick={handleClickOpen}><Visibility /></Button>
       <Dialog open={open} onClose={handleClose} fullWidth>
-        <DialogTitle>View Order</DialogTitle>
+        <DialogTitle><Typography variant="h5" fontWeight={'bold'}>View Order</Typography></DialogTitle>
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -35,7 +35,9 @@ function ViewOrder({ order }) {
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Typography minWidth={'100px'}>Address: </Typography>
-              <TextField fullWidth size='small' value={order?.customer?.address} />
+              <TextField fullWidth size='small'
+                value={order?.customer?.address + ',' + order?.customer?.ward + ',' +
+                  order?.customer?.district + ',' + order?.customer?.province} />
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Typography minWidth={'100px'}>CreatedDate: </Typography>
@@ -46,11 +48,23 @@ function ViewOrder({ order }) {
               <TextField fullWidth size='small' value={order?.orderStatus} />
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography minWidth={'100px'}>PayMethod: </Typography>
+              <TextField fullWidth size='small' value={order?.paymentMethod} />
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography minWidth={'100px'} >FeeShip: </Typography>
+              <Typography minWidth={'100px'} variant='h6' fontWeight={'bold'} color={'red'}>{formatCurrency(order?.shippingFee)}</Typography>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography minWidth={'100px'} >Discount: </Typography>
+              <Typography minWidth={'100px'} variant='h6' fontWeight={'bold'} color={'red'}>{formatCurrency(order?.voucherDiscount)}</Typography>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Typography minWidth={'100px'} >Tổng tiền: </Typography>
-              <Typography minWidth={'100px'} variant='h6'fontWeight={'bold'} color={'red'}>{formatCurrency(order?.total)}</Typography>
+              <Typography minWidth={'100px'} variant='h6' fontWeight={'bold'} color={'red'}>{formatCurrency(order?.total)}</Typography>
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Typography variant="h5">Thông tin đơn hàng</Typography>
+              <Typography variant="h5" fontWeight={'bold'}>Thông tin đơn hàng</Typography>
               {Array.isArray(orderItems) && orderItems.map((orderItem, index) =>
                 <Product key={index} product={orderItem.product} quantity={orderItem.quantity} />)}
             </Box>

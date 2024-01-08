@@ -1,5 +1,8 @@
 import { useState } from 'react'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, FormControl, Select, MenuItem } from '@mui/material'
+import {
+  Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box,
+  Typography, FormControl, Select, MenuItem, Alert, Snackbar
+} from '@mui/material'
 import { Create } from '@mui/icons-material'
 import { useDispatch } from 'react-redux'
 import categoryApi from '../../../../apis/categoryApi'
@@ -10,6 +13,8 @@ function UpdateCategory({ setUpdate, category }) {
   const [name, setName] = useState()
   const [enabled, setEnabled] = useState()
   const [open, setOpen] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)
+  const [showAlertFail, setShowAlertFail] = useState(false)
   const handleClickOpen = () => {
     setOpen(true)
     setName(category?.name)
@@ -20,19 +25,31 @@ function UpdateCategory({ setUpdate, category }) {
   }
   const handleUpdate = () => {
     categoryApi.updateCategory(category?.id, name, enabled)
-    .then((response) => {
-        alert('Update Success')
+      .then((response) => {
+        setShowAlert(true)
         setUpdate(response.data.id)
         dispatch(updateCategory(response.data))
-    })
-    .catch(error => {
+      })
+      .catch(error => {
         console.log(error)
-        alert('Update Fail')
-    })
+        setShowAlertFail(true)
+      })
     handleClose()
   }
   return (
     <div>
+      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={showAlert} autoHideDuration={1000} onClose={() => setShowAlert(false)}>
+        <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
+          Cập nhật danh mục thành công!
+        </Alert>
+      </Snackbar>
+      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={showAlertFail} autoHideDuration={1000} onClose={() => setShowAlertFail(false)}>
+        <Alert severity="error" variant='filled' onClose={() => setShowAlertFail(false)}>
+          Cập nhật danh mục thất bại!
+        </Alert>
+      </Snackbar>
       <Button sx={{ bgcolor: 'orange', color: 'black' }} variant="outlined" onClick={handleClickOpen}><Create /></Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Update Category</DialogTitle>
@@ -46,8 +63,8 @@ function UpdateCategory({ setUpdate, category }) {
               <Typography minWidth={'100px'}>Status: </Typography>
               <FormControl size={'small'} fullWidth>
                 <Select value={enabled} onChange={(e) => setEnabled(e.target.value)} >
-                    <MenuItem value={true}>Enable</MenuItem>
-                    <MenuItem value={false}>Disable</MenuItem>
+                  <MenuItem value={true}>Enable</MenuItem>
+                  <MenuItem value={false}>Disable</MenuItem>
                 </Select>
               </FormControl>
             </Box>

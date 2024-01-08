@@ -27,9 +27,8 @@ function Product({ product, quantity, customerId }) {
             })
     }, [changeQuantity])
     return (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-start', mt: 4 }}>
-            <img src={product?.image} alt='omachi'
-                style={{ objectFit: 'cover', borderRadius: '5px', height: '150px', with: '150px' }} />
+        <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+            <img src={product?.image} alt='omachi' style={{ objectFit: 'cover', height: '150px', width: '150px', borderRadius: 5 }} />
             <Box ml={2} minWidth={'300px'}>
                 <Typography variant='h6' fontWeight={'bold'} maxWidth={'280px'}>{product?.name}</Typography>
                 <Typography variant='h6' color={'red'} fontWeight={'bold'}>{formatCurrency(product?.price)}</Typography>

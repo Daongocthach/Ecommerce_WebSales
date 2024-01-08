@@ -23,6 +23,11 @@ const orderApi = {
   deleteOrder(orderId) {
     const url = `http://localhost:8080/api/v1/delete-order/${orderId}`
     return axios.put(url)
+  },
+  exportOrders(orders, path1) {
+    const path = 'C:/Users/PC/Downloads/orders.xlsx'
+    const url = `http://localhost:8080/api/v1/order-export?path=${path}`
+    return axios.post(url, orders)
   }
 }
 

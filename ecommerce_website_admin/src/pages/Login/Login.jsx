@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { Container, TextField, Stack, Button, Box, Checkbox } from '@mui/material'
+import { Container, TextField, Stack, Button, Box, Checkbox, Alert, Snackbar } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { setCookie } from '../../utils/cookie'
 import loginImage from '../../assets/img/loginImage.jpg'
@@ -9,6 +9,8 @@ import authenApi from '../../apis/authenApi'
 function Login() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [showAlert, setShowAlert] = useState(false)
+  const [showAlertFail, setShowAlertFail] = useState(false)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -17,16 +19,30 @@ function Login() {
       .then(response => {
         dispatch(login(response.data))
         setCookie('userId', response.data.id, 1)
-        alert('Login Success')
-        navigate('/dashboard')
+        setShowAlert(true)
+        setTimeout(() => {
+          navigate('/dashboard')
+        }, 1000)
       })
       .catch(error => {
         console.log(error)
-        alert('Wrong Username or Password')
+        setShowAlertFail(true)
       })
   }
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
+      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={showAlert} autoHideDuration={1000} onClose={() => setShowAlert(false)}>
+        <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
+          Đăng nhập thành công!
+        </Alert>
+      </Snackbar>
+      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={showAlertFail} autoHideDuration={1000} onClose={() => setShowAlertFail(false)}>
+        <Alert severity="error" variant='filled' onClose={() => setShowAlertFail(false)}>
+          Sai tên đăng nhập hoặc mật khẩu!
+        </Alert>
+      </Snackbar>
       <Box sx={{
         width: '100%',
         height: '100%',

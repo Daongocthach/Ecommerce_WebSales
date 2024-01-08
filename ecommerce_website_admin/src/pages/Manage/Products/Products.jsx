@@ -1,4 +1,5 @@
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, TablePagination, Paper, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
+import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter,
+   TablePagination, Paper, TableContainer, FormControl, Select, MenuItem, Breadcrumbs, Link } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import AddProduct from './FormProduct/AddProduct'
@@ -43,9 +44,16 @@ function Products() {
   }, [select])
   return (
     <Box sx={{ m: 5 }}>
-      <Typography variant='h7' >Trang chủ / Quản lý sản phẩm</Typography>
+      <Breadcrumbs>
+        <Link underline="hover" color="inherit" href="/dashboard">
+          Trang chủ
+        </Link>
+        <Link underline="hover" color="inherit" href="/manage/orders">
+          Quản lý sản phẩm
+        </Link>
+      </Breadcrumbs>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-        <AddProduct setUpdate={setUpdate}/>
+        <AddProduct setUpdate={setUpdate} />
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
           <SearchProduct setProducts={setProducts} />
           <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
@@ -58,7 +66,7 @@ function Products() {
         </Box>
       </Box>
       <Box sx={{ height: 'fit-content', bgcolor: 'white', boxShadow: '0px 0px 10px  ' }}>
-      <TableContainer component={Paper}>
+        <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow >
@@ -87,7 +95,7 @@ function Products() {
                     <TableCell align="center">{product?.subCategory?.name}</TableCell>
                     <TableCell align="center">{product?.provider?.name}</TableCell>
                     <TableCell align="center">{<img src={product?.image} alt='avatar' width={'50px'} height={'50px'} />}</TableCell>
-                    <TableCell align="center">{product?.enabled == 1 ? 'Enable': 'Disable'}</TableCell>
+                    <TableCell align="center">{product?.enabled == 1 ? 'Enable' : 'Disable'}</TableCell>
                     <TableCell align="center"><UpdateProduct setUpdate={setUpdate} product={product} /></TableCell>
                     {product.enabled == 1 && <TableCell align="center"><DeleteProduct setUpdate={setUpdate} productId={product?.id} /></TableCell>}
                   </TableRow>

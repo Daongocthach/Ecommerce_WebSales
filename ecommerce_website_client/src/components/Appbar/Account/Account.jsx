@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Menu, Box, Divider, MenuItem, ListItemIcon, Avatar, IconButton, Tooltip } from '@mui/material'
-import { Settings, PersonAdd } from '@mui/icons-material'
+import { Menu, Box, Divider, MenuItem, Alert, Snackbar, Avatar, IconButton, Tooltip } from '@mui/material'
+import { Settings, Login, AccountCircle } from '@mui/icons-material'
 import { Link, useNavigate } from 'react-router-dom'
 import { deleteCookie } from '../../../utils/cookie'
 import { logout } from '../../../redux/actions/auth'
@@ -12,6 +12,7 @@ function Account() {
     const avatar = useSelector(state => state.auth.avatar)
     const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = useState(null)
+    const [showAlert, setShowAlert] = useState(false)
     const open = Boolean(anchorEl)
 
     const handleClick = (event) => {
@@ -24,11 +25,17 @@ function Account() {
         deleteCookie()
         dispatch(logout())
         persistor.purge()
-        alert('Logout sucessfull')
+        setShowAlert(true)
         navigate('/')
     }
     return (
         <Box>
+            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                open={showAlert} autoHideDuration={6000} onClose={() => setShowAlert(false)}>
+                <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
+                    Đăng xuất thành công!
+                </Alert>
+            </Snackbar>
             <Tooltip title="Account settings">
                 <IconButton
                     onClick={handleClick}
@@ -54,15 +61,14 @@ function Account() {
             >
                 {avatar && <MenuItem onClick={handleClose}>
                     <Link to={'/account'} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Avatar sx={{ mr: 3 }} />
-                        Cá nhân
+                        <AccountCircle fontSize="small" />
+                        Profile
                     </Link>
-
                 </MenuItem>}
                 <Divider />
                 {!avatar && <MenuItem onClick={handleClose}>
                     <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <PersonAdd fontSize="small" />
+                        <Login fontSize="small" />
                         Login
                     </Link>
                 </MenuItem>}

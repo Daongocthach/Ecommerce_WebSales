@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stepper, Step, StepLabel, Box } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stepper, Step, StepLabel, Box, Alert, Snackbar } from '@mui/material'
 import { Create } from '@mui/icons-material'
 import { useDispatch } from 'react-redux'
 import orderApi from '../../../../apis/orderApi'
@@ -27,6 +27,8 @@ function UpdateOrder({ setUpdate, order }) {
   const [activeStep, setActiveStep] = useState(status || 0)
   const [open, setOpen] = useState(false)
   const [openCancel, setOpenCancel] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)
+  const [showAlertFail, setShowAlertFail] = useState(false)
   const handleClickOpen = () => {
     setOpen(true)
   }
@@ -42,13 +44,13 @@ function UpdateOrder({ setUpdate, order }) {
   const handleCancel = () => {
     orderApi.updateOrderStatus(order?.id, 4)
       .then((response) => {
-        alert('Update Success')
+        setShowAlert(true)
         dispatch(updateOrder(response.data))
         setUpdate(activeStep)
       })
       .catch(error => {
         console.log(error)
-        alert('Update Fail')
+        setShowAlertFail(true)
       })
     setOpenCancel(false)
     setOpen(false)
@@ -56,13 +58,13 @@ function UpdateOrder({ setUpdate, order }) {
   const handleUpdate = () => {
     orderApi.updateOrderStatus(order?.id, activeStep)
       .then((response) => {
-        alert('Update Success')
+        setShowAlert(true)
         setUpdate(activeStep)
         dispatch(updateOrder(response.data))
       })
       .catch(error => {
         console.log(error)
-        alert('Update Fail')
+        setShowAlertFail(true)
       })
     handleClose()
   }
@@ -80,6 +82,18 @@ function UpdateOrder({ setUpdate, order }) {
   }
   return (
     <div>
+      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={showAlert} autoHideDuration={1000} onClose={() => setShowAlert(false)}>
+        <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
+          Cập nhật đơn hàng thành công!
+        </Alert>
+      </Snackbar>
+      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={showAlertFail} autoHideDuration={1000} onClose={() => setShowAlertFail(false)}>
+        <Alert severity="error" variant='filled' onClose={() => setShowAlertFail(false)}>
+          Cập nhật đơn hàng thất bại!
+        </Alert>
+      </Snackbar>
       <Button sx={{ bgcolor: 'orange', color: 'black' }} variant="outlined" onClick={handleClickOpen}><Create /></Button>
       <Dialog open={open} onClose={handleClose} fullWidth >
         <DialogTitle>Update Order</DialogTitle>

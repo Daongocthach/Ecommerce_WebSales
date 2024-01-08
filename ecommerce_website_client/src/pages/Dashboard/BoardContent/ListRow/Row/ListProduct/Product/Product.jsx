@@ -87,7 +87,7 @@ function Product({ product }) {
         </Link>
       }
       <CardContent sx={{ p: 1 }}>
-        <Typography variant='body1' sx={{ fontWeight: 'bold', height: '40px', fontSize: '14px', color: '#555555' }}>
+        <Typography variant='body1' sx={{ fontWeight: 'bold', height: '40px', fontSize: '14px' }}>
           {product?.name}
         </Typography>
         <Typography variant='body1' fontWeight={'bold'} color={'red'}>
@@ -95,7 +95,7 @@ function Product({ product }) {
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Rating size='small' value={avarageReviews} precision={0.1} readOnly/>
-          <Typography variant='body1' fontSize={'13px'} sx={{ textAlign: 'center' }} color={'blue'}>{reviews?.length + ' Đánh giá'}</Typography>
+          <Typography variant='body1' fontSize={'13px'} sx={{ textAlign: 'center' }} color={'#00B2EE'}>{reviews?.length + ' Đánh giá'}</Typography>
         </Box>
       </CardContent>
 

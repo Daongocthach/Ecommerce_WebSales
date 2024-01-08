@@ -1,4 +1,5 @@
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, Paper, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
+import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow,
+   TableFooter, Paper, TablePagination, TableContainer, FormControl, Select, MenuItem, Breadcrumbs, Link } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import AddProvider from './FormProvider/AddProvider'
@@ -42,7 +43,14 @@ function Providers() {
     }
   }, [select])
   return ( <Box sx={{ m: 5 }}>
-      <Typography variant='h7' >Trang chủ / Quản lý nhà cung cấp</Typography>
+            <Breadcrumbs>
+        <Link underline="hover" color="inherit" href="/dashboard">
+          Trang chủ
+        </Link>
+        <Link underline="hover" color="inherit" href="/manage/providers">
+          Quản lý nhà cung cấp
+        </Link>
+      </Breadcrumbs>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <AddProvider setUpdate={setUpdate}/>
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>

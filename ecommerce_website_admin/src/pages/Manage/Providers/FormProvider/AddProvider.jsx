@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography } from '@mui/material'
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, Alert, Snackbar } from '@mui/material'
 import AddCircle from '@mui/icons-material/AddCircle'
 import providerApi from '../../../../apis/providerApi'
 import { addProvider } from '../../../../redux/actions/providers'
@@ -12,6 +12,8 @@ function AddProvider({ setUpdate }) {
     const [brand, setBrand] = useState('')
     const [phone, setPhone] = useState('')
     const [address, setAddress] = useState('')
+    const [showAlert, setShowAlert] = useState(false)
+    const [showAlertFail, setShowAlertFail] = useState(false)
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -20,20 +22,33 @@ function AddProvider({ setUpdate }) {
         setOpen(false)
     }
     const handleClickAdd = () => {
+
         providerApi.addProvider(name, brand, phone, address)
-        .then((response) => {
-            alert('Add Success')
-            dispatch(addProvider(response.data))
-            setUpdate(response.data.id + 1)
-        })
-        .catch(error => {
-            console.log(error)
-            alert('Add Fail')
-        })
+            .then((response) => {
+                setShowAlert(true)
+                dispatch(addProvider(response.data))
+                setUpdate(response.data.id + 1)
+            })
+            .catch(error => {
+                console.log(error)
+                setShowAlertFail(true)
+            })
         handleClose()
     }
     return (
         <div>
+            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                open={showAlert} autoHideDuration={1000} onClose={() => setShowAlert(false)}>
+                <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
+                    Thêm nhà cung cấp thành công!
+                </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                open={showAlertFail} autoHideDuration={1000} onClose={() => setShowAlertFail(false)}>
+                <Alert severity="error" variant='filled' onClose={() => setShowAlertFail(false)}>
+                    Thêm nhà cung cấp thất bại!
+                </Alert>
+            </Snackbar>
             <Button sx={{ fontWeight: 'bold' }} startIcon={<AddCircle />} variant="outlined" onClick={handleClickOpen}>
                 New Provider
             </Button>

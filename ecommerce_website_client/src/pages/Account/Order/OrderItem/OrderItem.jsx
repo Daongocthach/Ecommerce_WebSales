@@ -20,7 +20,7 @@ function OrderItem({ customerId, orderItem, orderStatus }) {
                 <Typography variant='h7' sx={{ fontWeight: 'bold', minWidth: '100px' }}>{orderItem?.product?.name}</Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1, justifyContent: 'space-between' }}>
-                <Typography variant='h7'>{formatCurrency(orderItem?.product.price)}</Typography>
+                <Typography variant='h7'>{formatCurrency(orderItem?.productPrice)}</Typography>
                 <Typography variant='h7'>x{orderItem?.quantity}</Typography>
             </Box>
             {!isReviewed && !review && <ReviewProduct product={orderItem?.product} customerId={customerId} />}

@@ -1,4 +1,7 @@
-import { Box, Typography, Table, TableBody, TableCell, TableHead, Paper, TableRow, TableFooter, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
+import {
+  Box, Typography, Table, TableBody, TableCell, TableHead, Paper, TableRow, TableFooter,
+  TablePagination, TableContainer, FormControl, Select, MenuItem, Breadcrumbs, Link
+} from '@mui/material'
 import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import AddPromotion from './FormPromotion/AddPromotion'
@@ -48,11 +51,18 @@ function Promotions() {
   }, [select])
   return (
     <Box sx={{ m: 5 }}>
-      <Typography variant='h7' >Trang chủ / Quản lý khuyến mãi</Typography>
+      <Breadcrumbs>
+        <Link underline="hover" color="inherit" href="/dashboard">
+          Trang chủ
+        </Link>
+        <Link underline="hover" color="inherit" href="/manage/promotions">
+          Quản lý khuyến mãi
+        </Link>
+      </Breadcrumbs>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <AddPromotion setUpdate={setUpdate} />
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
-          <SearchPromotion setPromotions={setPromotions}/>
+          <SearchPromotion setPromotions={setPromotions} />
           <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
           <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
             <Select value={select} onChange={handleChange} >

@@ -29,7 +29,7 @@ const theme = extendTheme({
           borderWidth: '0.5px',
           fontFamily:'sans-serif',
           color: (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black'),
-          '&:hover': { borderWidth: '0.5px', opacity: 0.7 },
+          '&:hover': { borderWidth: '0.5px', opacity: 0.7, backgroundColor: '#BEBEBE' },
           '&.MuiButtonBase-root': {
             fontSize: '17px',
             backgroundColor: (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black')
@@ -37,6 +37,56 @@ const theme = extendTheme({
         }
       }
     },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          fontSize: '0.875rem',
+          color: (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black')
+        }
+      }
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          '&.MuiTypography-body1': {
+            fontSize: '0.800rem'
+          }
+        }
+      }
+    },
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          '*::-webkit-scrollbar ': {
+            width: '8px',
+            height: '8px'
+          },
+          '*::-webkit-scrollbar-thumb ': {
+            backgroundColor: '#dcdde1',
+            borderRadius: '8px'
+          },
+          '*::-webkit-scrollbar-thumb:hover ': {
+            backgroundColor: 'white'
+          },
+          overflowX: 'hidden'
+        }
+      }
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          '& fieldset': {
+            borderWidth: '1px !important'
+          },
+          '&:hover fieldset': {
+            borderWidth: '2px !important'
+          },
+          '&.Mui-focused fieldset': {
+            borderWidth: '2px !important'
+          }
+        }
+      }
+    }
   }
 
 })

@@ -1,4 +1,7 @@
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, Paper, TablePagination, TableContainer, FormControl, Select, MenuItem } from '@mui/material'
+import {
+  Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, Paper,
+  TablePagination, TableContainer, FormControl, Select, MenuItem, Breadcrumbs, Link
+} from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import AddCategory from './FormCategory/AddCategory'
@@ -42,11 +45,18 @@ function Categories() {
   }, [select])
   return (
     <Box sx={{ m: 5 }}>
-      <Typography variant='h7' >Trang chủ / Quản lý loại sản phẩm</Typography>
+      <Breadcrumbs>
+        <Link underline="hover" color="inherit" href="/dashboard">
+          Trang chủ
+        </Link>
+        <Link underline="hover" color="inherit" href="/manage/orders">
+          Quản lý danh mục
+        </Link>
+      </Breadcrumbs>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-        <AddCategory setUpdate={setUpdate}/>
+        <AddCategory setUpdate={setUpdate} />
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
-          <SearchCategory setCategories={setCategories}/>
+          <SearchCategory setCategories={setCategories} />
           <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
           <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
             <Select value={select} onChange={handleChange} >
@@ -69,12 +79,12 @@ function Categories() {
               </TableRow>
             </TableHead>
             <TableBody>
-            {Array.isArray(categories) && categories?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((category, index) => {
+              {Array.isArray(categories) && categories?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((category, index) => {
                 return (
                   <TableRow key={index}>
                     <TableCell align="center">{category?.id}</TableCell>
                     <TableCell align="center">{category?.name}</TableCell>
-                    <TableCell align="center">{category?.enabled == 1 ? 'Enable': 'Disable'}</TableCell>
+                    <TableCell align="center">{category?.enabled == 1 ? 'Enable' : 'Disable'}</TableCell>
                     <TableCell align="center"><UpdateCategory setUpdate={setUpdate} category={category} /></TableCell>
                     {category.enabled == 1 && <TableCell align="center"><DeleteCategory setUpdate={setUpdate} categoryId={category?.id} /></TableCell>}
                   </TableRow>

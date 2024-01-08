@@ -1,5 +1,8 @@
 import { useState } from 'react'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, FormControl, Select, MenuItem } from '@mui/material'
+import {
+  Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box,
+  Typography, FormControl, Select, MenuItem, Alert, Snackbar
+} from '@mui/material'
 import { Create } from '@mui/icons-material'
 import { useDispatch } from 'react-redux'
 import providerApi from '../../../../apis/providerApi'
@@ -13,6 +16,9 @@ function UpdateProvider({ provider, setUpdate }) {
   const [phoneNo, setPhoneNo] = useState()
   const [address, setAddress] = useState()
   const [enabled, setEnabled] = useState()
+  const [showAlert, setShowAlert] = useState(false)
+  const [showAlertFail, setShowAlertFail] = useState(false)
+
   const handleClickOpen = () => {
     setOpen(true)
     setName(provider?.name)
@@ -27,15 +33,27 @@ function UpdateProvider({ provider, setUpdate }) {
   const handleUpdate = () => {
     providerApi.updateProvider(provider?.id, name, brand, phoneNo, address, enabled)
       .then((response) => {
-        alert('Update Success')
+        setShowAlert(true)
         setUpdate(response.data.id)
         dispatch(updateProvider(response.data))
       })
-      .catch(() => alert('Update Fail'))
+      .catch(() => setShowAlertFail(true))
     handleClose()
   }
   return (
     <div>
+      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={showAlert} autoHideDuration={1000} onClose={() => setShowAlert(false)}>
+        <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
+          Cập nhật nhà cung cấp thành công!
+        </Alert>
+      </Snackbar>
+      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={showAlertFail} autoHideDuration={1000} onClose={() => setShowAlertFail(false)}>
+        <Alert severity="error" variant='filled' onClose={() => setShowAlertFail(false)}>
+          Cập nhật nhà cung cấp thất bại!
+        </Alert>
+      </Snackbar>
       <Button sx={{ bgcolor: 'orange', color: 'black' }} variant="outlined" onClick={handleClickOpen}><Create /></Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Update Provider</DialogTitle>
@@ -61,8 +79,8 @@ function UpdateProvider({ provider, setUpdate }) {
               <Typography minWidth={'100px'}>Status: </Typography>
               <FormControl size={'small'} fullWidth>
                 <Select value={enabled} onChange={(e) => setEnabled(e.target.value)} >
-                    <MenuItem value={true}>Enable</MenuItem>
-                    <MenuItem value={false}>Disable</MenuItem>
+                  <MenuItem value={true}>Enable</MenuItem>
+                  <MenuItem value={false}>Disable</MenuItem>
                 </Select>
               </FormControl>
             </Box>
