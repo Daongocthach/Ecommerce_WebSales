@@ -49,7 +49,7 @@ function AppBar() {
         </Box>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, paddingX: 3 }}>
-        <Search />
+        {/* <Search /> */}
         <ModeSelect />
         <Tooltip title="Cart">
           <Badge color="warning" badgeContent={quantity} sx={{ cursor: 'pointer' }}>

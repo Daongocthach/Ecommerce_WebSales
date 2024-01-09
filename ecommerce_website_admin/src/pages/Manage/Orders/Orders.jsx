@@ -107,11 +107,11 @@ function Orders() {
       </Snackbar>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
-          <Button startIcon={<Reorder />} sx={{ fontWeight: 'bold' }} variant="outlined" onClick={() => { setIsExport(!isExport) }}>Xuất đơn hàng</Button>
+          <Button startIcon={<Reorder />} sx={{ fontWeight: 'bold' }} variant="outlined" onClick={() => { setIsExport(!isExport) }}>Export Orders</Button>
           {isExport && <Button variant="contained" startIcon={<Checklist />} onClick={handleSelectAll}>Select All</Button>}
-          {checked.length > 0 && isExport && <Button variant="contained" startIcon={<FileDownload />} onClick={handleExportOrder}>Xuất đơn đã chọn</Button>}
+          {checked.length > 0 && isExport && <Button variant="contained" startIcon={<FileDownload />} onClick={handleExportOrder}>Export</Button>}
           {checked.length > 0 && isExport && <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
-            <Typography variant='h7' fontWeight={'bold'}>Nơi lưu</Typography>
+            <Typography variant='h7' fontWeight={'bold'}>Location</Typography>
             <TextField defaultValue={'C:/Downloads'} value={path} size='small' onChange={(e) => { setPath(e.target.value) }}></TextField>
           </Box>}
         </Box>
