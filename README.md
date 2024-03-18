@@ -1,4 +1,9 @@
 # Ecommerce_G2Store
+![image](https://github.com/Daongocthach/Ecommerce_G2Store/assets/94102125/15f185cb-4013-4c3e-8eda-b84aa24da56d)
+![image](https://github.com/Daongocthach/Ecommerce_G2Store/assets/94102125/274fb817-fe83-4287-b271-ec88026cedfa)
+![image](https://github.com/Daongocthach/Ecommerce_G2Store/assets/94102125/d5fec857-3172-403e-b88b-cc3034cf7e8e)
+![image](https://github.com/Daongocthach/Ecommerce_G2Store/assets/94102125/325c0ee4-a752-4b20-a560-63bdf50f22ab)
+
 # Công nghệ sử dụng
 •	Front-End: ReactJS, Material UI
 •	Back-End: Java Spring Boot
