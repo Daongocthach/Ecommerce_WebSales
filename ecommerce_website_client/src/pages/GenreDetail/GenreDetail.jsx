@@ -1,6 +1,5 @@
 import {
-  Container, Grid, Typography, Box, FormControl, Select, MenuItem,
-  FormGroup, FormControlLabel, Checkbox, Menu, Slider, TextField, Button, Breadcrumbs, Link
+  Container, Grid, Typography, Box, FormControl, Select, MenuItem, Menu, Slider, TextField, Button, Breadcrumbs, Link
 } from '@mui/material'
 import DehazeIcon from '@mui/icons-material/Dehaze'
 import { useState, useEffect } from 'react'
@@ -9,7 +8,6 @@ import Product from '../Dashboard/BoardContent/ListRow/Row/ListProduct/Product/P
 import productApi from '../../apis/productApi'
 import { sortByMaxId, sortByMaxPrice, sortByMinPrice, sortByMaxIdAndPriceRange } from '../../utils/price'
 import { formatCurrency } from '../../utils/price'
-import providerApi from '../../apis/providerApi'
 import categoryApi from '../../apis/categoryApi'
 import MenuCategory from './MenuCategory/MenuCategory'
 

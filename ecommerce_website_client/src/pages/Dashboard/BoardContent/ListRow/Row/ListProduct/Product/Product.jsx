@@ -19,6 +19,13 @@ function Product({ product }) {
   reviews.map((review) => { avarageReviews += review?.rating })
   avarageReviews = avarageReviews / reviews.length
   const navigate = useNavigate()
+  const [isHovered, setIsHovered] = useState(false)
+  const handleMouseEnter = () => {
+    setIsHovered(true)
+  }
+  const handleMouseLeave = () => {
+    setIsHovered(false)
+  }
   // function handleClickAddToCart() {
   //   if (user && product && cartItems) {
   //     var update = false
@@ -74,11 +81,17 @@ function Product({ product }) {
   }, [])
   return (
     <MuiCard
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       sx={{
         cursor: 'pointer',
         bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#363636' : 'white'),
         height: '320px',
-        width: '220px'
+        width: '220px',
+        transition: 'transform 1s',
+        transform: isHovered ? 'scale(1.5)' : 'scale(1)',
+        borderRadius: '10px',
+        zIndex: isHovered ? 3 : 0,
       }}>
       {product?.image &&
         <Link to={`/product-detail?${product?.id}`}>
@@ -94,7 +107,7 @@ function Product({ product }) {
           {formatCurrency(product?.price)}
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Rating size='small' value={avarageReviews} precision={0.1} readOnly/>
+          <Rating size='small' value={avarageReviews} precision={0.1} readOnly />
           <Typography variant='body1' fontSize={'13px'} sx={{ textAlign: 'center' }} color={'#00B2EE'}>{reviews?.length + ' Đánh giá'}</Typography>
         </Box>
       </CardContent>

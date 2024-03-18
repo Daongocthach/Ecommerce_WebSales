@@ -7,7 +7,6 @@ function BoardContent() {
       display: 'flex',
       flexDirection: 'column',
       bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#363636' : '#E6E6FA'),
-      overflowX: 'hidden',
       pb: 2
     }}>
       <ListRow />

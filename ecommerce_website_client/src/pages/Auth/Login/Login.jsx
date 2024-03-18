@@ -35,18 +35,6 @@ function Login() {
   }
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
-      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={showAlert} autoHideDuration={1000} onClose={() => setShowAlert(false)}>
-        <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
-          Đăng nhập thành công!
-        </Alert>
-      </Snackbar>
-      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={showAlertFail} autoHideDuration={1000} onClose={() => setShowAlertFail(false)}>
-        <Alert severity="error" variant='filled' onClose={() => setShowAlertFail(false)}>
-          Sai tên đăng nhập hoặc mật khẩu!
-        </Alert>
-      </Snackbar>
       <Box sx={{
         width: '100%',
         height: '100%',
@@ -107,6 +95,18 @@ function Login() {
           </Stack>
         </Box>
       </Box>
+      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={showAlert} autoHideDuration={1000} onClose={() => setShowAlert(false)}>
+        <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
+          Đăng nhập thành công!
+        </Alert>
+      </Snackbar>
+      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={showAlertFail} autoHideDuration={1000} onClose={() => setShowAlertFail(false)}>
+        <Alert severity="error" variant='filled' onClose={() => setShowAlertFail(false)}>
+          Sai tên đăng nhập hoặc mật khẩu!
+        </Alert>
+      </Snackbar>
     </Container>
   )
 }

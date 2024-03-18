@@ -23,7 +23,7 @@ const initialState = {
             const newPromotions = state.promotions.filter(promotion => promotion.id !== action.payload.id)
             return {
               ...state,
-              promotionss: newPromotions
+              promotions: newPromotions
             }
           }
         case 'LIST_PROMOTIONS':

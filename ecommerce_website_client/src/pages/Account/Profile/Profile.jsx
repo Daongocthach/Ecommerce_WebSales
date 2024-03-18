@@ -78,8 +78,8 @@ function Profile() {
         </Box>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, mt: 1, mb: 1 }}>
-        <Button sx={{ color: 'white', width: '100px', height: '40px', ':hover': { bgcolor: '#666666' }, bgcolor: '#FF0000' }} onClick={onUpdate}>Cập nhật</Button>
-        <Button sx={{ color: 'white', width: '130px', height: '40px', ':hover': { bgcolor: '#666666' }, bgcolor: '#EE9A00' }} onClick={handleClickOpen}>Đổi mật khẩu</Button>
+        <Button sx={{ color: 'white', width: '140px', height: '40px', ':hover': { bgcolor: '#666666' }, bgcolor: '#FF0000' }} onClick={onUpdate}>Cập nhật</Button>
+        <Button sx={{ color: 'white', width: '150px', height: '40px', ':hover': { bgcolor: '#666666' }, bgcolor: '#EE9A00' }} onClick={handleClickOpen}>Đổi mật khẩu</Button>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, mt: 1, mb: 1 }}>
         <Typography variant='h6' sx={{ minWidth: '250px' }}>Thông tin gói dịch vụ</Typography>

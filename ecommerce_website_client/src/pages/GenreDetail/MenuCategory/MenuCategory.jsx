@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
-import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Box, Typography, ListItemButton, List, Collapse } from '@mui/material'
 import subCategoryApi from '../../../apis/subCategory'
